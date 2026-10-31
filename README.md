@@ -15,7 +15,7 @@ permalink: /
 [![Docs Publish CI](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg)](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml)
 [![YAML Lint CI](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml/badge.svg)](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml)
 [![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
-[![GitHub Pages](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://n3b3x.github.io/hf-general-ci-tools)
+[![GitHub Pages](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://hardfoc.github.io/hf-general-ci-tools)
 
 *Streamline your development workflow with battle-tested, production-ready GitHub Actions*
 
@@ -25,7 +25,7 @@ permalink: /
 
 This repository provides a curated set of **reusable GitHub Actions workflows** designed to accelerate your CI/CD pipeline setup. Whether you're working on C/C++ projects, documentation, or need comprehensive quality checks, these workflows have you covered.
 
-> **📖 [📚🌐 Live Complete Documentation](https://n3b3x.github.io/hf-general-ci-tools/)** - Interactive guides, examples, and step-by-step tutorials
+> **📖 [📚🌐 Live Complete Documentation](https://hardfoc.github.io/hf-general-ci-tools/)** - Interactive guides, examples, and step-by-step tutorials
 
 ### ✨ Key Features
 
@@ -68,7 +68,7 @@ This repository provides a curated set of **reusable GitHub Actions workflows** 
 
 ## 📚 Documentation
 
-**🌐 [Live Documentation Site](https://n3b3x.github.io/hf-general-ci-tools/)**  
+**🌐 [Live Documentation Site](https://hardfoc.github.io/hf-general-ci-tools/)**  
 *Published documentation with enhanced navigation and search*
 
 ### 📖 Available Guides
@@ -87,7 +87,7 @@ This repository provides a curated set of **reusable GitHub Actions workflows** 
 
 ## 🚀 Quick Start
 
-> **📚 [View Complete Documentation](https://n3b3x.github.io/hf-general-ci-tools/)** - Interactive guides, examples, and configuration templates
+> **📚 [View Complete Documentation](https://hardfoc.github.io/hf-general-ci-tools/)** - Interactive guides, examples, and configuration templates
 
 ### 🎯 Using Reusable Workflows
 

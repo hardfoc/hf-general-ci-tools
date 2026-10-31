@@ -42,7 +42,7 @@ This project follows the [Contributor Covenant Code of Conduct](https://www.cont
    ```
 3. **Add the upstream remote**:
    ```bash
-   git remote add upstream https://github.com/N3b3x/hf-general-ci-tools.git
+   git remote add upstream https://github.com/hardfoc/hf-general-ci-tools.git
    ```
 4. **Create a new branch** for your changes:
    ```bash
