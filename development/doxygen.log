@@ -156,7 +156,39 @@ finalizing index lists...
 writing tag file...
 Running plantuml with JAVA...
 Running dot...
-Patching output file 1/1
+Generating dot graphs using 5 parallel threads...
+Running dot for graph 1/12
+Running dot for graph 2/12
+Running dot for graph 3/12
+Running dot for graph 4/12
+Running dot for graph 5/12
+Running dot for graph 6/12
+Running dot for graph 7/12
+Running dot for graph 8/12
+Running dot for graph 9/12
+Running dot for graph 10/12
+Running dot for graph 11/12
+Running dot for graph 12/12
+Patching output file 1/20
+Patching output file 2/20
+Patching output file 3/20
+Patching output file 4/20
+Patching output file 5/20
+Patching output file 6/20
+Patching output file 7/20
+Patching output file 8/20
+Patching output file 9/20
+Patching output file 10/20
+Patching output file 11/20
+Patching output file 12/20
+Patching output file 13/20
+Patching output file 14/20
+Patching output file 15/20
+Patching output file 16/20
+Patching output file 17/20
+Patching output file 18/20
+Patching output file 19/20
+Patching output file 20/20
 type lookup cache used 77/65536 hits=620 misses=215
 symbol lookup cache used 36/65536 hits=184 misses=36
 finished...

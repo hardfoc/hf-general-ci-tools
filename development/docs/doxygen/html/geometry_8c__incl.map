@@ -1,9 +1,9 @@
 <map id="geometry.c" name="geometry.c">
-<area shape="rect" id="Node000001" title="Implementation for the sample geometry helpers." alt="" coords="175,5,269,31"/>
-<area shape="rect" id="Node000002" href="$geometry_8h.html" title="Geometry utility helpers that exercise the C pipeline." alt="" coords="5,79,164,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,33,120,75,118,70,199,28"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="188,79,256,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,31,225,65,219,65,219,31"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="281,79,355,104"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,29,293,68,290,72,236,33"/>
+<area shape="rect" id="Node000001" title="Implementation for the sample geometry helpers." alt="" coords="173,5,267,33"/>
+<area shape="rect" id="Node000002" href="$geometry_8h.html" title="Geometry utility helpers that exercise the C pipeline." alt="" coords="5,81,163,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,33,123,76,120,71,193,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="186,81,254,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,32,222,67,218,64,218,35"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="278,81,351,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="238,31,289,71,283,71,236,36"/>
 </map>

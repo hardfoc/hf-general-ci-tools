@@ -701,21 +701,21 @@
   },"100": {
     "doc": "� C++ Static Analysis (Reusable)",
     "title": "Basic Usage",
-    "content": "| 1 2 3 4 5 6 7 . | jobs: static: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src include\" std: \"c++17\" strict: false . | . ",
+    "content": "| 1 2 3 4 5 6 7 . | jobs: static: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src include\" std: \"c++17\" strict: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-analysis.html#basic-usage",
     
     "relUrl": "/docs/ru-cpp-analysis.html#basic-usage"
   },"101": {
     "doc": "� C++ Static Analysis (Reusable)",
     "title": "Strict Mode",
-    "content": "| 1 2 3 4 5 6 7 . | jobs: static: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src include\" std: \"c++20\" strict: true # Fail on any issues . | . ",
+    "content": "| 1 2 3 4 5 6 7 . | jobs: static: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src include\" std: \"c++20\" strict: true # Fail on any issues . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-analysis.html#strict-mode",
     
     "relUrl": "/docs/ru-cpp-analysis.html#strict-mode"
   },"102": {
     "doc": "� C++ Static Analysis (Reusable)",
     "title": "Custom Paths",
-    "content": "| 1 2 3 4 5 6 7 . | jobs: static: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src lib tests\" std: \"c++14\" strict: false . | . ",
+    "content": "| 1 2 3 4 5 6 7 . | jobs: static: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src lib tests\" std: \"c++14\" strict: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-analysis.html#custom-paths",
     
     "relUrl": "/docs/ru-cpp-analysis.html#custom-paths"
@@ -855,35 +855,35 @@
   },"122": {
     "doc": "🔧 C++ Linting Tools (Reusable)",
     "title": "Basic Usage",
-    "content": "| 1 2 3 4 5 . | jobs: lint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" . | . ",
+    "content": "| 1 2 3 4 5 . | jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-lint.html#basic-usage",
     
     "relUrl": "/docs/ru-cpp-lint.html#basic-usage"
   },"123": {
     "doc": "🔧 C++ Linting Tools (Reusable)",
     "title": "Custom File Extensions",
-    "content": "| 1 2 3 4 5 6 . | jobs: lint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: extensions: \"c,cpp,h,hpp,cc,cxx\" clang_version: \"18\" . | . ",
+    "content": "| 1 2 3 4 5 6 . | jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: extensions: \"c,cpp,h,hpp,cc,cxx\" clang_version: \"18\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-lint.html#custom-file-extensions",
     
     "relUrl": "/docs/ru-cpp-lint.html#custom-file-extensions"
   },"124": {
     "doc": "🔧 C++ Linting Tools (Reusable)",
     "title": "Custom Exclude Paths",
-    "content": "| 1 2 3 4 5 6 . | jobs: lint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: ignore: \"build|.git|third_party|vendor|test\" clang_version: \"20\" . | . ",
+    "content": "| 1 2 3 4 5 6 . | jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: ignore: \"build|.git|third_party|vendor|test\" clang_version: \"20\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-lint.html#custom-exclude-paths",
     
     "relUrl": "/docs/ru-cpp-lint.html#custom-exclude-paths"
   },"125": {
     "doc": "🔧 C++ Linting Tools (Reusable)",
     "title": "Advanced Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 . | jobs: lint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" tidy_checks: \"readability-*,performance-*,modernize-*\" # Specific checks extensions: \"c,cpp,h,hpp\" ignore: \"build|.git|third_party\" files_changed_only: true # Only check changed files in PRs thread_comments: true # Post collapsible thread comments . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 . | jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" tidy_checks: \"readability-*,performance-*,modernize-*\" # Specific checks extensions: \"c,cpp,h,hpp\" ignore: \"build|.git|third_party\" files_changed_only: true # Only check changed files in PRs thread_comments: true # Post collapsible thread comments . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-lint.html#advanced-configuration",
     
     "relUrl": "/docs/ru-cpp-lint.html#advanced-configuration"
   },"126": {
     "doc": "🔧 C++ Linting Tools (Reusable)",
     "title": "Performance Optimized for Large Projects",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | jobs: lint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" files_changed_only: true # Only lint changed files lines_changed_only: true # Only check changed lines ignore: \"build|.git|third_party|vendor\" # Exclude more directories step_summary: true # Show summary in workflow file_annotations: true # Show inline annotations thread_comments: false # Disable thread comments for performance . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" files_changed_only: true # Only lint changed files lines_changed_only: true # Only check changed lines ignore: \"build|.git|third_party|vendor\" # Exclude more directories step_summary: true # Show summary in workflow file_annotations: true # Show inline annotations thread_comments: false # Disable thread comments for performance . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-cpp-lint.html#performance-optimized-for-large-projects",
     
     "relUrl": "/docs/ru-cpp-lint.html#performance-optimized-for-large-projects"
@@ -988,21 +988,21 @@
   },"141": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Basic Usage",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | name: Check Documentation Links on: push: branches: [main] pull_request: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | name: Check Documentation Links on: push: branches: [main] pull_request: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#basic-usage",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#basic-usage"
   },"142": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Advanced Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 . | name: Advanced Link Check on: push: branches: [main] pull_request: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md **/docs/**\" fail_on_errors: true timeout: \"15\" max_retries: \"5\" retry_wait_time: \"2\" exclude_private: true exclude_mail: true verbose: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 . | name: Advanced Link Check on: push: branches: [main] pull_request: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md **/docs/**\" fail_on_errors: true timeout: \"15\" max_retries: \"5\" retry_wait_time: \"2\" exclude_private: true exclude_mail: true verbose: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#advanced-configuration",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#advanced-configuration"
   },"143": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Using TOML Configuration File",
-    "content": "For advanced configuration, you can use a lychee.toml file: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 . | name: Link Check with TOML Config on: push: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: config_file: \"lychee.toml\" paths: \"docs/** *.md\" verbose: true . | . Creating a TOML Config File: . Create a custom configuration file: . | 1 2 . | # Create lychee.toml in your repository root touch lychee.toml . | . Then customize it for your needs. The TOML file allows you to: . | Set default timeouts and retry counts | Exclude specific domains or patterns | Configure HTTP headers and redirects | Enable caching for faster subsequent runs | . ",
+    "content": "For advanced configuration, you can use a lychee.toml file: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 . | name: Link Check with TOML Config on: push: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: config_file: \"lychee.toml\" paths: \"docs/** *.md\" verbose: true . | . Creating a TOML Config File: . Create a custom configuration file: . | 1 2 . | # Create lychee.toml in your repository root touch lychee.toml . | . Then customize it for your needs. The TOML file allows you to: . | Set default timeouts and retry counts | Exclude specific domains or patterns | Configure HTTP headers and redirects | Enable caching for faster subsequent runs | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#using-toml-configuration-file",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#using-toml-configuration-file"
@@ -1051,35 +1051,35 @@
   },"150": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Basic Link Check",
-    "content": "| 1 2 3 4 5 6 7 8 9 . | name: Basic Link Check on: push: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 . | name: Basic Link Check on: push: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#basic-link-check",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#basic-link-check"
   },"151": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Custom Paths",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: Custom Link Check on: push: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** README.md CONTRIBUTING.md\" fail_on_errors: false . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: Custom Link Check on: push: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** README.md CONTRIBUTING.md\" fail_on_errors: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#custom-paths",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#custom-paths"
   },"152": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Documentation Only",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | name: Documentation Link Check on: push: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | name: Documentation Link Check on: push: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#documentation-only",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#documentation-only"
   },"153": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "All Markdown Files",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | name: All Markdown Link Check on: push: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"**/*.md\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | name: All Markdown Link Check on: push: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"**/*.md\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#all-markdown-files",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#all-markdown-files"
   },"154": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "With Submodule Support",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: Link Check with Submodules on: push: branches: [main] jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: checkout_recursive: true # Enable submodule checkout paths: \"docs/** *.md **/docs/**\" fail_on_errors: true timeout: \"15\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: Link Check with Submodules on: push: branches: [main] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: checkout_recursive: true # Enable submodule checkout paths: \"docs/** *.md **/docs/**\" fail_on_errors: true timeout: \"15\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#with-submodule-support",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#with-submodule-support"
@@ -1093,14 +1093,14 @@
   },"156": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Combined with Documentation Workflow",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | name: Documentation Pipeline on: push: branches: [main] jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile run_link_check: true link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | name: Documentation Pipeline on: push: branches: [main] jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile run_link_check: true link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#combined-with-documentation-workflow",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#combined-with-documentation-workflow"
   },"157": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Part of Full CI Pipeline",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 . | name: Full CI Pipeline on: push: branches: [main] pull_request: branches: [main] jobs: lint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 static: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 . | name: Full CI Pipeline on: push: branches: [main] pull_request: branches: [main] jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 static: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#part-of-full-ci-pipeline",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#part-of-full-ci-pipeline"
@@ -1170,7 +1170,7 @@
   },"167": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "Debug Mode",
-    "content": "Enable verbose output for debugging: . | 1 2 3 4 5 6 . | jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**\" fail_on_errors: false # Don't fail on errors for debugging . | . ",
+    "content": "Enable verbose output for debugging: . | 1 2 3 4 5 6 . | jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**\" fail_on_errors: false # Don't fail on errors for debugging . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#debug-mode",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#debug-mode"
@@ -1359,49 +1359,49 @@
   },"194": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Basic Usage",
-    "content": "| 1 2 3 4 5 6 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages . | . ",
+    "content": "| 1 2 3 4 5 6 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#basic-usage",
     
     "relUrl": "/docs/ru-docs-publish.html#basic-usage"
   },"195": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "With Submodule Support",
-    "content": "| 1 2 3 4 5 6 7 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages checkout_recursive: true # Enable submodule checkout . | . ",
+    "content": "| 1 2 3 4 5 6 7 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages checkout_recursive: true # Enable submodule checkout . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#with-submodule-support",
     
     "relUrl": "/docs/ru-docs-publish.html#with-submodule-support"
   },"196": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "With Documentation Quality Checks",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages run_link_check: true link_check_paths: \"docs/** *.md **/docs/**\" run_markdown_lint: true markdown_lint_paths: \"docs/** *.md\" run_spell_check: true spell_check_paths: \"docs/** *.md\" spell_check_config: \".cspell.json\" deploy_pages: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages run_link_check: true link_check_paths: \"docs/** *.md **/docs/**\" run_markdown_lint: true markdown_lint_paths: \"docs/** *.md\" run_spell_check: true spell_check_paths: \"docs/** *.md\" spell_check_config: \".cspell.json\" deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#with-documentation-quality-checks",
     
     "relUrl": "/docs/ru-docs-publish.html#with-documentation-quality-checks"
   },"197": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "With Jekyll Integration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_config: \"_config.yml\" jekyll_source: \"docs\" jekyll_destination: \"_site\" run_link_check: true deploy_pages: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_config: \"_config.yml\" jekyll_source: \"docs\" jekyll_destination: \"_site\" run_link_check: true deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#with-jekyll-integration",
     
     "relUrl": "/docs/ru-docs-publish.html#with-jekyll-integration"
   },"198": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Advanced Jekyll Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_config: \"_config.yml,_config_prod.yml\" jekyll_source: \"docs\" jekyll_destination: \"_site\" jekyll_environment: \"production\" jekyll_safe: true jekyll_verbose: true jekyll_strict_front_matter: true jekyll_drafts: false jekyll_future: false jekyll_unpublished: false run_link_check: true deploy_pages: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_config: \"_config.yml,_config_prod.yml\" jekyll_source: \"docs\" jekyll_destination: \"_site\" jekyll_environment: \"production\" jekyll_safe: true jekyll_verbose: true jekyll_strict_front_matter: true jekyll_drafts: false jekyll_future: false jekyll_unpublished: false run_link_check: true deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#advanced-jekyll-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#advanced-jekyll-configuration"
   },"199": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Custom Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: docs/Doxyfile.custom deployment_branch: gh-pages run_link_check: false deploy_pages: false . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: docs/Doxyfile.custom deployment_branch: gh-pages run_link_check: false deploy_pages: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#custom-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#custom-configuration"
   },"200": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Submodule Documentation Projects",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | jobs: docs: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: checkout_recursive: true # Required for submodule-based docs doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_source: \"docs\" run_link_check: true link_check_paths: \"docs/** *.md **/docs/**\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: checkout_recursive: true # Required for submodule-based docs doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_source: \"docs\" run_link_check: true link_check_paths: \"docs/** *.md **/docs/**\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#submodule-documentation-projects",
     
     "relUrl": "/docs/ru-docs-publish.html#submodule-documentation-projects"
@@ -1464,7 +1464,7 @@
   },"209": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Standalone Link Check",
-    "content": "For repositories that only need link checking without documentation generation, use the dedicated link check workflow: . | 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: link-check: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md **/docs/**\" # Paths to check (default: **/*.md) fail_on_errors: true # Fail on broken links timeout: \"10\" # Timeout per link (seconds) retry: \"3\" # Number of retries exclude_private: true # Exclude private links exclude_mail: true # Exclude mailto links verbose: false # Verbose output # Uses lycheeverse/lychee-action@v2 for advanced link checking . | . ",
+    "content": "For repositories that only need link checking without documentation generation, use the dedicated link check workflow: . | 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md **/docs/**\" # Paths to check (default: **/*.md) fail_on_errors: true # Fail on broken links timeout: \"10\" # Timeout per link (seconds) retry: \"3\" # Number of retries exclude_private: true # Exclude private links exclude_mail: true # Exclude mailto links verbose: false # Verbose output # Uses lycheeverse/lychee-action@v2 for advanced link checking . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#standalone-link-check",
     
     "relUrl": "/docs/ru-docs-publish.html#standalone-link-check"
@@ -2024,28 +2024,28 @@
   },"289": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Basic Usage",
-    "content": "| 1 2 3 4 5 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 . | . ",
+    "content": "| 1 2 3 4 5 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#basic-usage",
     
     "relUrl": "/docs/ru-yaml-lint.html#basic-usage"
   },"290": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Advanced Usage",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,_site/**' . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,_site/**' . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#advanced-usage",
     
     "relUrl": "/docs/ru-yaml-lint.html#advanced-usage"
   },"291": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Workflow-Only Checking",
-    "content": "| 1 2 3 4 5 6 7 8 . | name: Workflow YAML Lint on: [push, pull_request] jobs: yamllint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml' strict_mode: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 . | name: Workflow YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml' strict_mode: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#workflow-only-checking",
     
     "relUrl": "/docs/ru-yaml-lint.html#workflow-only-checking"
   },"292": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Comprehensive Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: Complete YAML Lint on: [push, pull_request] jobs: yamllint: uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml,**/*.yaml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,venv/**,.venv/**,_site/**' . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: Complete YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml,**/*.yaml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,venv/**,.venv/**,_site/**' . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#comprehensive-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#comprehensive-configuration"
@@ -2129,7 +2129,7 @@
   },"304": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "1. Enable Versioning in Your Workflow",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 . | name: '📚 Publish Versioned Documentation' on: push: branches: ['main', 'release/*'] pull_request: branches: ['main'] workflow_dispatch: permissions: contents: 'read' pages: 'write' id-token: 'write' jobs: ci-docs-publish: uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning is now enabled by default deployment_branch: 'gh-pages' # Required for versioned documentation # Doxygen versioning doxygen_version_strategy: 'auto' doxygen_config: '_config/Doxyfile' # Jekyll configuration jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Versioned deployment deployment_branch: 'gh-pages' # Quality checks run_link_check: 'true' run_markdown_lint: 'true' deploy_pages: 'true' . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 . | name: '📚 Publish Versioned Documentation' on: push: branches: ['main', 'release/*'] pull_request: branches: ['main'] workflow_dispatch: permissions: contents: 'read' pages: 'write' id-token: 'write' jobs: ci-docs-publish: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning is now enabled by default deployment_branch: 'gh-pages' # Required for versioned documentation # Doxygen versioning doxygen_version_strategy: 'auto' doxygen_config: '_config/Doxyfile' # Jekyll configuration jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Versioned deployment deployment_branch: 'gh-pages' # Quality checks run_link_check: 'true' run_markdown_lint: 'true' deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#1-enable-versioning-in-your-workflow",
     
     "relUrl": "/docs/versioning-guide.html#1-enable-versioning-in-your-workflow"
@@ -2325,21 +2325,21 @@
   },"332": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Basic Versioning",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: 'Documentation with Versioning' on: push: branches: ['main', 'release/*'] jobs: docs: uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' doxygen_config: '_config/Doxyfile' jekyll_enabled: 'true' deploy_pages: 'true' . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: 'Documentation with Versioning' on: push: branches: ['main', 'release/*'] jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' doxygen_config: '_config/Doxyfile' jekyll_enabled: 'true' deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#basic-versioning",
     
     "relUrl": "/docs/versioning-guide.html#basic-versioning"
   },"333": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Advanced Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 . | name: 'Advanced Versioned Documentation' on: push: branches: ['main', 'release/*', 'feature/*'] pull_request: branches: ['main'] jobs: docs: uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning (always enabled) deployment_branch: 'gh-pages' # Doxygen (auto-synchronized with git versioning) doxygen_config: 'docs/Doxyfile' # Jekyll jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Deployment deployment_branch: 'gh-pages' # Optional: defaults to 'gh-pages' # Quality run_link_check: 'true' run_markdown_lint: 'true' run_spell_check: 'true' verbose: 'true' # Standard deployment deploy_pages: 'true' . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 . | name: 'Advanced Versioned Documentation' on: push: branches: ['main', 'release/*', 'feature/*'] pull_request: branches: ['main'] jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning (always enabled) deployment_branch: 'gh-pages' # Doxygen (auto-synchronized with git versioning) doxygen_config: 'docs/Doxyfile' # Jekyll jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Deployment deployment_branch: 'gh-pages' # Optional: defaults to 'gh-pages' # Quality run_link_check: 'true' run_markdown_lint: 'true' run_spell_check: 'true' verbose: 'true' # Standard deployment deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#advanced-configuration",
     
     "relUrl": "/docs/versioning-guide.html#advanced-configuration"
   },"334": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Manual Versioning",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 . | name: 'Manual Version Control' on: workflow_dispatch: inputs: version: description: 'Version to deploy' required: true type: string jobs: docs: uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' # Required for versioned documentation deploy_pages: 'true' # Deploy to GitHub Pages . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 . | name: 'Manual Version Control' on: workflow_dispatch: inputs: version: description: 'Version to deploy' required: true type: string jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' # Required for versioned documentation deploy_pages: 'true' # Deploy to GitHub Pages . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#manual-versioning",
     
     "relUrl": "/docs/versioning-guide.html#manual-versioning"
