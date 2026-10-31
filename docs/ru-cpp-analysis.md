@@ -72,7 +72,7 @@ This reusable workflow (`ru-cpp-analysis.yml`) performs comprehensive static ana
 ```yaml
 jobs:
   static:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
     with:
       paths: "src include"
       std: "c++17"
@@ -84,7 +84,7 @@ jobs:
 ```yaml
 jobs:
   static:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
     with:
       paths: "src include"
       std: "c++20"
@@ -96,7 +96,7 @@ jobs:
 ```yaml
 jobs:
   static:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
     with:
       paths: "src lib tests"
       std: "c++14"

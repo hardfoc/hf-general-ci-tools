@@ -160,7 +160,7 @@ seo:
   description: >
     Reusable GitHub Actions workflows for CI/CD tasks including C/C++ linting,
     static analysis, documentation generation, and link checking
-  url: "https://n3b3x.github.io/hf-general-ci-tools"
+  url: "https://hardfoc.github.io/hf-general-ci-tools"
   twitter:
     card: "summary_large_image"
     site: "@n3b3x"

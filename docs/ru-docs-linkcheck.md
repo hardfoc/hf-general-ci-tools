@@ -50,7 +50,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
 ```
 
 ### **Advanced Configuration**
@@ -66,7 +66,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/** *.md **/docs/**"
       fail_on_errors: true
@@ -91,7 +91,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       config_file: "lychee.toml"
       paths: "docs/** *.md"
@@ -168,7 +168,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
 ```
 
 ### **Custom Paths**
@@ -182,7 +182,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/** README.md CONTRIBUTING.md"
       fail_on_errors: false
@@ -199,7 +199,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/**"
 ```
@@ -215,7 +215,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "**/*.md"
 ```
@@ -231,7 +231,7 @@ on:
 
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       checkout_recursive: true  # Enable submodule checkout
       paths: "docs/** *.md **/docs/**"
@@ -254,13 +254,13 @@ on:
 
 jobs:
   docs:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
     with:
       doxygen_config: _config/Doxyfile
       run_link_check: true
 
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/**"
 ```
@@ -278,16 +278,16 @@ on:
 
 jobs:
   lint:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
 
   static:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
 
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
 
   docs:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
 ```
 
 ---
@@ -415,7 +415,7 @@ Enable verbose output for debugging:
 ```yaml
 jobs:
   link-check:
-    uses: N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/**"
       fail_on_errors: false  # Don't fail on errors for debugging

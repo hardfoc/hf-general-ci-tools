@@ -44,7 +44,7 @@ permissions:
 
 jobs:
   ci-docs-publish:
-    uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
+    uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
     with:
       # Versioning is now enabled by default
       deployment_branch: 'gh-pages'  # Required for versioned documentation
@@ -442,7 +442,7 @@ on:
 
 jobs:
   docs:
-    uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
+    uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
     with:
       deployment_branch: 'gh-pages'
       doxygen_config: '_config/Doxyfile'
@@ -463,7 +463,7 @@ on:
 
 jobs:
   docs:
-    uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
+    uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
     with:
       # Versioning (always enabled)
       deployment_branch: 'gh-pages'
@@ -504,7 +504,7 @@ on:
 
 jobs:
   docs:
-    uses: 'N3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
+    uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'
     with:
       deployment_branch: 'gh-pages'  # Required for versioned documentation
       deploy_pages: 'true'          # Deploy to GitHub Pages
