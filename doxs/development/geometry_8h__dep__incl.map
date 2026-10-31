@@ -1,5 +1,5 @@
 <map id="geometry.h" name="geometry.h">
-<area shape="rect" id="Node000001" title="Geometry utility helpers that exercise the C pipeline." alt="" coords="5,5,100,31"/>
-<area shape="rect" id="Node000002" href="$geometry_8c.html" title="Implementation for the sample geometry helpers." alt="" coords="5,79,100,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,44,55,79,50,79,50,44"/>
+<area shape="rect" id="Node000001" title="Geometry utility helpers that exercise the C pipeline." alt="" coords="5,5,100,33"/>
+<area shape="rect" id="Node000002" href="$geometry_8c.html" title="Implementation for the sample geometry helpers." alt="" coords="6,81,99,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,47,55,81,50,80,51,51"/>
 </map>
