@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="492" viewBox="0 0 1200 492" role="img" aria-labelledby="docs-pipeline-title docs-pipeline-desc" font-family="Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<title id="docs-pipeline-title">From code to site</title>
+<desc id="docs-pipeline-desc">Pages and code feed figkit and the table generator, MkDocs builds the site in strict mode, the Doxygen API is merged in, links are checked and mike publishes to gh-pages.</desc>
+<defs><marker id="fk-arrow-blue-strong" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#60A5FA"/></marker><marker id="fk-arrow-brand-strong" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8C93FF"/></marker><marker id="fk-arrow-violet-strong" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#A78BFA"/></marker></defs>
+<rect x="0.5" y="0.5" width="1199" height="491" rx="16" fill="#0E131A" stroke="#283241"/>
+<text x="32" y="46.8" font-size="16" font-weight="700" letter-spacing="1.2" fill="#C7CBFF">DOCUMENTATION PIPELINE</text>
+<text x="32" y="85.6" font-size="32" font-weight="700" fill="#E8EDF3">From code to site</text>
+<text x="32" y="115.4" font-size="18" fill="#9AA6B5">Everything a reader sees is either written once or generated from the code, and CI checks both.</text>
+<rect x="32" y="131.4" width="1136" height="1" fill="#252F3C"/>
+<path d="M266 193.4 L628 193.4" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-blue-strong)"/>
+<path d="M266 334.4 L289 334.4 Q297 334.4 297 326.4 L297 283.9 Q297 275.9 305 275.9 L328 275.9" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-blue-strong)"/>
+<path d="M266 334.4 L289 334.4 Q297 334.4 297 342.4 L297 376.9 Q297 384.9 305 384.9 L328 384.9" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-blue-strong)"/>
+<path d="M566 275.9 L589 275.9 Q597 275.9 597 267.9 L597 215.2 Q597 207.2 605 207.2 L628 207.2" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-violet-strong)"/>
+<path d="M566 384.9 L589 384.9 Q597 384.9 597 376.9 L597 237.5 Q597 229.5 605 229.5 L628 229.5" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-violet-strong)"/>
+<path d="M866 193.9 L889 193.9 Q897 193.9 897 201.9 L897 245.6 Q897 253.6 905 253.6 L928 253.6" fill="none" stroke="#8C93FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-brand-strong)"/>
+<path d="M866 384.9 L889 384.9 Q897 384.9 897 376.9 L897 312.9 Q897 304.9 905 304.9 L928 304.9" fill="none" stroke="#8C93FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fk-arrow-brand-strong)"/>
+<rect x="32" y="149.4" width="230" height="88" rx="12" fill="#151C26" stroke="#3A4657" stroke-width="1"/>
+<rect x="32" y="157.4" width="4" height="72" rx="2" fill="#60A5FA"/>
+<rect x="32" y="277.4" width="230" height="114" rx="12" fill="#151C26" stroke="#3A4657" stroke-width="1"/>
+<rect x="32" y="285.4" width="4" height="98" rx="2" fill="#60A5FA"/>
+<rect x="332" y="231.4" width="230" height="89" rx="12" fill="#151C26" stroke="#3A4657" stroke-width="1"/>
+<rect x="332" y="239.4" width="4" height="73" rx="2" fill="#A78BFA"/>
+<rect x="332" y="340.4" width="230" height="89" rx="12" fill="#151C26" stroke="#3A4657" stroke-width="1"/>
+<rect x="332" y="348.4" width="4" height="73" rx="2" fill="#A78BFA"/>
+<rect x="632" y="149.4" width="230" height="89" rx="12" fill="#1C1F3D" stroke="#8C93FF" stroke-width="1.4"/>
+<rect x="632" y="157.4" width="4" height="73" rx="2" fill="#8C93FF"/>
+<rect x="632" y="340.4" width="230" height="89" rx="12" fill="#151C26" stroke="#3A4657" stroke-width="1"/>
+<rect x="632" y="348.4" width="4" height="73" rx="2" fill="#8C93FF"/>
+<rect x="932" y="219.4" width="236" height="114" rx="12" fill="#11281A" stroke="#4ADE80" stroke-width="1.4"/>
+<rect x="932" y="227.4" width="4" height="98" rx="2" fill="#4ADE80"/>
+<text x="56" y="184.4" font-size="20" font-weight="700" fill="#E8EDF3">Pages</text>
+<text x="56" y="213.6" font-size="16" font-family="'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace" fill="#D2DAE4">docs/**/*.md</text>
+<text x="56" y="312.4" font-size="20" font-weight="700" fill="#E8EDF3">Code</text>
+<text x="56" y="343" font-size="17" fill="#D2DAE4">headers, tables,</text>
+<text x="56" y="367.7" font-size="17" fill="#D2DAE4">YAML</text>
+<text x="356" y="266.4" font-size="20" font-weight="700" fill="#E8EDF3">figkit</text>
+<text x="356" y="297" font-size="17" fill="#D2DAE4">figures from code</text>
+<text x="356" y="375.4" font-size="20" font-weight="700" fill="#E8EDF3">gen.py</text>
+<text x="356" y="406" font-size="17" fill="#D2DAE4">tables from code</text>
+<text x="656" y="184.4" font-size="20" font-weight="700" fill="#C7CBFF">MkDocs</text>
+<text x="656" y="215" font-size="17" fill="#D2DAE4">build --strict</text>
+<text x="656" y="375.4" font-size="20" font-weight="700" fill="#E8EDF3">Doxygen</text>
+<text x="656" y="406" font-size="17" fill="#D2DAE4">API under api/</text>
+<text x="956" y="254.4" font-size="20" font-weight="700" fill="#BBF7D0">mike</text>
+<text x="956" y="285" font-size="17" fill="#D2DAE4">gh-pages, one folder</text>
+<text x="956" y="309.7" font-size="17" fill="#D2DAE4">per version</text>
+<rect x="931.8" y="351.4" width="236.4" height="24" rx="12" fill="#0E131A"/>
+<text x="1050" y="369.2" font-size="16" font-weight="500" text-anchor="middle" fill="#9AA6B5">merged, then links checked</text>
+<rect x="32" y="441.8" width="14" height="14" rx="4" fill="#13233A" stroke="#60A5FA" stroke-width="1.4"/>
+<text x="54" y="456.4" font-size="16" fill="#9AA6B5">input</text>
+<rect x="118.1" y="441.8" width="14" height="14" rx="4" fill="#221A3A" stroke="#A78BFA" stroke-width="1.4"/>
+<text x="140.1" y="456.4" font-size="16" fill="#9AA6B5">generator, checked in CI</text>
+<rect x="361.4" y="441.8" width="14" height="14" rx="4" fill="#1C1F3D" stroke="#8C93FF" stroke-width="1.4"/>
+<text x="383.4" y="456.4" font-size="16" fill="#9AA6B5">build</text>
+<rect x="446.4" y="441.8" width="14" height="14" rx="4" fill="#11281A" stroke="#4ADE80" stroke-width="1.4"/>
+<text x="468.4" y="456.4" font-size="16" fill="#9AA6B5">publish</text>
+</svg>

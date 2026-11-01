@@ -1,0 +1,12 @@
+---
+# Site navigation (mkdocs-awesome-nav). Each entry is a top tab; inside a folder, index.md is the section's landing
+# page and the other pages follow by name unless the folder has its own .nav.yml.
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Learn: learn
+  - Architecture: architecture
+  - Guides: guides
+  - Reference: reference
+  - Decisions: adr
+  - Figures: diagrams

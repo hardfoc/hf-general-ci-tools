@@ -1,0 +1,16 @@
+{
+  "docs-pipeline": {
+    "title": "From code to site",
+    "alt": "Pages and code feed figkit and the table generator, MkDocs builds the site in strict mode, the Doxygen API is merged in, links are checked and mike publishes to gh-pages.",
+    "description": "From left to right. Pages under docs/ and the code they describe are the inputs. Two generators turn code into documentation: figkit draws the figures and gen.py fills the generated tables, and both run with --check in CI so a committed figure or table that no longer matches the code fails the pull request. MkDocs builds the site in strict mode, Doxygen builds the API reference, the two are merged and the link checker runs on the result. On a push to main or a version tag, mike publishes the merged site to the gh-pages branch under a version folder.",
+    "profile": "overview",
+    "width": 1200,
+    "source": "docs/diagrams/figures/docs-pipeline.py",
+    "sources": [
+      "mkdocs.yml",
+      "tools/figkit/build.py",
+      "tools/docs/gen.py",
+      "tools/docs/mkdocs_hooks.py"
+    ]
+  }
+}
