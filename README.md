@@ -74,6 +74,7 @@ and a new required permission is a breaking change (see
 | [`ru-cpp-lint.yml`](.github/workflows/ru-cpp-lint.yml) | `contents: read`, `pull-requests: write` | checkout; cpp-linter thread comments and annotations |
 | [`ru-docs-linkcheck.yml`](.github/workflows/ru-docs-linkcheck.yml) | `contents: read` | checkout |
 | [`ru-docs-publish.yml`](.github/workflows/ru-docs-publish.yml) | `contents: write` | push to the deployment branch; required on pull requests too, although PRs never deploy |
+| [`ru-host-ci.yml`](.github/workflows/ru-host-ci.yml) | `contents: read` | checkout |
 | [`ru-markdown-lint.yml`](.github/workflows/ru-markdown-lint.yml) | `contents: read` | checkout |
 | [`ru-release.yml`](.github/workflows/ru-release.yml) | `contents: write` | create the GitHub Release |
 | [`ru-yaml-lint.yml`](.github/workflows/ru-yaml-lint.yml) | `contents: read` | checkout |
