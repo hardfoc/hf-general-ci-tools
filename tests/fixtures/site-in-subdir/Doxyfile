@@ -1,0 +1,13 @@
+# Self-test Doxyfile. OUTPUT_DIRECTORY deliberately sits under a directory
+# that does not exist in a fresh checkout (build/ is git-ignored), which
+# Doxygen cannot create on its own; ru-docs-publish must create it.
+PROJECT_NAME           = "docs-publish self-test"
+OUTPUT_DIRECTORY       = build/docs-selftest/doxygen
+HTML_OUTPUT            = html
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+INPUT                  = tests/fixtures/site-in-subdir/src
+FILE_PATTERNS          = *.h
+RECURSIVE              = YES
+QUIET                  = YES
+HAVE_DOT               = NO

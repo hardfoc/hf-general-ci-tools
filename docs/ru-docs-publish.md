@@ -127,6 +127,73 @@ The deployment process follows this sequence:
 - ✅ **Centralized API**: Doxygen docs available at root level for all versions
 - ✅ **Smart Navigation**: Root always redirects to appropriate version
 
+### **PR Build Path (no deploy)**
+
+On `pull_request`, `pull_request_target` and `merge_group` events the workflow
+takes the PR build path. It runs everything a deploy would (input validation,
+quality checks, Doxygen, the Jekyll build, the link check) and uploads the
+built site as the `docs-html` artifact (or the name set by `artifact_name`).
+It never pushes to the deployment branch, whatever `deploy_pages` says. One
+step, `Decide whether to deploy`, makes that decision, and every deploy step
+reads its output.
+
+Call the workflow on pull requests so theme and config errors fail the PR and
+not `main`:
+
+```yaml
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  docs:
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    permissions:
+      contents: write   # required even on PRs: a called workflow cannot ask for more than the caller grants
+    with:
+      jekyll_enabled: true
+      jekyll_source: "docs"
+      jekyll_config: "docs/_config/_config.yml"
+      deploy_pages: true   # pull requests still never deploy
+```
+
+### **Pre-flight Checks**
+
+Before anything is built, the build job checks configuration that would
+otherwise only fail at render time or on `main`:
+
+- **Jekyll config files** must exist. `jekyll_config` entries are paths
+  relative to the repository root, the same way `jekyll build --config`
+  resolves them. Paths relative to `jekyll_source` are still accepted.
+- **`callouts:`** (just-the-docs) must be a mapping, and each callout must be
+  a mapping with a `color` key. The shorthand `note: blue` is rejected with an
+  error that shows the correct form:
+
+  ```yaml
+  callouts:
+    note:
+      title: Note
+      color: blue
+  ```
+
+- **Doxygen `OUTPUT_DIRECTORY`**: the directory and all its missing parents
+  are created (`mkdir -p`) before Doxygen runs. Doxygen alone does not create
+  missing parents. If the path cannot be created, the step fails with an
+  error naming the Doxyfile.
+- **GitHub Pages source**: before deploying, the workflow tries to read the
+  repository's Pages settings. If Pages is set to build from GitHub Actions
+  (it must be *Deploy from a branch* on the deployment branch), the deploy
+  fails with an explanation instead of leaving the site at 404. If the token
+  cannot read the Pages settings, the check is skipped.
+
+The generated, versioned Jekyll config is written to
+`<jekyll_source>/_config_generated.yml`, and Jekyll is given that same path,
+so sites whose source is a subdirectory (for example `docs/`) build the same
+way as sites at the repository root. The tools repository's own CI builds
+both layouts (`ci-docs-publish.yml`: `publish-docs` and
+`selftest-site-in-subdir`).
+
 ## ⚙️ Inputs
 
 ### 📁 Repository Configuration
@@ -172,7 +239,8 @@ The deployment process follows this sequence:
 
 | Input | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
-| `deploy_pages` | boolean | ❌ | `true` | Deploy to GitHub Pages |
+| `deploy_pages` | boolean | ❌ | `true` | Deploy to GitHub Pages. Ignored on pull requests (PR build path) |
+| `artifact_name` | string | ❌ | `docs-html` | Name of the uploaded site artifact; set it when calling the workflow more than once in one run |
 | `deployment_branch` | string | ✅ | `gh-pages` | Branch name for deployment (required for versioned documentation) |
 
 ### 🎨 Jekyll Configuration
