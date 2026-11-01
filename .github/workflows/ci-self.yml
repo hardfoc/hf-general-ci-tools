@@ -89,6 +89,17 @@ jobs:
       - name: Unit tests for the check scripts
         run: python .github/scripts/test_checks.py
 
+      # Removed inputs, new required inputs or wider permissions break every
+      # caller on the current major; they need a "### Breaking" entry under
+      # Unreleased in CHANGELOG.md (and then a major release).
+      - name: No unrecorded breaking change against the base branch
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_REF"
+          python .github/scripts/check_contract.py --base-ref FETCH_HEAD
+
   # Dogfood the gate: this repository's required check is "CI gate / gate".
   ci-gate:
     name: CI gate

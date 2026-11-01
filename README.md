@@ -55,6 +55,20 @@ This repository provides a curated set of **reusable GitHub Actions workflows** 
 
 ---
 
+## 🏷️ Versioning
+
+Pin the moving major tag: `uses: hardfoc/hf-general-ci-tools/.github/workflows/<workflow>.yml@v1`.
+Releases are semver tags (`v1.0.0`, `v1.1.0`, ...). `v1` always points at the
+newest `v1.x.y`, so callers get fixes and new optional inputs, never breaking
+changes. Removed inputs, new required inputs and new required permissions
+only arrive with a new major (`@v2`). See [docs/VERSIONING.md](docs/VERSIONING.md)
+and [CHANGELOG.md](CHANGELOG.md).
+
+> After a fix lands here, start a **new** run. "Re-run failed jobs" reuses the
+> reusable-workflow revision that the original run resolved.
+
+---
+
 ## 🔐 Permissions Contract
 
 Each reusable workflow declares minimal `permissions` on every job. A called
