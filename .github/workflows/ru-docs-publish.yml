@@ -1919,9 +1919,9 @@ jobs:
           echo "✅ All conditions met - Pages deployment will proceed"
           else
           echo "⚠️  Pages deployment will be skipped because:"
-            [ "${{ inputs.deploy_pages }}" != "true" ] && echo "   - deploy_pages is false"
-            [ "${{ github.event_name }}" != "push" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ] && echo "   - not a push or workflow_dispatch event (current: ${{ github.event_name }})"
-            [ "${{ github.ref }}" != "refs/heads/${{ github.event.repository.default_branch }}" ] && echo "   - not on default branch (current: ${{ github.ref }}, expected: refs/heads/${{ github.event.repository.default_branch }})"
+            if [ "${{ inputs.deploy_pages }}" != "true" ]; then echo "   - deploy_pages is false"; fi
+            if [ "${{ github.event_name }}" != "push" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then echo "   - not a push or workflow_dispatch event (current: ${{ github.event_name }})"; fi
+            if [ "${{ github.ref }}" != "refs/heads/${{ github.event.repository.default_branch }}" ]; then echo "   - not on default branch (current: ${{ github.ref }}, expected: refs/heads/${{ github.event.repository.default_branch }})"; fi
           fi
 
       # =============================================================================
