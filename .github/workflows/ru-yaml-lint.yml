@@ -39,6 +39,8 @@ jobs:
   yamllint:
     name: YAML Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       result: ${{ steps.lint.outputs.result }}
       files_checked: ${{ steps.lint.outputs.files_checked }}

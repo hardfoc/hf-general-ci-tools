@@ -62,8 +62,8 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    # Permissions: write is required for thread_comments and recommended for file_annotations
-    # Callers can override to 'read' if both thread_comments and file_annotations are disabled
+    # pull-requests: write is used by thread_comments and file_annotations. A job
+    # cannot ask for more than its caller grants, so callers must grant it.
     permissions:
       contents: read
       pull-requests: write
