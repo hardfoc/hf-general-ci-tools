@@ -65,6 +65,7 @@ jobs:
     # Permissions: write is required for thread_comments and recommended for file_annotations
     # Callers can override to 'read' if both thread_comments and file_annotations are disabled
     permissions:
+      contents: read
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
