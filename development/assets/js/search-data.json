@@ -57,7 +57,7 @@
   },"8": {
     "doc": "🚀 hf-general-ci-tools",
     "title": "🎯 Using Reusable Workflows",
-    "content": "For other repositories - Copy and customize these examples for your project . 🔧 Basic CI Pipeline . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 . | name: 🚀 CI Pipeline on: push: { branches: [ main ] } pull_request: { branches: [ main ] } jobs: # Code quality checks lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" style: \"file\" extensions: \"c,cpp,h,hpp\" # Security analysis static: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src include\" std: \"c++17\" strict: false # Documentation generation docs: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: \"_config/Doxyfile\" output_dir: \"docs/doxygen/html\" # Link validation link-check: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**,*.md\" . | . 🎨 Individual Workflow Examples . 🔧 C/C++ Linting Only ```yaml name: Code Quality on: [push, pull_request] jobs: lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" include_patterns: \"*.cpp,*.hpp,*.c,*.h\" clang_version: \"20\" style: \"file\" ``` 📚 Documentation Only ```yaml name: Build Docs on: [push] jobs: docs: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: jekyll_enabled: true jekyll_source: \"docs\" deploy_pages: true run_link_check: true ``` 🔗 Link Checking Only ```yaml name: Check Links on: [push, pull_request] jobs: link-check: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**,*.md\" verbose: true timeout: \"30\" ``` � Markdown Validation Only ```yaml name: Docs Quality on: [push, pull_request] jobs: markdown: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md *.md\" fix: false ``` �📦 Release Creation Only ```yaml name: Release on: push: tags: ['v*'] jobs: release: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: false prerelease: false ``` . ",
+    "content": "For other repositories - Copy and customize these examples for your project . Version pinning: callers pin the major tag @v1, which moves to the latest v1.x.y release. Pin a full tag (@v1.2.3) or a commit SHA if you need a fixed version. The v1 tag is created with the first release. 🔧 Basic CI Pipeline . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 . | name: 🚀 CI Pipeline on: push: { branches: [ main ] } pull_request: { branches: [ main ] } jobs: # Code quality checks lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: clang_version: \"20\" style: \"file\" extensions: \"c,cpp,h,hpp\" # Security analysis static: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1 with: paths: \"src include\" std: \"c++17\" strict: false # Documentation generation docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: \"_config/Doxyfile\" output_dir: \"docs/doxygen/html\" # Link validation link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**,*.md\" . | . 🎨 Individual Workflow Examples . 🔧 C/C++ Linting Only ```yaml name: Code Quality on: [push, pull_request] jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" include_patterns: \"*.cpp,*.hpp,*.c,*.h\" clang_version: \"20\" style: \"file\" ``` 📚 Documentation Only ```yaml name: Build Docs on: [push] jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: jekyll_enabled: true jekyll_source: \"docs\" deploy_pages: true run_link_check: true ``` 🔗 Link Checking Only ```yaml name: Check Links on: [push, pull_request] jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/**,*.md\" verbose: true timeout: \"30\" ``` � Markdown Validation Only ```yaml name: Docs Quality on: [push, pull_request] jobs: markdown: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md *.md\" fix: false ``` �📦 Release Creation Only ```yaml name: Release on: push: tags: ['v*'] jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: false prerelease: false ``` . ",
     "url": "/hf-general-ci-tools/development/#-using-reusable-workflows",
     
     "relUrl": "/#-using-reusable-workflows"
@@ -309,7 +309,7 @@
   },"44": {
     "doc": "📖 Documentation",
     "title": "1. Choose Your Reusable Workflow",
-    "content": "Select the appropriate reusable workflow for your needs: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | # For C/C++ projects uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 # For documentation uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 # For link checking uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 # For YAML validation uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 # For Markdown validation uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 # For releases uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 . | . Note: These are reusable workflows designed to be called from other repositories. The repository-specific workflows (like ci-docs-publish.yml) are only used internally by this repository. ",
+    "content": "Select the appropriate reusable workflow for your needs: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | # For C/C++ projects uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 # For documentation uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 # For link checking uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 # For YAML validation uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 # For Markdown validation uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 # For releases uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 . | . Note: These are reusable workflows designed to be called from other repositories. The repository-specific workflows (like ci-docs-publish.yml) are only used internally by this repository. ",
     "url": "/hf-general-ci-tools/development/docs/#1-choose-your-reusable-workflow",
     
     "relUrl": "/docs/#1-choose-your-reusable-workflow"
@@ -344,7 +344,7 @@
   },"49": {
     "doc": "📖 Documentation",
     "title": "🔄 Reusable Workflows",
-    "content": "These workflows are designed to be called from other repositories using the uses keyword: . | 1 2 3 4 5 6 . | jobs: my-job: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: jekyll_enabled: true deploy_pages: true . | . ",
+    "content": "These workflows are designed to be called from other repositories using the uses keyword: . | 1 2 3 4 5 6 . | jobs: my-job: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: jekyll_enabled: true deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/#-reusable-workflows-1",
     
     "relUrl": "/docs/#-reusable-workflows-1"
@@ -365,21 +365,21 @@
   },"52": {
     "doc": "📖 Documentation",
     "title": "Basic C/C++ Linting",
-    "content": "| 1 2 3 4 5 6 7 8 . | name: Code Quality on: [push, pull_request] jobs: lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" include_patterns: \"*.cpp,*.hpp,*.c,*.h\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 . | name: Code Quality on: [push, pull_request] jobs: lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" include_patterns: \"*.cpp,*.hpp,*.c,*.h\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/#basic-cc-linting",
     
     "relUrl": "/docs/#basic-cc-linting"
   },"53": {
     "doc": "📖 Documentation",
     "title": "Documentation Generation",
-    "content": "| 1 2 3 4 5 6 7 8 9 . | name: Documentation on: [push] jobs: docs: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: jekyll_enabled: true run_link_check: true deploy_pages: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 . | name: Documentation on: [push] jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: jekyll_enabled: true run_link_check: true deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/#documentation-generation",
     
     "relUrl": "/docs/#documentation-generation"
   },"54": {
     "doc": "📖 Documentation",
     "title": "Link Validation",
-    "content": "| 1 2 3 4 5 6 7 8 . | name: Link Check on: [push, pull_request] jobs: links: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md\" verbose: true . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 . | name: Link Check on: [push, pull_request] jobs: links: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md\" verbose: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/#link-validation",
     
     "relUrl": "/docs/#link-validation"
@@ -1288,1174 +1288,1188 @@
     "relUrl": "/docs/ru-docs-publish.html#deployment-flow"
   },"184": {
     "doc": "📚 Documentation Publisher (Reusable)",
+    "title": "PR Build Path (no deploy)",
+    "content": "On pull_request, pull_request_target and merge_group events the workflow takes the PR build path. It runs everything a deploy would (input validation, quality checks, Doxygen, the Jekyll build, the link check) and uploads the built site as the docs-html artifact (or the name set by artifact_name). It never pushes to the deployment branch, whatever deploy_pages says. One step, Decide whether to deploy, makes that decision, and every deploy step reads its output. Call the workflow on pull requests so theme and config errors fail the PR and not main: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 . | on: push: branches: [main] pull_request: jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 permissions: contents: write # required even on PRs: a called workflow cannot ask for more than the caller grants with: jekyll_enabled: true jekyll_source: \"docs\" jekyll_config: \"docs/_config/_config.yml\" deploy_pages: true # pull requests still never deploy . | . ",
+    "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#pr-build-path-no-deploy",
+    
+    "relUrl": "/docs/ru-docs-publish.html#pr-build-path-no-deploy"
+  },"185": {
+    "doc": "📚 Documentation Publisher (Reusable)",
+    "title": "Pre-flight Checks",
+    "content": "Before anything is built, the build job checks configuration that would otherwise only fail at render time or on main: . | Jekyll config files must exist. jekyll_config entries are paths relative to the repository root, the same way jekyll build --config resolves them. Paths relative to jekyll_source are still accepted. | callouts: (just-the-docs) must be a mapping, and each callout must be a mapping with a color key. The shorthand note: blue is rejected with an error that shows the correct form: . | 1 2 3 4 . | callouts: note: title: Note color: blue . | . | Doxygen OUTPUT_DIRECTORY: the directory and all its missing parents are created (mkdir -p) before Doxygen runs. Doxygen alone does not create missing parents. If the path cannot be created, the step fails with an error naming the Doxyfile. | GitHub Pages source: before deploying, the workflow tries to read the repository’s Pages settings. If Pages is set to build from GitHub Actions (it must be Deploy from a branch on the deployment branch), the deploy fails with an explanation instead of leaving the site at 404. If the token cannot read the Pages settings, the check is skipped. | . The generated, versioned Jekyll config is written to &lt;jekyll_source&gt;/_config_generated.yml, and Jekyll is given that same path, so sites whose source is a subdirectory (for example docs/) build the same way as sites at the repository root. The tools repository’s own CI builds both layouts (ci-docs-publish.yml: publish-docs and selftest-site-in-subdir). ",
+    "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#pre-flight-checks",
+    
+    "relUrl": "/docs/ru-docs-publish.html#pre-flight-checks"
+  },"186": {
+    "doc": "📚 Documentation Publisher (Reusable)",
     "title": "⚙️ Inputs",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#%EF%B8%8F-inputs",
     
     "relUrl": "/docs/ru-docs-publish.html#️-inputs"
-  },"185": {
+  },"187": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "📁 Repository Configuration",
     "content": "| Input | Type | Required | Default | Description | . | checkout_recursive | boolean | ❌ | false | Checkout submodules recursively (for projects with docs in submodules) | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-repository-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#-repository-configuration"
-  },"186": {
+  },"188": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "📚 Doxygen Configuration",
     "content": "| Input | Type | Required | Default | Description | . | doxygen_config | string | ❌ | Doxyfile | Path to Doxyfile (relative to repo root) | . | doxygen_working_directory | string | ❌ | . | Directory to execute Doxygen from (relative to repo root). Relative paths in your Doxyfile are resolved from here. | . | doxygen_fail_on_warnings | boolean | ❌ | false | Treat Doxygen warnings as errors in CI | . 💡 Tip: When your Doxyfile lives in a subdirectory (for example docs/api/Doxyfile) or assumes it will be executed from a specific folder, point doxygen_config to the file itself and set doxygen_working_directory to the directory you want Doxygen to run from. This keeps relative INPUT and OUTPUT_DIRECTORY values working exactly as they do locally. ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-doxygen-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#-doxygen-configuration"
-  },"187": {
+  },"189": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🔗 Link Checking",
     "content": "| Input | Type | Required | Default | Description | . | run_link_check | boolean | ❌ | true | Run documentation link checker | . | link_check_paths | string | ❌ | **/*.md | Space-separated paths to check for broken links | . | link_check_config | string | ❌ | '' | Path to lychee.toml config file (optional) | . | verbose | boolean | ❌ | false | Enable verbose output for link checking | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-link-checking",
     
     "relUrl": "/docs/ru-docs-publish.html#-link-checking"
-  },"188": {
+  },"190": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "📝 Documentation Quality",
     "content": "| Input | Type | Required | Default | Description | . | run_markdown_lint | boolean | ❌ | false | Run markdown linting on documentation files | . | markdown_lint_paths | string | ❌ | **/*.md | Space-separated glob patterns for markdown files to lint | . | yamllint_config | string | ❌ | _config/.yamllint | Path to yamllint configuration file | . | markdown_lint_config | string | ❌ | _config/.markdownlint.json | Path to markdownlint configuration file | . | run_spell_check | boolean | ❌ | false | Run spell checking on documentation files | . | spell_check_paths | string | ❌ | **/*.md | Space-separated glob patterns for files to spell check | . | spell_check_config | string | ❌ | .cspell.json | Path to cspell configuration file | . ℹ️ Visibility: The workflow lists every YAML and Markdown file that will be linted before running yamllint or markdownlint, making it easy to confirm what is being validated in CI logs. ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-documentation-quality",
     
     "relUrl": "/docs/ru-docs-publish.html#-documentation-quality"
-  },"189": {
+  },"191": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🌐 Deployment",
-    "content": "| Input | Type | Required | Default | Description | . | deploy_pages | boolean | ❌ | true | Deploy to GitHub Pages | . | deployment_branch | string | ✅ | gh-pages | Branch name for deployment (required for versioned documentation) | . ",
+    "content": "| Input | Type | Required | Default | Description | . | deploy_pages | boolean | ❌ | true | Deploy to GitHub Pages. Ignored on pull requests (PR build path) | . | artifact_name | string | ❌ | docs-html | Name of the uploaded site artifact; set it when calling the workflow more than once in one run | . | deployment_branch | string | ✅ | gh-pages | Branch name for deployment (required for versioned documentation) | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-deployment",
     
     "relUrl": "/docs/ru-docs-publish.html#-deployment"
-  },"190": {
+  },"192": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🎨 Jekyll Configuration",
     "content": "| Input | Type | Required | Default | Description | . | jekyll_enabled | boolean | ❌ | false | Enable Jekyll static site generation | . | jekyll_config | string | ❌ | _config.yml | Comma-separated list of Jekyll configuration files | . | jekyll_source | string | ❌ | docs | Jekyll source directory containing your site files | . | jekyll_destination | string | ❌ | _site | Jekyll build destination directory for generated site | . | jekyll_environment | string | ❌ | production | Jekyll environment (development, production, staging) | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-jekyll-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#-jekyll-configuration"
-  },"191": {
+  },"193": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "⚙️ Jekyll Advanced Options",
     "content": "| Input | Type | Required | Default | Description | . | jekyll_safe | boolean | ❌ | true | Run in safe mode (disables custom plugins, used by GitHub Pages) | . | jekyll_plugins_dir | string | ❌ | '' | Comma-separated list of plugin directories | . | jekyll_layouts_dir | string | ❌ | '' | Layout directory | . | jekyll_verbose | boolean | ❌ | false | Enable verbose output during Jekyll build | . | jekyll_strict_front_matter | boolean | ❌ | true | Fail build on YAML syntax errors in front matter | . | jekyll_drafts | boolean | ❌ | false | Include draft posts in the build | . | jekyll_future | boolean | ❌ | false | Include future-dated posts in the build | . | jekyll_unpublished | boolean | ❌ | false | Include unpublished posts in the build | . | jekyll_incremental | boolean | ❌ | false | Enable incremental builds for faster development | . | jekyll_lsi | boolean | ❌ | false | Enable LSI (Latent Semantic Indexing) for related posts | . | jekyll_limit_posts | string | ❌ | '' | Limit the number of posts to parse and publish | . | jekyll_profile | boolean | ❌ | false | Enable profiling output to show build performance | . | jekyll_quiet | boolean | ❌ | false | Suppress normal output during Jekyll build | . | jekyll_trace | boolean | ❌ | false | Show full backtrace when an error occurs | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#%EF%B8%8F-jekyll-advanced-options",
     
     "relUrl": "/docs/ru-docs-publish.html#️-jekyll-advanced-options"
-  },"192": {
+  },"194": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "📤 Outputs",
     "content": "| Output | Description | . | Versioned Documentation | Deployed to gh-pages/version/ directories | . | Centralized API Docs | Doxygen artifacts in gh-pages/doxs/ directory | . | Root Navigation | Smart redirects and version selector | . | Version Metadata | version_info.json files in each deployed directory | . | GitHub Pages | Live documentation site (if enabled) | . | Artifacts | Uploaded documentation files for download | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-outputs",
     
     "relUrl": "/docs/ru-docs-publish.html#-outputs"
-  },"193": {
+  },"195": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🚀 Usage Examples",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-usage-examples",
     
     "relUrl": "/docs/ru-docs-publish.html#-usage-examples"
-  },"194": {
+  },"196": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Basic Usage",
     "content": "| 1 2 3 4 5 6 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#basic-usage",
     
     "relUrl": "/docs/ru-docs-publish.html#basic-usage"
-  },"195": {
+  },"197": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "With Submodule Support",
     "content": "| 1 2 3 4 5 6 7 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages checkout_recursive: true # Enable submodule checkout . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#with-submodule-support",
     
     "relUrl": "/docs/ru-docs-publish.html#with-submodule-support"
-  },"196": {
+  },"198": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "With Documentation Quality Checks",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages run_link_check: true link_check_paths: \"docs/** *.md **/docs/**\" run_markdown_lint: true markdown_lint_paths: \"docs/** *.md\" run_spell_check: true spell_check_paths: \"docs/** *.md\" spell_check_config: \".cspell.json\" deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#with-documentation-quality-checks",
     
     "relUrl": "/docs/ru-docs-publish.html#with-documentation-quality-checks"
-  },"197": {
+  },"199": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "With Jekyll Integration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_config: \"_config.yml\" jekyll_source: \"docs\" jekyll_destination: \"_site\" run_link_check: true deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#with-jekyll-integration",
     
     "relUrl": "/docs/ru-docs-publish.html#with-jekyll-integration"
-  },"198": {
+  },"200": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Advanced Jekyll Configuration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_config: \"_config.yml,_config_prod.yml\" jekyll_source: \"docs\" jekyll_destination: \"_site\" jekyll_environment: \"production\" jekyll_safe: true jekyll_verbose: true jekyll_strict_front_matter: true jekyll_drafts: false jekyll_future: false jekyll_unpublished: false run_link_check: true deploy_pages: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#advanced-jekyll-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#advanced-jekyll-configuration"
-  },"199": {
+  },"201": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Custom Configuration",
     "content": "| 1 2 3 4 5 6 7 8 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: doxygen_config: docs/Doxyfile.custom deployment_branch: gh-pages run_link_check: false deploy_pages: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#custom-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#custom-configuration"
-  },"200": {
+  },"202": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Submodule Documentation Projects",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 with: checkout_recursive: true # Required for submodule-based docs doxygen_config: _config/Doxyfile deployment_branch: gh-pages jekyll_enabled: true jekyll_source: \"docs\" run_link_check: true link_check_paths: \"docs/** *.md **/docs/**\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#submodule-documentation-projects",
     
     "relUrl": "/docs/ru-docs-publish.html#submodule-documentation-projects"
-  },"201": {
+  },"203": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "⚙️ Configuration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#%EF%B8%8F-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#️-configuration"
-  },"202": {
+  },"204": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Repository Setup",
     "content": "Submodule Checkout . The workflow supports optional recursive submodule checkout for projects that store documentation in submodules: . | 1 . | checkout_recursive: true # Enable submodule checkout . | . When to use recursive checkout: . | Documentation is stored in a separate submodule repository | Doxygen source files are in submodules | Jekyll themes or plugins are in submodules | External documentation dependencies are in submodules | . When NOT to use recursive checkout: . | All documentation is in the main repository | No submodules are present | Performance optimization (recursive checkout is slower) | . Default behavior: false (no submodule checkout) . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#repository-setup",
     
     "relUrl": "/docs/ru-docs-publish.html#repository-setup"
-  },"203": {
+  },"205": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Optimized Dependency Installation",
     "content": "The workflow uses optimized installation methods for maximum speed: . | Doxygen: ssciwr/doxygen-install@v1 - Pre-built binaries with caching | Graphviz: tlylt/install-graphviz@v1 - Pre-built binaries with caching | Pre-installation Check: Uses pre-installed Graphviz if available (instant) | Performance: 75-90% faster than traditional apt-get installation | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#optimized-dependency-installation",
     
     "relUrl": "/docs/ru-docs-publish.html#optimized-dependency-installation"
-  },"204": {
+  },"206": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Doxygen Configuration",
     "content": "This repository ships with a preconfigured Doxygen setup at _config/Doxyfile. Run it from the repository root so the relative paths resolve correctly: . | 1 . | doxygen _config/Doxyfile . | . The configuration publishes HTML documentation to docs/doxygen/html, enabling GitHub Pages to surface the generated API reference alongside the rest of the site. It also discovers the sample sources in cpp-ci-test/, which you can reuse to validate C and C++ focused workflows. When invoking the reusable workflow, point to this configuration explicitly: . | 1 2 3 . | with: doxygen_config: _config/Doxyfile doxygen_working_directory: . | . Need to customize the inputs? Copy _config/Doxyfile and adjust INPUT, OUTPUT_DIRECTORY, or any other settings to match your project’s layout. ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#doxygen-configuration",
     
     "relUrl": "/docs/ru-docs-publish.html#doxygen-configuration"
-  },"205": {
+  },"207": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Link Checking with Lychee",
     "content": "The workflow includes advanced link checking using Lychee, which provides comprehensive link validation for both internal and external links. | 1 2 . | run_link_check: true # Enable link checking (default: true) link_check_paths: \"docs/** *.md\" # Paths to check for broken links . | . The Lychee link checker: . | Scans all markdown files in the specified paths | Uses space-separated glob patterns (not comma-separated) | Validates both internal file references and external URLs | Supports configurable timeouts and retry attempts | Excludes private/internal links by default | Provides detailed reporting with verbose output options | . Path Format Examples: . | **/*.md - All .md files recursively (default) | docs/** *.md - All files in docs/ and all .md files in root (space-separated) | README.md docs/**/*.md - Specific file + all .md files in docs/ (space-separated) | Uses the modern lycheeverse/lychee-action@v2 action | Offers better performance and reliability than traditional link checkers | . Important: Paths must be space-separated, not comma-separated, as required by lycheeverse/lychee-action@v2. ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#link-checking-with-lychee",
     
     "relUrl": "/docs/ru-docs-publish.html#link-checking-with-lychee"
-  },"206": {
+  },"208": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Markdown Linting",
     "content": "Optional markdown linting using markdownlint-cli to enforce consistent markdown formatting and catch common issues. | 1 2 3 . | run_markdown_lint: true # Enable markdown linting (default: false) markdown_lint_paths: \"**/*.md\" # Glob patterns for files to lint markdown_lint_config: \"_config/.markdownlint.json\" # Path to markdownlint config . | . Features: . | Enforces consistent markdown formatting | Catches common markdown issues | Configurable via _config/.markdownlint.json (override with markdown_lint_config) | Ignores node_modules by default | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#markdown-linting",
     
     "relUrl": "/docs/ru-docs-publish.html#markdown-linting"
-  },"207": {
+  },"209": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Spell Checking",
     "content": "Optional spell checking using cspell to catch spelling errors in documentation. | 1 2 3 . | run_spell_check: true # Enable spell checking (default: false) spell_check_paths: \"**/*.md\" # Glob patterns for files to check spell_check_config: \".cspell.json\" # Path to cspell config file . | . Features: . | Catches spelling errors in documentation | Configurable via .cspell.json file | Supports custom dictionaries and ignore patterns | Works with multiple file types | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#spell-checking",
     
     "relUrl": "/docs/ru-docs-publish.html#spell-checking"
-  },"208": {
+  },"210": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Jekyll Integration",
     "content": "Optional Jekyll static site generation for enhanced documentation presentation and better GitHub Pages integration. | 1 2 3 4 . | jekyll_enabled: true # Enable Jekyll (default: false) jekyll_config: \"_config.yml\" # Path to Jekyll config jekyll_source: \"docs\" # Source directory jekyll_destination: \"_site\" # Build destination . | . Jekyll Configuration: . The workflow automatically creates a minimal _config.yml file if one doesn’t exist. For comprehensive Jekyll configuration, see the Jekyll Guide. Quick Setup: . | 1 2 3 4 5 6 7 8 . | # Basic Jekyll configuration title: \"My C++ Project Documentation\" description: \"Comprehensive documentation for my C++ project\" baseurl: \"\" # Set by workflow automatically url: \"https://yourusername.github.io\" theme: minima markdown: kramdown highlighter: rouge . | . Features: . | Static site generation with customizable themes | Better GitHub Pages integration | Enhanced navigation and presentation | Support for custom layouts and includes | Automatic baseurl configuration for GitHub Pages | Smart configuration validation with directory-aware checking | Automatic API reference link injection into Jekyll navigation | . Advanced Jekyll Configuration: . The workflow supports extensive Jekyll configuration options for fine-tuned control: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | jekyll_enabled: true jekyll_config: \"_config.yml,_config_prod.yml\" # Multiple config files jekyll_environment: \"production\" # Environment-specific settings jekyll_safe: true # Safe mode (GitHub Pages compatible) jekyll_verbose: true # Verbose output for debugging jekyll_strict_front_matter: true # Fail on YAML syntax errors jekyll_drafts: false # Exclude draft posts jekyll_future: false # Exclude future-dated posts jekyll_unpublished: false # Exclude unpublished posts jekyll_incremental: false # Disable incremental builds (CI recommended) jekyll_lsi: false # Disable LSI (resource-intensive) jekyll_profile: false # Disable profiling (reduces build time) jekyll_quiet: false # Enable normal output jekyll_trace: false # Disable full backtrace . | . CI-Optimized Defaults: The workflow automatically applies CI-optimized defaults for better reliability: . | Safe mode enabled (prevents custom plugin issues) | Incremental builds disabled (prevents stale content) | Profiling disabled (reduces build time) | Drafts and future posts excluded (focus on published content) | Strict front matter validation enabled (ensures content integrity) | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#jekyll-integration",
     
     "relUrl": "/docs/ru-docs-publish.html#jekyll-integration"
-  },"209": {
+  },"211": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Standalone Link Check",
     "content": "For repositories that only need link checking without documentation generation, use the dedicated link check workflow: . | 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: link-check: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 with: paths: \"docs/** *.md **/docs/**\" # Paths to check (default: **/*.md) fail_on_errors: true # Fail on broken links timeout: \"10\" # Timeout per link (seconds) retry: \"3\" # Number of retries exclude_private: true # Exclude private links exclude_mail: true # Exclude mailto links verbose: false # Verbose output # Uses lycheeverse/lychee-action@v2 for advanced link checking . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#standalone-link-check",
     
     "relUrl": "/docs/ru-docs-publish.html#standalone-link-check"
-  },"210": {
+  },"212": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🔍 Jekyll Configuration Validation",
     "content": "The workflow includes intelligent Jekyll configuration validation that: . Smart Directory Detection . | Reads your _config.yml to determine custom directory locations | Checks directories where they’re actually configured (e.g., _config/_layouts) | Falls back to standard locations if custom paths aren’t specified | Reports missing directories as “may be using theme defaults” | . File Location Validation . | Checks common files (index.md, 404.html, robots.txt) relative to your config file location | If _config.yml is in docs/, files are checked in docs/ directory | Prevents false warnings about missing files in wrong locations | . Configuration Warnings . | Detects trailing slashes in baseurl and url (should be avoided) | Validates YAML syntax with specific error reporting | Provides helpful guidance for common configuration issues | . Example Validation Output: . | 1 2 3 4 5 6 7 8 9 10 11 . | 🔍 Validating Jekyll configuration... ✅ Validating config file: _config/_config.yml ✅ YAML syntax is valid ✅ Found layouts directory: _config/_layouts ✅ Found includes directory: _config/_includes ⚠️ Directory not found: _config/_sass (may be using theme defaults) ✅ Found file: index.md ✅ Found file: 404.html ✅ Found file: robots.txt ⚠️ File not found: index.html (optional but recommended) ✅ Jekyll configuration validation completed . | . For detailed validation guidance, see the Jekyll Configuration Guide. ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-jekyll-configuration-validation",
     
     "relUrl": "/docs/ru-docs-publish.html#-jekyll-configuration-validation"
-  },"211": {
+  },"213": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🔗 Automatic API Reference Link Injection",
     "content": "The workflow automatically injects API reference links into your Jekyll configuration when Doxygen is enabled. This provides seamless navigation from your documentation site to the API documentation. How It Works: . | Detection: When Doxygen is enabled (doxygen_config is specified), the workflow detects this | URL Generation: Creates the appropriate API reference URL based on version and repository | Configuration Injection: Automatically adds the link to Jekyll’s aux_links section | Navigation Integration: The link appears in your Jekyll site’s navigation menu | . Generated URL Format: . | 1 . | https://username.github.io/repository/version/api/index.html . | . Examples: . | Development: https://username.github.io/my-project/development/api/index.html | Stable Release: https://username.github.io/my-project/v1.2.0/api/index.html | Preview: https://username.github.io/my-project/preview/api/index.html | . Configuration Behavior: . If aux_links section exists: . | 1 2 3 4 5 6 7 8 9 10 11 . | # Your existing config aux_links: \"🏠 Home\": \"/\" \"📚 Documentation\": \"/docs/\" # Workflow automatically adds: aux_links: \"🏠 Home\": \"/\" \"📚 Documentation\": \"/docs/\" \"📖 API Reference\": - \"/my-project/development/api/index.html\" . | . If aux_links section doesn’t exist: . | 1 2 3 4 . | # Workflow creates new section: aux_links: \"📖 API Reference\": - \"/my-project/development/api/index.html\" . | . Smart Updates: . | Existing API Reference: If an API reference already exists, it’s updated with the new URL | Version-Aware: The URL automatically reflects the current version being deployed | Repository-Aware: The URL includes the correct repository name | . Benefits: . | ✅ Zero Configuration: Works automatically when Doxygen is enabled | ✅ Version-Aware: Always points to the correct version’s API docs | ✅ Theme Compatible: Works with any Jekyll theme that supports aux_links | ✅ Non-Destructive: Preserves existing aux_links configuration | ✅ Smart Updates: Updates existing API references instead of duplicating | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-automatic-api-reference-link-injection",
     
     "relUrl": "/docs/ru-docs-publish.html#-automatic-api-reference-link-injection"
-  },"212": {
+  },"214": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Versioned Deployment Process",
     "content": "The workflow uses a sophisticated deployment process that maintains versioned documentation: . | Jekyll Site Deployment: Deploys the generated _site directory to a version folder using peaceiris/actions-gh-pages@v3 | Doxygen Artifacts Deployment: Deploys Doxygen artifacts to the root /doxs/ directory using peaceiris/actions-gh-pages@v3 | Root Files Update: Clones the gh-pages branch to update root redirects and version selector | Version Metadata: Creates version_info.json files in each deployed version directory | Preserve History: Uses keep_files: true to maintain all previous versions | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#versioned-deployment-process",
     
     "relUrl": "/docs/ru-docs-publish.html#versioned-deployment-process"
-  },"213": {
+  },"215": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "GitHub Pages Setup",
     "content": "Important: GitHub Pages must be enabled in your repository settings before using this workflow. | Enable GitHub Pages in your repository settings: . | Go to Settings → Pages | Set Source to “GitHub Actions” | Save the settings | . | Grant permissions to the workflow: | . | 1 2 3 4 . | permissions: contents: write pages: write id-token: write . | . | Workflow behavior: . | If Pages is not enabled, the workflow will continue but skip deployment | Documentation will still be built and artifacts uploaded | No errors will occur if Pages is not configured | . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#github-pages-setup",
     
     "relUrl": "/docs/ru-docs-publish.html#github-pages-setup"
-  },"214": {
+  },"216": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Access URLs",
     "content": "After deployment, your documentation will be available at: . | Root: https://username.github.io/repository/ → Redirects to latest version | Version Selector: https://username.github.io/repository/version_selector.html | Specific Version: https://username.github.io/repository/v1.2.0/ | Development: https://username.github.io/repository/development/ | API Documentation: https://username.github.io/repository/v1.2.0/api/ | Centralized API: https://username.github.io/repository/doxs/v1.2.0/ | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#access-urls",
     
     "relUrl": "/docs/ru-docs-publish.html#access-urls"
-  },"215": {
+  },"217": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Versioned Deployment Details",
     "content": "The workflow creates a sophisticated versioned documentation system: . What Gets Deployed Where: . | Jekyll _site/ contents → gh-pages/version/ (e.g., development/, v1.2.0/) via peaceiris/actions-gh-pages | Doxygen doxs/ contents → gh-pages/doxs/ (centralized API docs) via peaceiris/actions-gh-pages | Root navigation files → gh-pages/ (redirects, version selector, README) via manual git operations | . Version Detection: . | Main branch pushes → development/ version | Release branch pushes → v1.2.0/ version (extracted from branch name) | Tag creation → v1.2.0/ version (extracted from tag name) | Other branches → preview/ version | . Smart Root Redirects: . | Stable releases → Redirects to specific version (e.g., v1.2.0/) | Development → Redirects to development/ | Preview → Redirects to development/ as fallback | . Version Metadata: . Each deployed version includes a version_info.json file with: . | 1 2 3 4 5 6 7 8 . | { \"version\": \"v1.2.0\", \"type\": \"stable\", \"deployed_at\": \"2024-01-15T10:30:00Z\", \"commit\": \"abc123...\", \"ref\": \"refs/tags/v1.2.0\", \"doxygen_version\": \"v1.2.0\" } . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#versioned-deployment-details",
     
     "relUrl": "/docs/ru-docs-publish.html#versioned-deployment-details"
-  },"216": {
+  },"218": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🌐 GitHub Pages Setup",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-github-pages-setup",
     
     "relUrl": "/docs/ru-docs-publish.html#-github-pages-setup"
-  },"217": {
+  },"219": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Repository Settings",
     "content": ". | Go to Settings → Pages | Set Source to “GitHub Actions” | Ensure GitHub Actions has write permissions | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#repository-settings",
     
     "relUrl": "/docs/ru-docs-publish.html#repository-settings"
-  },"218": {
+  },"220": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Workflow Permissions",
     "content": "The workflow requires these permissions: . | 1 2 3 4 . | permissions: contents: write # Upload artifacts pages: write # Deploy to Pages id-token: write # Authentication . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#workflow-permissions",
     
     "relUrl": "/docs/ru-docs-publish.html#workflow-permissions"
-  },"219": {
+  },"221": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Custom Domain (Optional)",
     "content": "Add a CNAME file to your docs/doxygen/html directory: . | 1 . | docs.yourproject.com . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#custom-domain-optional",
     
     "relUrl": "/docs/ru-docs-publish.html#custom-domain-optional"
-  },"220": {
+  },"222": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🔧 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-troubleshooting",
     
     "relUrl": "/docs/ru-docs-publish.html#-troubleshooting"
-  },"221": {
+  },"223": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Common Issues",
     "content": "Doxygen Build Fails . | Verify Doxyfile exists and is valid | Check source directories exist (src/, include/) | Graphviz is automatically installed via optimized action (no manual setup needed) | Verify doxygen_config path is correct (and set doxygen_working_directory if relative paths expect a different working folder) | . Jekyll Configuration Validation Issues . | False warnings about missing directories: Check if your _config.yml specifies custom directory locations (e.g., layouts_dir: _config/_layouts) | Files not found warnings: Ensure common files (index.md, 404.html, robots.txt) are in the same directory as your _config.yml | Trailing slash warnings: Remove trailing slashes from baseurl and url in your configuration | YAML syntax errors: Use online YAML validators or yq to check syntax | . GitHub Pages Not Deploying . | Check repository permissions | Verify deploy_pages: true | Ensure workflow runs on main branch (not PRs) | Enable GitHub Pages in repository settings (Settings → Pages → Source: GitHub Actions) | Check if Pages site exists and is configured properly | . Link Check Fails . | Verify link paths are correct in link_check_paths | Check that markdown files exist at specified paths | Review link checker output for specific broken links | . Markdown Lint Fails . | Check markdown syntax and formatting | Review _config/.markdownlint.json (or your configured markdown_lint_config) if present | Fix linting errors reported by markdownlint | . Spell Check Fails . | Review spelling errors in documentation | Add words to .cspell.json custom dictionary if needed | Check spell_check_config path is correct | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#common-issues",
     
     "relUrl": "/docs/ru-docs-publish.html#common-issues"
-  },"222": {
+  },"224": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Debug Mode",
     "content": "Enable debug output: . | 1 2 . | env: ACTIONS_STEP_DEBUG: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#debug-mode",
     
     "relUrl": "/docs/ru-docs-publish.html#debug-mode"
-  },"223": {
+  },"225": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Manual Testing",
     "content": "Test Doxygen locally: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | # Install Doxygen and Graphviz # Option 1: Using package manager (slower) sudo apt-get install doxygen graphviz # Option 2: Using optimized actions (faster, like in CI) # For local development, you can use the same actions: # - ssciwr/doxygen-install@v1 for Doxygen # - tlylt/install-graphviz@v1 for Graphviz # Generate docs doxygen Doxyfile # Check output ls docs/doxygen/html/ . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#manual-testing",
     
     "relUrl": "/docs/ru-docs-publish.html#manual-testing"
-  },"224": {
+  },"226": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🔧 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-troubleshooting-1",
     
     "relUrl": "/docs/ru-docs-publish.html#-troubleshooting-1"
-  },"225": {
+  },"227": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "Common Configuration Issues",
     "content": "Sed Syntax Errors . Problem: Workflow fails with sed: -e expression #1, char 44: unterminated 's' command . Cause: Inline comments in configuration files can cause sed syntax errors during processing. Solution: The workflow now automatically handles inline comments safely. If you encounter this error: . | Check your _config.yml for inline comments: | 1 2 3 . | # This is safe title: \"My Project\" # This comment is handled automatically baseurl: \"/my-project\" # GitHub Pages subpath . | . | The workflow automatically: . | Strips inline comments during processing | Generates clean configuration files | Prevents sed syntax errors | . | . Example Fix: . | 1 2 3 4 5 6 . | # Before (could cause errors in older versions) baseurl: \"/my-project\" # GitHub Pages subpath # After (handled automatically by current workflow) baseurl: \"/my-project\" # GitHub Pages subpath # ↑ This comment is now safely stripped during processing . | . YAML Validation Issues . Problem: YAML syntax errors in configuration files . Solution: The workflow includes built-in YAML validation: . | Automatic validation - YAML syntax is checked during workflow execution | Clear error messages - Specific line numbers and error descriptions | Prevention - Validation runs before configuration processing | . Manual validation: . | 1 2 3 4 5 . | # Install yamllint pip install yamllint # Validate your configuration yamllint _config.yml . | . Configuration Generation Failures . Problem: Version-specific configuration generation fails . Solution: The workflow now includes robust configuration processing: . | Comment-safe extraction - Handles inline comments automatically | Clean generation - Creates _config_generated.yml without syntax errors | Error prevention - Validates configuration before processing | . Check generated configuration: . | 1 2 . | # After workflow runs, check the generated file cat _config_generated.yml . | . Missing Deployment Branch . Problem: Workflow fails with fatal: Remote branch gh-pages not found in upstream origin . Solution: The workflow automatically creates the deployment branch if it doesn’t exist: . | Auto-detection - Checks if the deployment branch exists | Auto-creation - Creates the branch from main/master if missing | Fallback handling - Tries main branch first, then master | Clear messaging - Provides informative output about branch creation | . What happens automatically: . | ✅ Checks if gh-pages branch exists | ✅ Creates branch from main/master if missing | ✅ Pushes the new branch to origin | ✅ Continues with deployment normally | . Manual creation (if needed): . | 1 2 3 . | # Create gh-pages branch manually git checkout -b gh-pages git push origin gh-pages . | . Git Authentication Errors . Problem: Workflow fails with fatal: could not read Username for 'https://github.com': No such device or address . Solution: The workflow now uses proper GitHub token authentication: . | Automatic authentication - Uses GitHub Actions built-in GITHUB_TOKEN with proper permissions | Secure URLs - Uses standard HTTPS URLs without token exposure | No manual setup - Works automatically in GitHub Actions environment | . What happens automatically: . | ✅ Uses GitHub Actions built-in authentication via contents: write permission | ✅ Uses standard HTTPS URLs without token exposure | ✅ Clones and pushes using secure authentication | ✅ No manual token configuration needed | ✅ Works with private repositories (with proper permissions) | . Technical Details: . | Uses standard HTTPS URLs without embedded tokens | Relies on contents: write permission for authentication | GitHub Actions automatically provides GITHUB_TOKEN with proper permissions | No token exposure in logs or URLs | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#common-configuration-issues",
     
     "relUrl": "/docs/ru-docs-publish.html#common-configuration-issues"
-  },"226": {
+  },"228": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "📚 Related Workflows",
     "content": ". | C/C++ Lint - Code quality checks | Static Analysis - Security analysis | Link Check - Documentation link validation | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-related-workflows",
     
     "relUrl": "/docs/ru-docs-publish.html#-related-workflows"
-  },"227": {
+  },"229": {
     "doc": "📚 Documentation Publisher (Reusable)",
     "title": "🔗 Related Resources",
     "content": ". | Doxygen Documentation | GitHub Pages | Markdown Link Checking | . | ← Previous: Static Analysis Workflow | Next: Link Check Workflow → | . | 📚 All Documentation | 🏠 Main README | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-publish.html#-related-resources",
     
     "relUrl": "/docs/ru-docs-publish.html#-related-resources"
-  },"228": {
+  },"230": {
     "doc": "📄 Markdown Linting",
     "title": "📄 Markdown Linting",
     "content": "Markdown file validation with ru-markdown-lint.yml reusable workflow . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html",
     
     "relUrl": "/docs/ru-markdown-lint.html"
-  },"229": {
+  },"231": {
     "doc": "📄 Markdown Linting",
     "title": "🎯 Overview",
     "content": "The ru-markdown-lint.yml workflow provides comprehensive Markdown file validation: . | ✅ Markdown syntax checking with markdownlint | ✅ Style consistency enforcement | ✅ Auto-fix capabilities for common issues | ✅ Flexible configuration with custom rules | ✅ Glob pattern matching for targeted validation | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-overview",
     
     "relUrl": "/docs/ru-markdown-lint.html#-overview"
-  },"230": {
+  },"232": {
     "doc": "📄 Markdown Linting",
     "title": "🚀 Quick Start",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-quick-start",
     
     "relUrl": "/docs/ru-markdown-lint.html#-quick-start"
-  },"231": {
+  },"233": {
     "doc": "📄 Markdown Linting",
     "title": "Basic Markdown Validation",
-    "content": "| 1 2 3 4 5 6 7 8 . | # .github/workflows/docs.yml name: 📚 Documentation Quality on: [push, pull_request] jobs: markdown: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 . | # .github/workflows/docs.yml name: 📚 Documentation Quality on: [push, pull_request] jobs: markdown: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#basic-markdown-validation",
     
     "relUrl": "/docs/ru-markdown-lint.html#basic-markdown-validation"
-  },"232": {
+  },"234": {
     "doc": "📄 Markdown Linting",
     "title": "Advanced Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: 📚 Documentation Quality on: [push, pull_request] jobs: markdown: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md README.md\" config_file: \"_config/.markdownlint.json\" exclude_patterns: \"node_modules/**,_site/**\" fix: false . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: 📚 Documentation Quality on: [push, pull_request] jobs: markdown: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md README.md\" config_file: \"_config/.markdownlint.json\" exclude_patterns: \"node_modules/**,_site/**\" fix: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#advanced-configuration",
     
     "relUrl": "/docs/ru-markdown-lint.html#advanced-configuration"
-  },"233": {
+  },"235": {
     "doc": "📄 Markdown Linting",
     "title": "⚙️ Configuration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#%EF%B8%8F-configuration",
     
     "relUrl": "/docs/ru-markdown-lint.html#️-configuration"
-  },"234": {
+  },"236": {
     "doc": "📄 Markdown Linting",
     "title": "Inputs",
     "content": "| Parameter | Type | Default | Description | . | globs | string | **/*.md | Space-separated glob patterns for files to check | . | config_file | string | _config/.markdownlint.json | Path to markdownlint configuration file | . | exclude_patterns | string | .git/**,node_modules/**,... | Comma-separated patterns to exclude | . | use_docker | boolean | false | Use Docker container for more control | . | fix | boolean | false | Automatically fix fixable issues | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#inputs",
     
     "relUrl": "/docs/ru-markdown-lint.html#inputs"
-  },"235": {
+  },"237": {
     "doc": "📄 Markdown Linting",
     "title": "📋 Usage Patterns",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-usage-patterns",
     
     "relUrl": "/docs/ru-markdown-lint.html#-usage-patterns"
-  },"236": {
+  },"238": {
     "doc": "📄 Markdown Linting",
     "title": "1. Documentation-Only Projects",
-    "content": "| 1 2 3 4 5 6 7 8 9 . | name: Docs Quality on: [push, pull_request] jobs: markdown-lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md *.md\" fix: false . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 . | name: Docs Quality on: [push, pull_request] jobs: markdown-lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md *.md\" fix: false . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#1-documentation-only-projects",
     
     "relUrl": "/docs/ru-markdown-lint.html#1-documentation-only-projects"
-  },"237": {
+  },"239": {
     "doc": "📄 Markdown Linting",
     "title": "2. Project with Mixed Content",
-    "content": "| 1 2 3 4 5 6 . | jobs: markdown-lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md README.md CONTRIBUTING.md\" exclude_patterns: \"node_modules/**,vendor/**,_site/**\" . | . ",
+    "content": "| 1 2 3 4 5 6 . | jobs: markdown-lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: globs: \"docs/**/*.md README.md CONTRIBUTING.md\" exclude_patterns: \"node_modules/**,vendor/**,_site/**\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#2-project-with-mixed-content",
     
     "relUrl": "/docs/ru-markdown-lint.html#2-project-with-mixed-content"
-  },"238": {
+  },"240": {
     "doc": "📄 Markdown Linting",
     "title": "3. Auto-Fix in Development",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: Fix Documentation on: workflow_dispatch: # Manual trigger jobs: markdown-fix: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: fix: true # Enable auto-fix globs: \"**/*.md\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: Fix Documentation on: workflow_dispatch: # Manual trigger jobs: markdown-fix: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: fix: true # Enable auto-fix globs: \"**/*.md\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#3-auto-fix-in-development",
     
     "relUrl": "/docs/ru-markdown-lint.html#3-auto-fix-in-development"
-  },"239": {
+  },"241": {
     "doc": "📄 Markdown Linting",
     "title": "4. Strict Validation",
-    "content": "| 1 2 3 4 5 6 . | jobs: markdown-strict: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: config_file: \"_config/.markdownlint-strict.json\" use_docker: true # More control over environment . | . ",
+    "content": "| 1 2 3 4 5 6 . | jobs: markdown-strict: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: config_file: \"_config/.markdownlint-strict.json\" use_docker: true # More control over environment . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#4-strict-validation",
     
     "relUrl": "/docs/ru-markdown-lint.html#4-strict-validation"
-  },"240": {
+  },"242": {
     "doc": "📄 Markdown Linting",
     "title": "🔧 Configuration Files",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-configuration-files",
     
     "relUrl": "/docs/ru-markdown-lint.html#-configuration-files"
-  },"241": {
+  },"243": {
     "doc": "📄 Markdown Linting",
     "title": "Basic Configuration",
     "content": "Create _config/.markdownlint.json: . | 1 2 3 4 5 6 7 8 9 10 . | { \"default\": true, \"MD013\": { \"line_length\": 120, \"code_blocks\": false, \"tables\": false }, \"MD033\": false, \"MD041\": false } . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#basic-configuration",
     
     "relUrl": "/docs/ru-markdown-lint.html#basic-configuration"
-  },"242": {
+  },"244": {
     "doc": "📄 Markdown Linting",
     "title": "Advanced Configuration",
     "content": "Create _config/.markdownlint.json: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 . | { \"default\": true, \"MD001\": true, \"MD003\": { \"style\": \"atx\" }, \"MD004\": { \"style\": \"dash\" }, \"MD007\": { \"indent\": 2 }, \"MD013\": { \"line_length\": 120, \"heading_line_length\": 120, \"code_blocks\": false, \"tables\": false, \"headings\": false }, \"MD022\": true, \"MD025\": true, \"MD026\": { \"punctuation\": \".,;:!\" }, \"MD029\": { \"style\": \"ordered\" }, \"MD033\": { \"allowed_elements\": [\"br\", \"sub\", \"sup\"] }, \"MD036\": false, \"MD041\": false, \"MD046\": { \"style\": \"fenced\" } } . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#advanced-configuration-1",
     
     "relUrl": "/docs/ru-markdown-lint.html#advanced-configuration-1"
-  },"243": {
+  },"245": {
     "doc": "📄 Markdown Linting",
     "title": "📝 Common Rules",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-common-rules",
     
     "relUrl": "/docs/ru-markdown-lint.html#-common-rules"
-  },"244": {
+  },"246": {
     "doc": "📄 Markdown Linting",
     "title": "Key Markdownlint Rules",
     "content": "| Rule | Description | Fix | . | MD001 | Heading levels increment by one | Use proper heading hierarchy | . | MD003 | Heading style consistency | Use consistent # or === style | . | MD013 | Line length limits | Break long lines or adjust config | . | MD022 | Headings surrounded by blank lines | Add blank lines around headings | . | MD025 | Single top-level heading | Ensure only one H1 per document | . | MD033 | No inline HTML | Use Markdown syntax instead | . | MD041 | First line in file should be H1 | Start with main heading | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#key-markdownlint-rules",
     
     "relUrl": "/docs/ru-markdown-lint.html#key-markdownlint-rules"
-  },"245": {
+  },"247": {
     "doc": "📄 Markdown Linting",
     "title": "Auto-Fixable Issues",
     "content": "When fix: true is enabled, these issues are automatically corrected: . | Trailing whitespace | Missing blank lines | Inconsistent list markers | Heading spacing issues | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#auto-fixable-issues",
     
     "relUrl": "/docs/ru-markdown-lint.html#auto-fixable-issues"
-  },"246": {
+  },"248": {
     "doc": "📄 Markdown Linting",
     "title": "🛠️ Advanced Scenarios",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#%EF%B8%8F-advanced-scenarios",
     
     "relUrl": "/docs/ru-markdown-lint.html#️-advanced-scenarios"
-  },"247": {
+  },"249": {
     "doc": "📄 Markdown Linting",
     "title": "Multiple Configuration Files",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: docs-lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: config_file: \"_config/.markdownlint-docs.json\" globs: \"docs/**/*.md\" readme-lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: config_file: \"_config/.markdownlint-readme.json\" globs: \"README.md CONTRIBUTING.md\" . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | jobs: docs-lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: config_file: \"_config/.markdownlint-docs.json\" globs: \"docs/**/*.md\" readme-lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 with: config_file: \"_config/.markdownlint-readme.json\" globs: \"README.md CONTRIBUTING.md\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#multiple-configuration-files",
     
     "relUrl": "/docs/ru-markdown-lint.html#multiple-configuration-files"
-  },"248": {
+  },"250": {
     "doc": "📄 Markdown Linting",
     "title": "Conditional Execution",
-    "content": "| 1 2 3 4 . | jobs: markdown-lint: if: contains(github.event.head_commit.message, '[docs]') uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 . | . ",
+    "content": "| 1 2 3 4 . | jobs: markdown-lint: if: contains(github.event.head_commit.message, '[docs]') uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#conditional-execution",
     
     "relUrl": "/docs/ru-markdown-lint.html#conditional-execution"
-  },"249": {
+  },"251": {
     "doc": "📄 Markdown Linting",
     "title": "Integration with Other Workflows",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: Complete Documentation CI on: [push, pull_request] jobs: markdown-lint: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 link-check: needs: [markdown-lint] uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 build-docs: needs: [markdown-lint, link-check] uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: Complete Documentation CI on: [push, pull_request] jobs: markdown-lint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1 link-check: needs: [markdown-lint] uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 build-docs: needs: [markdown-lint, link-check] uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#integration-with-other-workflows",
     
     "relUrl": "/docs/ru-markdown-lint.html#integration-with-other-workflows"
-  },"250": {
+  },"252": {
     "doc": "📄 Markdown Linting",
     "title": "🐛 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-troubleshooting",
     
     "relUrl": "/docs/ru-markdown-lint.html#-troubleshooting"
-  },"251": {
+  },"253": {
     "doc": "📄 Markdown Linting",
     "title": "Common Issues",
     "content": "| Issue | Solution | . | Line too long | Adjust MD013 rule or break lines | . | HTML not allowed | Use Markdown syntax or allow specific tags in MD033 | . | Heading issues | Follow proper heading hierarchy (H1 → H2 → H3) | . | List formatting | Use consistent markers (-, *, +) as configured | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#common-issues",
     
     "relUrl": "/docs/ru-markdown-lint.html#common-issues"
-  },"252": {
+  },"254": {
     "doc": "📄 Markdown Linting",
     "title": "Debug Tips",
     "content": ". | Test locally with markdownlint CLI before pushing | Check configuration file syntax and location | Review glob patterns to ensure correct file matching | Use Docker mode for consistent environment | Enable auto-fix to see what can be automatically corrected | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#debug-tips",
     
     "relUrl": "/docs/ru-markdown-lint.html#debug-tips"
-  },"253": {
+  },"255": {
     "doc": "📄 Markdown Linting",
     "title": "Glob Pattern Examples",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | # All markdown files globs: \"**/*.md\" # Specific directories globs: \"docs/**/*.md src/**/*.md\" # Exclude patterns in input globs: \"**/*.md\" exclude_patterns: \"node_modules/**,vendor/**\" # Specific files globs: \"README.md CONTRIBUTING.md docs/index.md\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#glob-pattern-examples",
     
     "relUrl": "/docs/ru-markdown-lint.html#glob-pattern-examples"
-  },"254": {
+  },"256": {
     "doc": "📄 Markdown Linting",
     "title": "🔗 Related Workflows",
     "content": ". | Link Check - Validate links in Markdown files | Documentation Publisher - Build and deploy documentation | YAML Linting - Validate YAML in documentation | . 📖 ← Back to Documentation Index . ",
     "url": "/hf-general-ci-tools/development/docs/ru-markdown-lint.html#-related-workflows",
     
     "relUrl": "/docs/ru-markdown-lint.html#-related-workflows"
-  },"255": {
+  },"257": {
     "doc": "📦 Release Management",
     "title": "📦 Release Management",
     "content": "Automated GitHub release creation with ru-release.yml reusable workflow . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html",
     
     "relUrl": "/docs/ru-release.html"
-  },"256": {
+  },"258": {
     "doc": "📦 Release Management",
     "title": "🎯 Overview",
     "content": "The ru-release.yml workflow provides automated GitHub release creation with: . | ✅ Auto-generated release notes from GitHub’s built-in feature | ✅ Tag-based releases with automatic source code archives | ✅ Draft and prerelease support for controlled releases | ✅ Minimal configuration - just tag and release | ✅ Professional release notes generated from PR and commit history | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-overview",
     
     "relUrl": "/docs/ru-release.html#-overview"
-  },"257": {
+  },"259": {
     "doc": "📦 Release Management",
     "title": "🚀 Quick Start",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-quick-start",
     
     "relUrl": "/docs/ru-release.html#-quick-start"
-  },"258": {
+  },"260": {
     "doc": "📦 Release Management",
     "title": "Basic Release Workflow",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | # .github/workflows/release.yml name: 📦 Release on: push: tags: ['v*'] jobs: release: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | # .github/workflows/release.yml name: 📦 Release on: push: tags: ['v*'] jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#basic-release-workflow",
     
     "relUrl": "/docs/ru-release.html#basic-release-workflow"
-  },"259": {
+  },"261": {
     "doc": "📦 Release Management",
     "title": "Advanced Configuration",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 . | # .github/workflows/release.yml name: 📦 Release on: push: tags: ['v*'] jobs: release: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: $ prerelease: $ permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 . | # .github/workflows/release.yml name: 📦 Release on: push: tags: ['v*'] jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: $ prerelease: $ permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#advanced-configuration",
     
     "relUrl": "/docs/ru-release.html#advanced-configuration"
-  },"260": {
+  },"262": {
     "doc": "📦 Release Management",
     "title": "⚙️ Configuration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#%EF%B8%8F-configuration",
     
     "relUrl": "/docs/ru-release.html#️-configuration"
-  },"261": {
+  },"263": {
     "doc": "📦 Release Management",
     "title": "Inputs",
     "content": "| Parameter | Type | Default | Description | . | draft | boolean | false | Create as draft release (not publicly visible) | . | prerelease | boolean | false | Mark as pre-release (shown with warning) | . | tag_name | string | github.ref_name | Custom tag name (usually automatic) | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#inputs",
     
     "relUrl": "/docs/ru-release.html#inputs"
-  },"262": {
+  },"264": {
     "doc": "📦 Release Management",
     "title": "Permissions Required",
     "content": "| 1 2 . | permissions: contents: write # Required for creating releases . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#permissions-required",
     
     "relUrl": "/docs/ru-release.html#permissions-required"
-  },"263": {
+  },"265": {
     "doc": "📦 Release Management",
     "title": "📋 Usage Patterns",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-usage-patterns",
     
     "relUrl": "/docs/ru-release.html#-usage-patterns"
-  },"264": {
+  },"266": {
     "doc": "📦 Release Management",
     "title": "1. Production Releases",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 . | name: Production Release on: push: tags: ['v[0-9]+.[0-9]+.[0-9]+'] # v1.0.0, v2.1.3, etc. jobs: release: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: false prerelease: false permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 . | name: Production Release on: push: tags: ['v[0-9]+.[0-9]+.[0-9]+'] # v1.0.0, v2.1.3, etc. jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: false prerelease: false permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#1-production-releases",
     
     "relUrl": "/docs/ru-release.html#1-production-releases"
-  },"265": {
+  },"267": {
     "doc": "📦 Release Management",
     "title": "2. Beta/RC Releases",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: Pre-Release on: push: tags: ['v*-beta*', 'v*-rc*'] # v1.0.0-beta1, v2.0.0-rc1 jobs: prerelease: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: prerelease: true permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: Pre-Release on: push: tags: ['v*-beta*', 'v*-rc*'] # v1.0.0-beta1, v2.0.0-rc1 jobs: prerelease: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: prerelease: true permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#2-betarc-releases",
     
     "relUrl": "/docs/ru-release.html#2-betarc-releases"
-  },"266": {
+  },"268": {
     "doc": "📦 Release Management",
     "title": "3. Draft Reviews",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | name: Draft Release on: workflow_dispatch: # Manual trigger inputs: tag: description: 'Release tag' required: true type: string jobs: draft: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: true tag_name: $ permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | name: Draft Release on: workflow_dispatch: # Manual trigger inputs: tag: description: 'Release tag' required: true type: string jobs: draft: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: true tag_name: $ permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#3-draft-reviews",
     
     "relUrl": "/docs/ru-release.html#3-draft-reviews"
-  },"267": {
+  },"269": {
     "doc": "📦 Release Management",
     "title": "4. Combined CI + Release",
-    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 . | name: CI and Release on: push: branches: [main] tags: ['v*'] pull_request: branches: [main] jobs: # Run tests first test: if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/') uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" # Only release on tags release: if: startsWith(github.ref, 'refs/tags/') needs: [test] uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 . | name: CI and Release on: push: branches: [main] tags: ['v*'] pull_request: branches: [main] jobs: # Run tests first test: if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/') uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" # Only release on tags release: if: startsWith(github.ref, 'refs/tags/') needs: [test] uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#4-combined-ci--release",
     
     "relUrl": "/docs/ru-release.html#4-combined-ci--release"
-  },"268": {
+  },"270": {
     "doc": "📦 Release Management",
     "title": "🔄 Release Process",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-release-process",
     
     "relUrl": "/docs/ru-release.html#-release-process"
-  },"269": {
+  },"271": {
     "doc": "📦 Release Management",
     "title": "What Happens",
     "content": ". | Checkout: Repository code is checked out with full history | Release Creation: GitHub release is created with: . | Tag: From inputs.tag_name or the git tag that triggered the workflow | Title: Auto-generated from tag name | Notes: Auto-generated from PRs and commits since last release | Assets: Source code archives (.zip and .tar.gz) automatically included | . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#what-happens",
     
     "relUrl": "/docs/ru-release.html#what-happens"
-  },"270": {
+  },"272": {
     "doc": "📦 Release Management",
     "title": "Auto-Generated Release Notes",
     "content": "GitHub automatically generates release notes including: . | Pull Requests merged since the last release | New Contributors with their first contributions | Commit History formatted professionally | Comparison Links to view changes | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#auto-generated-release-notes",
     
     "relUrl": "/docs/ru-release.html#auto-generated-release-notes"
-  },"271": {
+  },"273": {
     "doc": "📦 Release Management",
     "title": "🛠️ Advanced Scenarios",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#%EF%B8%8F-advanced-scenarios",
     
     "relUrl": "/docs/ru-release.html#️-advanced-scenarios"
-  },"272": {
+  },"274": {
     "doc": "📦 Release Management",
     "title": "Custom Tag Naming",
-    "content": "| 1 2 3 4 5 6 7 . | jobs: release: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: tag_name: \"release-$\" permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 . | jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: tag_name: \"release-$\" permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#custom-tag-naming",
     
     "relUrl": "/docs/ru-release.html#custom-tag-naming"
-  },"273": {
+  },"275": {
     "doc": "📦 Release Management",
     "title": "Conditional Release Types",
-    "content": "| 1 2 3 4 5 6 7 8 . | jobs: release: uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: $ prerelease: $ permissions: contents: write . | . ",
+    "content": "| 1 2 3 4 5 6 7 8 . | jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: $ prerelease: $ permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#conditional-release-types",
     
     "relUrl": "/docs/ru-release.html#conditional-release-types"
-  },"274": {
+  },"276": {
     "doc": "📦 Release Management",
     "title": "🔗 Related Workflows",
     "content": ". | ESP32 Releases - Use ru-release-with-artifacts.yml for firmware releases | Documentation - Often combined with release workflows | C/C++ Linting - Quality checks before releases | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-related-workflows",
     
     "relUrl": "/docs/ru-release.html#-related-workflows"
-  },"275": {
+  },"277": {
     "doc": "📦 Release Management",
     "title": "📚 Examples in Production",
     "content": "This workflow is used by: . | HardFOC Driver Libraries - Automated releases on version tags | ESP32 Projects - Combined with build artifacts for firmware releases | Documentation Sites - Release coordination with documentation updates | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-examples-in-production",
     
     "relUrl": "/docs/ru-release.html#-examples-in-production"
-  },"276": {
+  },"278": {
     "doc": "📦 Release Management",
     "title": "🐛 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-troubleshooting",
     
     "relUrl": "/docs/ru-release.html#-troubleshooting"
-  },"277": {
+  },"279": {
     "doc": "📦 Release Management",
     "title": "Common Issues",
     "content": "| Issue | Solution | . | Permission denied | Add permissions: contents: write to calling workflow | . | Tag not found | Ensure workflow triggers on correct tag patterns | . | Empty release notes | Check that PRs use proper titles and descriptions | . | Duplicate releases | Verify tag uniqueness and workflow triggers | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#common-issues",
     
     "relUrl": "/docs/ru-release.html#common-issues"
-  },"278": {
+  },"280": {
     "doc": "📦 Release Management",
     "title": "Debug Tips",
     "content": ". | Check permissions in the calling repository’s workflow | Verify tag format matches your trigger patterns | Review repository settings for release permissions | Test with draft releases first | . 📖 ← Back to Documentation Index . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#debug-tips",
     
     "relUrl": "/docs/ru-release.html#debug-tips"
-  },"279": {
+  },"281": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📝 YAML Linting Tools (Reusable)",
     "content": "Workflow: ru-yaml-lint.yml → 📝 [RU] YAML Linting Tools . A comprehensive reusable workflow for YAML file validation and formatting using yamllint. Ensures proper syntax, formatting, and adherence to best practices across all YAML files in your repository. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html",
     
     "relUrl": "/docs/ru-yaml-lint.html"
-  },"280": {
+  },"282": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📋 Overview",
     "content": "This reusable workflow (ru-yaml-lint.yml) validates YAML files in your repository using yamllint to ensure proper formatting and syntax. It’s designed for maximum configurability and can be easily integrated into any project with YAML files. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-overview",
     
     "relUrl": "/docs/ru-yaml-lint.html#-overview"
-  },"281": {
+  },"283": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "✨ Live CI Example",
     "content": "👀 See our comprehensive testing workflow: ci-yaml-lint.yml which demonstrates all features of this reusable workflow by testing it against this repository’s YAML files with comprehensive configuration options. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-live-ci-example",
     
     "relUrl": "/docs/ru-yaml-lint.html#-live-ci-example"
-  },"282": {
+  },"284": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📋 Table of Contents",
     "content": ". | Overview | Inputs | Outputs | Usage Examples | Configuration | Troubleshooting | Related Workflows | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-table-of-contents",
     
     "relUrl": "/docs/ru-yaml-lint.html#-table-of-contents"
-  },"283": {
+  },"285": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🎯 Overview",
     "content": "Purpose: YAML file validation and formatting Key Features: . | yamllint integration | Configurable rules | Flexible path specification | Exclude patterns support | Strict mode option | Detailed reporting | . Use Case: YAML file quality and consistency enforcement . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-overview-1",
     
     "relUrl": "/docs/ru-yaml-lint.html#-overview-1"
-  },"284": {
+  },"286": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "⚙️ Inputs",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#%EF%B8%8F-inputs",
     
     "relUrl": "/docs/ru-yaml-lint.html#️-inputs"
-  },"285": {
+  },"287": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📁 File Selection",
     "content": "| Input | Description | Required | Default | Type | . | paths | Comma-separated list of paths to check | No | **/*.yml,**/*.yaml | string | . | exclude_patterns | Comma-separated patterns to exclude | No | .git/**,node_modules/**,venv/**,.venv/** | string | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-file-selection",
     
     "relUrl": "/docs/ru-yaml-lint.html#-file-selection"
-  },"286": {
+  },"288": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "⚙️ Configuration",
     "content": "| Input | Description | Required | Default | Type | . | config_file | Path to yamllint configuration file | No | _config/.yamllint | string | . | strict_mode | Enable strict mode (fail on warnings) | No | false | boolean | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#%EF%B8%8F-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#️-configuration"
-  },"287": {
+  },"289": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📤 Outputs",
     "content": "| Output | Description | . | result | YAML lint result (success/failure) | . | files_checked | Number of files checked | . | issues_found | Number of issues found | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-outputs",
     
     "relUrl": "/docs/ru-yaml-lint.html#-outputs"
-  },"288": {
+  },"290": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🚀 Usage Examples",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-usage-examples",
     
     "relUrl": "/docs/ru-yaml-lint.html#-usage-examples"
-  },"289": {
+  },"291": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Basic Usage",
     "content": "| 1 2 3 4 5 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#basic-usage",
     
     "relUrl": "/docs/ru-yaml-lint.html#basic-usage"
-  },"290": {
+  },"292": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Advanced Usage",
     "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,_site/**' . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#advanced-usage",
     
     "relUrl": "/docs/ru-yaml-lint.html#advanced-usage"
-  },"291": {
+  },"293": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Workflow-Only Checking",
     "content": "| 1 2 3 4 5 6 7 8 . | name: Workflow YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml' strict_mode: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#workflow-only-checking",
     
     "relUrl": "/docs/ru-yaml-lint.html#workflow-only-checking"
-  },"292": {
+  },"294": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Comprehensive Configuration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: Complete YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml,**/*.yaml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,venv/**,.venv/**,_site/**' . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#comprehensive-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#comprehensive-configuration"
-  },"293": {
+  },"295": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "⚙️ Configuration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#%EF%B8%8F-configuration-1",
     
     "relUrl": "/docs/ru-yaml-lint.html#️-configuration-1"
-  },"294": {
+  },"296": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "_config/.yamllint Configuration",
     "content": "Create a _config/.yamllint file in your project (relative to the repository root): . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | extends: default rules: line-length: max: 120 level: warning indentation: spaces: 2 comments: min-spaces-from-content: 1 document-start: present: true truthy: allowed-values: ['true', 'false', 'on', 'off'] . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#_configyamllint-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#_configyamllint-configuration"
-  },"295": {
+  },"297": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Default Rules",
     "content": "The workflow uses yamllint with these default settings: . | Line length: 120 characters (warning) | Indentation: 2 spaces | Document start: Required | Comments: Proper spacing | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#default-rules",
     
     "relUrl": "/docs/ru-yaml-lint.html#default-rules"
-  },"296": {
+  },"298": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🔧 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-troubleshooting",
     
     "relUrl": "/docs/ru-yaml-lint.html#-troubleshooting"
-  },"297": {
+  },"299": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Common Issues",
     "content": "YAML Syntax Errors . | Check for proper indentation (2 spaces) | Verify YAML syntax is valid | Ensure proper document structure | . Line Length Issues . | Adjust line length in _config/.yamllint configuration | Break long lines appropriately | Use YAML’s line continuation features | . Indentation Problems . | Use consistent 2-space indentation | Avoid mixing tabs and spaces | Check for proper nesting | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#common-issues",
     
     "relUrl": "/docs/ru-yaml-lint.html#common-issues"
-  },"298": {
+  },"300": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Debug Mode",
     "content": "Enable debug output by checking the workflow logs in GitHub Actions. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#debug-mode",
     
     "relUrl": "/docs/ru-yaml-lint.html#debug-mode"
-  },"299": {
+  },"301": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📚 Related Workflows",
     "content": ". | C/C++ Lint - Code quality checks | Static Analysis - Security analysis | Documentation - Documentation generation | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-related-workflows",
     
     "relUrl": "/docs/ru-yaml-lint.html#-related-workflows"
-  },"300": {
+  },"302": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🔗 Related Resources",
     "content": ". | yamllint Documentation | YAML Specification | GitHub Actions YAML Reference | . ← Previous: Link Check Workflow . | 📚 All Documentation | 🏠 Main README | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-related-resources",
     
     "relUrl": "/docs/ru-yaml-lint.html#-related-resources"
-  },"301": {
+  },"303": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🔀 Documentation Versioning Guide",
     "content": "Complete guide to implementing versioned documentation with automatic Doxygen and Jekyll integration using the enhanced ru-docs-publish.yml workflow. ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html",
     
     "relUrl": "/docs/versioning-guide.html"
-  },"302": {
+  },"304": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "📋 Table of Contents",
     "content": ". | Quick Start | Versioning Strategies | Configuration Options | Doxygen Integration | Jekyll Integration | Deployment Strategies | Workflow Examples | Best Practices | Troubleshooting | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-table-of-contents",
     
     "relUrl": "/docs/versioning-guide.html#-table-of-contents"
-  },"303": {
+  },"305": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🚀 Quick Start",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-quick-start",
     
     "relUrl": "/docs/versioning-guide.html#-quick-start"
-  },"304": {
+  },"306": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "1. Enable Versioning in Your Workflow",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 . | name: '📚 Publish Versioned Documentation' on: push: branches: ['main', 'release/*'] pull_request: branches: ['main'] workflow_dispatch: permissions: contents: 'read' pages: 'write' id-token: 'write' jobs: ci-docs-publish: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning is now enabled by default deployment_branch: 'gh-pages' # Required for versioned documentation # Doxygen versioning doxygen_version_strategy: 'auto' doxygen_config: '_config/Doxyfile' # Jekyll configuration jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Versioned deployment deployment_branch: 'gh-pages' # Quality checks run_link_check: 'true' run_markdown_lint: 'true' deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#1-enable-versioning-in-your-workflow",
     
     "relUrl": "/docs/versioning-guide.html#1-enable-versioning-in-your-workflow"
-  },"305": {
+  },"307": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "2. Version Configuration (Automatic)",
     "content": "No separate config files needed! The workflow automatically handles versioning by: . | Using your main _config.yml as the base | Dynamically injecting version information during build | Updating title and baseurl for versioned documentation | Adding version metadata automatically | . Example: Your main _config.yml: . | 1 2 3 4 5 6 7 8 9 . | title: \"My Project\" description: \"Documentation for My Project\" baseurl: \"/myproject\" url: \"https://myusername.github.io\" # All your existing configuration... markdown: kramdown highlighter: rouge theme: minima . | . Automatically becomes for versioned docs: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 . | title: \"My Project - v1.2.3\" description: \"Documentation for My Project\" baseurl: \"/myproject/v1.2.3\" url: \"https://myusername.github.io\" # All your existing configuration... markdown: kramdown highlighter: rouge theme: minima # Version information (auto-generated) version: \"v1.2.3\" version_type: \"stable\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#2-version-configuration-automatic",
     
     "relUrl": "/docs/versioning-guide.html#2-version-configuration-automatic"
-  },"306": {
+  },"308": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "3. Dynamic Configuration (Automatic)",
     "content": "The workflow automatically modifies your main _config.yml to inject version-specific information: . | Title: Appends version name to the title | Base URL: Updates to include version path | Version Info: Adds version and version_type variables | Comment-safe processing: Safely handles inline comments in configuration files | Clean generation: Creates _config_generated.yml without syntax errors | . No custom templates are needed - the workflow handles everything automatically with robust configuration processing. Navigation for Versioned Docs: . Just the Docs uses front matter navigation (not _data/navigation.yml), so versioned navigation is handled automatically through page front matter: . | 1 2 3 4 5 . | --- nav_order: 1 parent: \"Getting Started\" has_children: true --- . | . The workflow automatically generates the navigation menu based on the front matter in your markdown files. | Page front matter - nav_order, parent, has_children work the same way | Folder structure - Pages are organized in directories as usual | Version-specific content - You can add version info to page titles in front matter | No separate navigation files needed - Just the Docs handles this automatically | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#3-dynamic-configuration-automatic",
     
     "relUrl": "/docs/versioning-guide.html#3-dynamic-configuration-automatic"
-  },"307": {
+  },"309": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🎯 Versioning vs Deployment: Understanding the Difference",
     "content": "Important: Versioning and deployment are separate concerns that can be combined in different ways: . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-versioning-vs-deployment-understanding-the-difference",
     
     "relUrl": "/docs/versioning-guide.html#-versioning-vs-deployment-understanding-the-difference"
-  },"308": {
+  },"310": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Architectural Design Decisions",
     "content": "The following features are automatically enabled with versioned documentation: . | Version preservation - All existing version directories are preserved | Root redirect - Creates redirect from root to latest stable version | Version selector - Adds version selector component for navigation | . Why these are automatic: . | Root redirect is essential - Without it, the root URL would be broken | Keeping existing versions is required - Otherwise versions get deleted on each deployment | Version selector is necessary UX - Users need a way to navigate between versions | . This architectural decision ensures: . | ✅ Consistent behavior - Versioned deployment always works correctly | ✅ Simplified configuration - Users don’t need to understand internal dependencies | ✅ Professional results - All versioned deployments have proper UX features | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#architectural-design-decisions",
     
     "relUrl": "/docs/versioning-guide.html#architectural-design-decisions"
-  },"309": {
+  },"311": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Automatic Base URL Extraction",
     "content": "The version_base_url input has been deprecated in favor of automatic extraction from your Jekyll configuration: . | 1 2 3 4 5 . | # In your _config.yml baseurl: \"/myproject\" # This is automatically used as the base URL # In your workflow - no need to specify version_base_url # The base URL \"/myproject\" is automatically extracted and used . | . Benefits: . | ✅ Single source of truth - Base URL defined once in _config.yml | ✅ No duplication - Eliminates potential inconsistencies | ✅ Simpler configuration - One less input to manage | ✅ Automatic consistency - Versioned URLs always match your main site structure | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#automatic-base-url-extraction",
     
     "relUrl": "/docs/versioning-guide.html#automatic-base-url-extraction"
-  },"310": {
+  },"312": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioning Without Deployment",
     "content": "Purpose: Generate versioned documentation artifacts for internal use, testing, or future deployment. What happens: . | Doxygen gets versioned PROJECT_NUMBER (e.g., v1.0.0, v1.1.0-dev) | Jekyll generates versioned configurations | Documentation is built with version information | But NOT deployed to GitHub Pages | . Use cases: . | Development builds for testing | Pre-release validation | CI/CD artifact generation | Internal documentation review | . Configuration: . | 1 2 . | deploy_pages: 'false' # No deployment # Versioning is always enabled by default . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioning-without-deployment",
     
     "relUrl": "/docs/versioning-guide.html#versioning-without-deployment"
-  },"311": {
+  },"313": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioning With Deployment",
     "content": "Purpose: Publish versioned documentation to GitHub Pages for end users. What happens: . | Everything from versioning without deployment, PLUS | Deploy to versioned directories in gh-pages branch | Create version selector and redirects | Make documentation accessible to users | . Use cases: . | Production releases | Multi-version user access | Release management | . Configuration: . | 1 2 . | deploy_pages: 'true' # Deploy to GitHub Pages # Versioning and versioned deployment are always enabled by default . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioning-with-deployment",
     
     "relUrl": "/docs/versioning-guide.html#versioning-with-deployment"
-  },"312": {
+  },"314": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioning Strategies",
     "content": "Auto Detection (Recommended) . The workflow automatically detects versions from: . | Branch/Tag Pattern | Version Type | Deployment Path | Example | . | main | Development | development/ | Latest features | . | release/v1.0.0 | Stable | v1.0.0/ | Production release | . | release/v1.1.0-rc1 | Pre-release | v1.1.0-rc1/ | Release candidate | . | release/v2.0.0-beta1 | Pre-release | v2.0.0-beta1/ | Beta release | . | v1.2.0 (tag) | Stable | v1.2.0/ | Tagged release | . Disabled Versioning . For versioned documentation (now the default): . | 1 2 3 4 5 . | deployment_branch: 'gh-pages' # Required for versioned documentation deploy_pages: 'true' # Deploy to GitHub Pages # Versioning is always enabled by default # Automatically uses your main _config.yml as base # No separate config files needed! . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioning-strategies",
     
     "relUrl": "/docs/versioning-guide.html#versioning-strategies"
-  },"313": {
+  },"315": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "⚙️ Configuration Matrix",
     "content": "Understanding how deployment settings work with versioning (always enabled): . | deploy_pages | Result | . | false | Versioned docs built as artifacts (no deployment) | . | true | Versioned docs deployed to versioned directories | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#%EF%B8%8F-configuration-matrix",
     
     "relUrl": "/docs/versioning-guide.html#️-configuration-matrix"
-  },"314": {
+  },"316": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Common Use Cases",
     "content": "Development/Testing (Build only): . | 1 2 . | deploy_pages: 'false' # Result: Versioned docs built as artifacts . | . Production (All versions): . | 1 2 . | deploy_pages: 'true' # Result: Versioned docs deployed to versioned directories . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#common-use-cases",
     
     "relUrl": "/docs/versioning-guide.html#common-use-cases"
-  },"315": {
+  },"317": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "⚙️ Configuration Options",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#%EF%B8%8F-configuration-options",
     
     "relUrl": "/docs/versioning-guide.html#️-configuration-options"
-  },"316": {
+  },"318": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Core Versioning Settings",
     "content": "| Input | Type | Default | Description | . | deployment_branch | string | 'gh-pages' | Branch for versioned documentation deployment (required) | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#core-versioning-settings",
     
     "relUrl": "/docs/versioning-guide.html#core-versioning-settings"
-  },"317": {
+  },"319": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Doxygen Versioning",
     "content": "Note: Doxygen versioning is automatically synchronized with git-based versioning. No separate configuration needed. Automatic Version Generation: . | Git Context | Version Type | Generated Doxygen Version | Example | . | main branch | development | {latest_tag}-dev or 0.1.0-dev | v1.2.0-dev | . | release/v1.0.0 branch | stable | {version_name} | v1.0.0 | . | v1.1.0-rc1 tag | prerelease | {version_name} | v1.1.0-rc1 | . | Other branches | preview | {latest_tag}-preview or 0.1.0-preview | v1.2.0-preview | . Benefits: . | ✅ Consistent formatting - All projects follow the same pattern | ✅ No configuration errors - Can’t accidentally create malformed versions | ✅ Semantic versioning compliance - Follows industry standards | ✅ Git context awareness - Versions reflect actual git state | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#doxygen-versioning",
     
     "relUrl": "/docs/versioning-guide.html#doxygen-versioning"
-  },"318": {
+  },"320": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Centralized Doxygen Architecture",
     "content": "Doxygen artifacts are centrally managed for optimal access: . Root-Level Doxygen Organization: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | gh-pages branch: ├── doxs/ # Centralized Doxygen artifacts │ ├── v1.0.0/ # Doxygen docs for v1.0.0 │ ├── v1.1.0/ # Doxygen docs for v1.1.0 │ ├── v2.0.0-rc1/ # Doxygen docs for v2.0.0-rc1 │ ├── development/ # Doxygen docs for main branch │ ├── latest -&gt; v1.1.0/ # Symlink to latest stable │ ├── version_selector.js # Centralized version selector │ └── versions.json # Centralized version metadata ├── v1.0.0/ # Jekyll site for v1.0.0 │ ├── api -&gt; ../../doxs/v1.0.0/ # Symlink to centralized API │ ├── guides/ # Jekyll content │ └── ... └── development/ # Jekyll site for development ├── api -&gt; ../../doxs/development/ # Symlink to centralized API ├── guides/ └── ... | . Benefits of Centralized Architecture: . | ✅ Single source of truth - All API versions in one location | ✅ Easy discovery - Users know exactly where to find API docs | ✅ Efficient storage - No duplication of Doxygen artifacts | ✅ Flexible access - Works with or without Jekyll | ✅ Version selector - Centralized navigation between API versions | ✅ Symlink integration - Jekyll sites link to centralized API docs | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#centralized-doxygen-architecture",
     
     "relUrl": "/docs/versioning-guide.html#centralized-doxygen-architecture"
-  },"319": {
+  },"321": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Deployment Settings",
     "content": "| Input | Type | Default | Description | . | deployment_branch | string | gh-pages | Branch for deployment | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#deployment-settings",
     
     "relUrl": "/docs/versioning-guide.html#deployment-settings"
-  },"320": {
+  },"322": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🔧 Doxygen Integration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-doxygen-integration",
     
     "relUrl": "/docs/versioning-guide.html#-doxygen-integration"
-  },"321": {
+  },"323": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Automatic Version Detection",
     "content": "The workflow automatically sets Doxygen’s PROJECT_NUMBER based on: . | Git Tags: Uses the latest tag for stable releases | Branch Names: Extracts version from release/v* branches | Development: Uses latest tag + “-dev” suffix | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#automatic-version-detection",
     
     "relUrl": "/docs/versioning-guide.html#automatic-version-detection"
-  },"322": {
+  },"324": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Version Examples",
     "content": "| Source | Doxygen PROJECT_NUMBER | Description | . | release/v1.0.0 | v1.0.0 | Stable release | . | release/v1.1.0-rc1 | v1.1.0-rc1 | Release candidate | . | main (with v1.0.0 tag) | v1.0.0-dev | Development build | . | main (no tags) | 0.1.0-dev | Initial development | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#version-examples",
     
     "relUrl": "/docs/versioning-guide.html#version-examples"
-  },"323": {
+  },"325": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🎨 Jekyll Integration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-jekyll-integration",
     
     "relUrl": "/docs/versioning-guide.html#-jekyll-integration"
-  },"324": {
+  },"326": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Template System",
     "content": "Use placeholders in your Jekyll templates: . | Placeholder | Replaced With | Example | . | {VERSION} | Version name | v1.0.0 | . | {VERSION_TYPE} | Version type | stable | . | {BASE_URL} | Full base URL | /myproject/v1.0.0 | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#template-system",
     
     "relUrl": "/docs/versioning-guide.html#template-system"
-  },"325": {
+  },"327": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Generated Files",
     "content": "The workflow generates: . | _config_generated.yml - Versioned Jekyll configuration | version_info.json - Version metadata | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#generated-files",
     
     "relUrl": "/docs/versioning-guide.html#generated-files"
-  },"326": {
+  },"328": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Version Metadata",
     "content": "Each version includes metadata: . | 1 2 3 4 5 6 7 8 . | { \"version\": \"v1.0.0\", \"type\": \"stable\", \"deployed_at\": \"2024-01-15T10:30:00Z\", \"commit\": \"abc123...\", \"ref\": \"refs/heads/release/v1.0.0\", \"doxygen_version\": \"v1.0.0\" } . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#version-metadata",
     
     "relUrl": "/docs/versioning-guide.html#version-metadata"
-  },"327": {
+  },"329": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🚀 Deployment Strategies",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-deployment-strategies",
     
     "relUrl": "/docs/versioning-guide.html#-deployment-strategies"
-  },"328": {
+  },"330": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioned Deployment Structure",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 . | gh-pages branch: ├── index.html # Redirects to latest stable ├── v1.0.0/ # Stable release │ ├── api/ # Doxygen docs │ ├── guides/ # Jekyll content │ ├── index.html │ └── version_info.json ├── v1.1.0/ # Another stable release │ ├── api/ │ ├── guides/ │ └── ... ├── v2.0.0-rc1/ # Pre-release │ ├── api/ │ ├── guides/ │ └── ... └── development/ # Development (main branch) ├── api/ ├── guides/ └── ... | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioned-deployment-structure",
     
     "relUrl": "/docs/versioning-guide.html#versioned-deployment-structure"
-  },"329": {
+  },"331": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "URL Structure",
     "content": "| Version | URL | Description | . | Latest Stable | / | Redirects to latest stable | . | v1.0.0 | /v1.0.0/ | Specific stable version | . | v2.0.0-rc1 | /v2.0.0-rc1/ | Pre-release version | . | Development | /development/ | Latest development | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#url-structure",
     
     "relUrl": "/docs/versioning-guide.html#url-structure"
-  },"330": {
+  },"332": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Custom Deployment Branch",
     "content": "| 1 . | deployment_branch: 'docs-deploy' # Use custom branch . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#custom-deployment-branch",
     
     "relUrl": "/docs/versioning-guide.html#custom-deployment-branch"
-  },"331": {
+  },"333": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "📝 Workflow Examples",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-workflow-examples",
     
     "relUrl": "/docs/versioning-guide.html#-workflow-examples"
-  },"332": {
+  },"334": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Basic Versioning",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: 'Documentation with Versioning' on: push: branches: ['main', 'release/*'] jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' doxygen_config: '_config/Doxyfile' jekyll_enabled: 'true' deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#basic-versioning",
     
     "relUrl": "/docs/versioning-guide.html#basic-versioning"
-  },"333": {
+  },"335": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Advanced Configuration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 . | name: 'Advanced Versioned Documentation' on: push: branches: ['main', 'release/*', 'feature/*'] pull_request: branches: ['main'] jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning (always enabled) deployment_branch: 'gh-pages' # Doxygen (auto-synchronized with git versioning) doxygen_config: 'docs/Doxyfile' # Jekyll jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Deployment deployment_branch: 'gh-pages' # Optional: defaults to 'gh-pages' # Quality run_link_check: 'true' run_markdown_lint: 'true' run_spell_check: 'true' verbose: 'true' # Standard deployment deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#advanced-configuration",
     
     "relUrl": "/docs/versioning-guide.html#advanced-configuration"
-  },"334": {
+  },"336": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Manual Versioning",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 . | name: 'Manual Version Control' on: workflow_dispatch: inputs: version: description: 'Version to deploy' required: true type: string jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' # Required for versioned documentation deploy_pages: 'true' # Deploy to GitHub Pages . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#manual-versioning",
     
     "relUrl": "/docs/versioning-guide.html#manual-versioning"
-  },"335": {
+  },"337": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🎯 Best Practices",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-best-practices",
     
     "relUrl": "/docs/versioning-guide.html#-best-practices"
-  },"336": {
+  },"338": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "1. Git-Based Versioning (Enforced)",
     "content": "Always use git-based versioning for security and consistency: . | ✅ Tags: v1.0.0, v1.1.0-rc1, v2.0.0-beta1 | ✅ Release branches: release/v1.0.0, release/v1.1.0-rc1 | ❌ Manual input: Never allow manual version names (security risk) | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#1-git-based-versioning-enforced",
     
     "relUrl": "/docs/versioning-guide.html#1-git-based-versioning-enforced"
-  },"337": {
+  },"339": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "2. Branch Naming Convention",
     "content": "Follow semantic versioning for branches: . | 1 2 3 4 5 6 7 8 9 10 11 12 . | # Stable releases release/v1.0.0 release/v1.1.0 release/v2.0.0 # Pre-releases release/v1.1.0-rc1 release/v2.0.0-beta1 release/v1.2.0-alpha1 # Development main . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#2-branch-naming-convention",
     
     "relUrl": "/docs/versioning-guide.html#2-branch-naming-convention"
-  },"338": {
+  },"340": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "3. Configuration Management",
     "content": "The workflow automatically handles configuration without requiring templates: . | Uses your main _config.yml as the base | Dynamically injects version information | No template files needed | . | 1 2 3 4 5 6 7 8 . | ### 4. Version Selector Integration The version selector is automatically included in your documentation: ```html &lt;!-- Version selector is automatically generated and injected --&gt; &lt;!-- No manual inclusion needed - it's handled by the workflow --&gt; . | . The workflow automatically creates version selector JavaScript for easy navigation between versions. ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#3-configuration-management",
     
     "relUrl": "/docs/versioning-guide.html#3-configuration-management"
-  },"339": {
+  },"341": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "5. Quality Assurance",
     "content": "Enable all quality checks: . | 1 2 3 4 . | run_link_check: 'true' run_markdown_lint: 'true' run_spell_check: 'true' verbose: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#5-quality-assurance",
     
     "relUrl": "/docs/versioning-guide.html#5-quality-assurance"
-  },"340": {
+  },"342": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "6. Deployment Strategy",
     "content": "Choose the right deployment strategy: . | Versioned Deployment: For projects with multiple versions | Standard Deployment: For simple single-version docs | Custom Branch: For specialized deployment needs | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#6-deployment-strategy",
     
     "relUrl": "/docs/versioning-guide.html#6-deployment-strategy"
-  },"341": {
+  },"343": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🔧 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-troubleshooting",
     
     "relUrl": "/docs/versioning-guide.html#-troubleshooting"
-  },"342": {
+  },"344": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Common Issues",
     "content": "1. Version Not Detected . Problem: Version detection fails or returns empty values. Solution: Check branch naming convention and ensure deployment branch is specified: . | 1 . | deployment_branch: 'gh-pages' # Required for versioned documentation . | . 2. Doxygen Version Not Set . Problem: Doxygen PROJECT_NUMBER is not updated. Solution: Ensure Doxygen versioning is enabled: . | 1 2 . | doxygen_version_strategy: 'auto' # or 'manual' doxygen_config: '_config/Doxyfile' # Ensure Doxyfile exists . | . 3. Jekyll Build Fails . Problem: Jekyll build fails with versioned configuration. Solution: Check Jekyll configuration: . | 1 2 3 4 5 . | # Check if main config exists ls _config.yml # Verify Jekyll configuration jekyll doctor . | . 4. Deployment Issues . Problem: Versioned deployment fails. Solution: Check deployment branch and permissions: . | 1 2 3 4 5 6 . | deployment_branch: 'gh-pages' # Ensure branch exists # Check repository permissions permissions: contents: 'read' pages: 'write' id-token: 'write' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#common-issues",
     
     "relUrl": "/docs/versioning-guide.html#common-issues"
-  },"343": {
+  },"345": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Debug Commands",
     "content": "| 1 2 3 4 5 6 7 8 9 10 . | # Check version detection echo \"Version: $\" echo \"Type: $\" echo \"Doxygen: $\" # Check generated files ls -la docs/_config_generated.yml # Check deployment structure ls -la gh-pages-deploy/ . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#debug-commands",
     
     "relUrl": "/docs/versioning-guide.html#debug-commands"
-  },"344": {
+  },"346": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Getting Help",
     "content": ". | Check Workflow Logs: Review the GitHub Actions logs for detailed error messages | Validate Configuration: Ensure all required inputs are provided | Test Locally: Run Doxygen and Jekyll locally to verify configuration | Check Permissions: Ensure the workflow has necessary repository permissions | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#getting-help",
     
     "relUrl": "/docs/versioning-guide.html#getting-help"
-  },"345": {
+  },"347": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "📚 Further Reading",
     "content": ". | HardFOC Versioning Policy - Organization versioning strategy and guidelines | Jekyll Guide - Jekyll configuration details | Doxygen Documentation - Doxygen reference | Semantic Versioning - Version numbering standard | GitHub Pages Documentation - GitHub Pages reference | . Built for the HardFOC ecosystem - Enabling seamless multi-version documentation with proper Semantic Versioning . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-further-reading",
     
     "relUrl": "/docs/versioning-guide.html#-further-reading"
-  },"346": {
+  },"348": {
     "doc": "🔄 Reusable Workflows",
     "title": "Reusable Workflows",
     "content": "This section contains all the reusable GitHub Actions workflows available in this repository. ",
     "url": "/hf-general-ci-tools/development/workflows/#reusable-workflows",
     
     "relUrl": "/workflows/#reusable-workflows"
-  },"347": {
+  },"349": {
     "doc": "🔄 Reusable Workflows",
     "title": "Available Workflows",
     "content": ". | 🔧 C++ Linting Tools - Clang-format and clang-tidy for any C++ project | 🔍 C++ Static Analysis - Cppcheck security analysis with flexible configuration | 📚 Documentation Publisher - Complete docs pipeline with Doxygen, Jekyll, and GitHub Pages | 🔗 Documentation Link Check - Comprehensive link validation using Lychee | 📝 YAML Linting Tools - Flexible YAML validation and formatting | . ",
     "url": "/hf-general-ci-tools/development/workflows/#available-workflows",
     
     "relUrl": "/workflows/#available-workflows"
-  },"348": {
+  },"350": {
     "doc": "🔄 Reusable Workflows",
     "title": "🚀 Testing &amp; Validation",
     "content": "Each reusable workflow (ru-*.yml) has a corresponding comprehensive CI test workflow (ci-*.yml) that demonstrates all its features and validates its functionality. See CI Workflows &amp; Design Philosophy for details on our testing approach. ",
     "url": "/hf-general-ci-tools/development/workflows/#-testing--validation",
     
     "relUrl": "/workflows/#-testing--validation"
-  },"349": {
+  },"351": {
     "doc": "🔄 Reusable Workflows",
     "title": "Usage",
     "content": "Each workflow is designed to be reusable and can be called from other repositories. See the individual workflow documentation for detailed usage instructions and parameters. | ← Previous: Documentation | Next: CI Workflows &amp; Design → | . | 📚 All Documentation | 🏠 Main README | . ",
     "url": "/hf-general-ci-tools/development/workflows/#usage",
     
     "relUrl": "/workflows/#usage"
-  },"350": {
+  },"352": {
     "doc": "🔄 Reusable Workflows",
     "title": "🔄 Reusable Workflows",
     "content": " ",
     "url": "/hf-general-ci-tools/development/workflows/",
     
     "relUrl": "/workflows/"
-  },"351": {
+  },"353": {
     "doc": "C/C++ Sample Sources for CI Experiments",
     "title": "C/C++ Sample Sources for CI Experiments",
     "content": "# C/C++ Sample Sources for CI Experiments This directory contains small, well-documented C and C++ translation units that exercise the C/C++ related tooling showcased in this repository: - `include/geometry.h` and `src/geometry.c` provide a handful of geometry helper functions written in C. - `include/greeter.hpp` and `src/greeter.cpp` deliver a simple C++ class used to model basic object-oriented behaviour. The files include Doxygen comments and are referenced by `_config/Doxyfile`, which means they are automatically published when you run ``` doxygen _config/Doxyfile ``` The generated documentation lands under `docs/doxygen/html`. This location is compatible with the Jekyll + GitHub Pages setup used by the Publish Docs workflows, so you can push the rendered artefacts alongside the rest of the documentation if desired. ",

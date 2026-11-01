@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Publish Docs API<span id="projectnumber">&#160;0.1.0-dev</span>
+   <div id="projectname">Publish Docs API<span id="projectnumber">&#160;v1.0.0-dev</span>
    </div>
    <div id="projectbrief">Auto-generated API documentation for example C and C++ code used by the workflow guides.</div>
   </td>
@@ -104,7 +104,7 @@ permalink: /</h2>
 🚀 hf-general-ci-tools</h1>
 <p><b>A comprehensive collection of reusable GitHub Actions workflows for modern CI/CD pipelines</b></p>
 <hr  />
-<p><a href="https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml"><img src="https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg" alt="Docs Publish CI" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml"><img src="https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml/badge.svg" alt="YAML Lint CI" style="pointer-events: none;" class="inline"/></a> [<img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg" alt="License" style="pointer-events: none;" class="inline"/>](LICENSE) <a href="https://hardfoc.github.io/hf-general-ci-tools"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" alt="GitHub Pages" style="pointer-events: none;" class="inline"/></a></p>
+<p><a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg" alt="Docs Publish CI" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml/badge.svg" alt="YAML Lint CI" style="pointer-events: none;" class="inline"/></a> [<img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg" alt="License" style="pointer-events: none;" class="inline"/>](LICENSE) <a href="https://hardfoc.github.io/hf-general-ci-tools"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" alt="GitHub Pages" style="pointer-events: none;" class="inline"/></a></p>
 <p><em>Streamline your development workflow with battle-tested, production-ready GitHub Actions</em></p>
 <hr  />
 <h2><a class="anchor" id="autotoc_md5"></a>
@@ -212,6 +212,7 @@ permalink: /</h2>
 <blockquote class="doxtable">
 <p>&zwj;<b>For other repositories</b> - Copy and customize these examples for your project </p>
 </blockquote>
+<p><b>Version pinning:</b> callers pin the major tag <code>@v1</code>, which moves to the latest <code>v1.x.y</code> release. Pin a full tag (<code>@v1.2.3</code>) or a commit SHA if you need a fixed version. The <code>v1</code> tag is created with the first release.</p>
 <h4><a class="anchor" id="autotoc_md17"></a>
 🔧 Basic CI Pipeline</h4>
 <div class="fragment"><div class="line">name: 🚀 CI Pipeline</div>
@@ -222,7 +223,7 @@ permalink: /</h2>
 <div class="line">jobs:</div>
 <div class="line">  # Code quality checks</div>
 <div class="line">  lint:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      clang_version: &quot;20&quot;</div>
 <div class="line">      style: &quot;file&quot;</div>
@@ -230,7 +231,7 @@ permalink: /</h2>
 <div class="line"> </div>
 <div class="line">  # Security analysis</div>
 <div class="line">  static:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      paths: &quot;src include&quot;</div>
 <div class="line">      std: &quot;c++17&quot;</div>
@@ -238,14 +239,14 @@ permalink: /</h2>
 <div class="line"> </div>
 <div class="line">  # Documentation generation</div>
 <div class="line">  docs:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      doxygen_config: &quot;_config/Doxyfile&quot;</div>
 <div class="line">      output_dir: &quot;docs/doxygen/html&quot;</div>
 <div class="line"> </div>
 <div class="line">  # Link validation</div>
 <div class="line">  link-check:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      paths: &quot;docs/**,*.md&quot;</div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md18"></a>
@@ -258,7 +259,7 @@ permalink: /</h2>
 <div class="line">on: [push, pull_request]</div>
 <div class="line">jobs:</div>
 <div class="line">  lint:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      source_dirs: &quot;src/&quot;</div>
 <div class="line">      include_patterns: &quot;*.cpp,*.hpp,*.c,*.h&quot;</div>
@@ -273,7 +274,7 @@ permalink: /</h2>
 <div class="line">on: [push]</div>
 <div class="line">jobs:</div>
 <div class="line">  docs:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      jekyll_enabled: true</div>
 <div class="line">      jekyll_source: &quot;docs&quot;</div>
@@ -288,7 +289,7 @@ permalink: /</h2>
 <div class="line">on: [push, pull_request]</div>
 <div class="line">jobs:</div>
 <div class="line">  link-check:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      paths: &quot;docs/**,*.md&quot;</div>
 <div class="line">      verbose: true</div>
@@ -302,7 +303,7 @@ permalink: /</h2>
 <div class="line">on: [push, pull_request]</div>
 <div class="line">jobs:</div>
 <div class="line">  markdown:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      globs: &quot;docs/**/*.md *.md&quot;</div>
 <div class="line">      fix: false</div>
@@ -317,7 +318,7 @@ permalink: /</h2>
 <div class="line">    tags: [&#39;v*&#39;]</div>
 <div class="line">jobs:</div>
 <div class="line">  release:</div>
-<div class="line">    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1</div>
 <div class="line">    with:</div>
 <div class="line">      draft: false</div>
 <div class="line">      prerelease: false</div>
@@ -390,7 +391,7 @@ permalink: /</h2>
 <p><b>GNU General Public License v3.0</b> - See the [LICENSE](LICENSE) file for details</p>
 <hr  />
 <p><b>⭐ Star this repository if you find it helpful!</b></p>
-<p><a href="https://github.com/n3b3x/hf-general-ci-tools/issues">Report Bug</a> • <a href="https://github.com/n3b3x/hf-general-ci-tools/issues">Request Feature</a> • Contribute </p>
+<p><a href="https://github.com/hardfoc/hf-general-ci-tools/issues">Report Bug</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools/issues">Request Feature</a> • Contribute </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"/>
 </div><!-- contents -->
@@ -398,7 +399,7 @@ permalink: /</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Nov 1 2026 21:01:47 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+    <li class="footer">Generated on Sun Nov 1 2026 23:45:00 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
   </ul>
 </div>
 </body>
