@@ -46,58 +46,53 @@ on:
 jobs:
   cppcheck:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
       - name: Run cppcheck (Docker)
         id: run
         shell: bash
+        env:
+          CPPCHECK_PATHS: ${{ inputs.paths }}
+          CPPCHECK_EXCLUDE: ${{ inputs.exclude }}
+          CPPCHECK_ENABLE: ${{ inputs.enable }}
+          CPPCHECK_FORCE: ${{ inputs.force }}
+          CPPCHECK_MAX_CONFIGS: ${{ inputs.max_configs }}
+          CPPCHECK_STD: ${{ inputs.std }}
         run: |
-          set -e
-          paths="${{ inputs.paths }}"
-          exclude="${{ inputs.exclude }}"
-          enable="${{ inputs.enable }}"
-          force="${{ inputs.force }}"
-          max_configs="${{ inputs.max_configs }}"
+          set -euo pipefail
 
-          # Build cppcheck command
-          CPPCHECK_CMD="cppcheck --enable=$enable"
-          # Suppress missingIncludeSystem warnings (common for system headers)
-          # Also suppress unmatchedSuppression info messages when suppressions don't match
-          CPPCHECK_CMD="$CPPCHECK_CMD --suppress=missingIncludeSystem"
-          CPPCHECK_CMD="$CPPCHECK_CMD --suppress=unmatchedSuppression"
-          CPPCHECK_CMD="$CPPCHECK_CMD --inline-suppr"
-          CPPCHECK_CMD="$CPPCHECK_CMD --std=${{ inputs.std }}"
-
-          # Add force option if enabled
-          if [ "$force" = "true" ]; then
-            CPPCHECK_CMD="$CPPCHECK_CMD --force"
+          # Suppress missingIncludeSystem (system headers are not mounted) and
+          # unmatchedSuppression (inline suppressions that match nothing).
+          args=(
+            "--enable=${CPPCHECK_ENABLE}"
+            --suppress=missingIncludeSystem
+            --suppress=unmatchedSuppression
+            --inline-suppr
+            "--std=${CPPCHECK_STD}"
+          )
+          if [ "${CPPCHECK_FORCE}" = "true" ]; then
+            args+=(--force)
           fi
-
-          # Add max-configs if specified
-          if [ "$max_configs" != "0" ] && [ -n "$max_configs" ]; then
-            CPPCHECK_CMD="$CPPCHECK_CMD --max-configs=$max_configs"
+          if [ -n "${CPPCHECK_MAX_CONFIGS}" ] && [ "${CPPCHECK_MAX_CONFIGS}" != "0" ]; then
+            args+=("--max-configs=${CPPCHECK_MAX_CONFIGS}")
           fi
+          args+=(--xml --output-file=/src/cppcheck_report.xml)
 
-          CPPCHECK_CMD="$CPPCHECK_CMD --xml"
-          CPPCHECK_CMD="$CPPCHECK_CMD --output-file=/src/cppcheck_report.xml"
-
-          # Add exclude options if specified
-          # Note: cppcheck uses -i (ignore) option, not --exclude
-          if [ -n "$exclude" ]; then
-            for ex in $exclude; do
-              CPPCHECK_CMD="$CPPCHECK_CMD -i /src/$ex"
-            done
-          fi
-
-          # Add paths to analyze
-          for p in $paths; do
-            CPPCHECK_CMD="$CPPCHECK_CMD /src/$p"
+          # cppcheck ignores paths with -i (there is no --exclude).
+          read -r -a excludes <<< "${CPPCHECK_EXCLUDE}"
+          for ex in "${excludes[@]}"; do
+            args+=(-i "/src/${ex}")
+          done
+          read -r -a paths <<< "${CPPCHECK_PATHS}"
+          for p in "${paths[@]}"; do
+            args+=("/src/${p}")
           done
 
           docker run --rm -v "$PWD":/src ghcr.io/facthunder/cppcheck:latest \
-            $CPPCHECK_CMD 2>&1 | \
-            tee cppcheck_output.txt || true
+            cppcheck "${args[@]}" 2>&1 | tee cppcheck_output.txt || true
 
           if [ -s cppcheck_report.xml ]; then
             echo "issues=true" >> "$GITHUB_OUTPUT"
@@ -106,7 +101,7 @@ jobs:
           fi
 
       - name: Upload report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         if: always()
         with:
           name: cppcheck-report

@@ -39,13 +39,15 @@ jobs:
   yamllint:
     name: YAML Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       result: ${{ steps.lint.outputs.result }}
       files_checked: ${{ steps.lint.outputs.files_checked }}
       issues_found: ${{ steps.lint.outputs.issues_found }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
       - name: Install yamllint
         run: |
@@ -54,24 +56,24 @@ jobs:
 
       - name: Run yamllint
         id: lint
+        env:
+          PATHS: ${{ inputs.paths }}
+          CONFIG_FILE: ${{ inputs.config_file }}
+          STRICT_MODE: ${{ inputs.strict_mode }}
+          EXCLUDE_PATTERNS: ${{ inputs.exclude_patterns }}
         run: |
-          # Parse inputs for configuration
-          PATHS="${{ inputs.paths }}"
-          CONFIG_FILE="${{ inputs.config_file }}"
-          STRICT_MODE="${{ inputs.strict_mode }}"
-          EXCLUDE_PATTERNS="${{ inputs.exclude_patterns }}"
 
           # Convert comma-separated paths to array for processing
           IFS=',' read -ra PATH_ARRAY <<< "$PATHS"
           IFS=',' read -ra EXCLUDE_ARRAY <<< "$EXCLUDE_PATTERNS"
 
           # Build yamllint command for execution
-          YAMLLINT_CMD="yamllint"
+          YAMLLINT_CMD=(yamllint)
 
           # Add config file if it exists
           if [ -f "$CONFIG_FILE" ]; then
             echo "✅ Using yamllint config: $CONFIG_FILE"
-            YAMLLINT_CMD="$YAMLLINT_CMD --config-file $CONFIG_FILE"
+            YAMLLINT_CMD+=(--config-file "$CONFIG_FILE")
           else
             echo "⚠️  No config file found at $CONFIG_FILE, using defaults"
           fi
@@ -79,7 +81,7 @@ jobs:
           # Add strict mode if enabled
           if [ "$STRICT_MODE" = "true" ]; then
             echo "🔍 Strict mode enabled"
-            YAMLLINT_CMD="$YAMLLINT_CMD --strict"
+            YAMLLINT_CMD+=(--strict)
           fi
 
           # Initialize counters
@@ -116,7 +118,7 @@ jobs:
 
               # If no files found with glob, try find as fallback
               if [ ${#files[@]} -eq 0 ]; then
-                files=($(find . -path "$path" -type f 2>/dev/null || true))
+                mapfile -t files < <(find . -path "$path" -type f 2>/dev/null || true)
               fi
             fi
 
@@ -164,7 +166,7 @@ jobs:
                 FILES_CHECKED=$((FILES_CHECKED + 1))
 
                 # Run yamllint and capture output
-                if ! $YAMLLINT_CMD "$file" 2>&1; then
+                if ! "${YAMLLINT_CMD[@]}" "$file" 2>&1; then
                   ISSUES_FOUND=$((ISSUES_FOUND + 1))
                 fi
               fi
@@ -172,15 +174,18 @@ jobs:
           done
 
           # Set outputs
-          echo "result=$([ $ISSUES_FOUND -eq 0 ] && echo 'success' || echo 'failure')" >> $GITHUB_OUTPUT
-          echo "files_checked=$FILES_CHECKED" >> $GITHUB_OUTPUT
-          echo "issues_found=$ISSUES_FOUND" >> $GITHUB_OUTPUT
+          if [ "$ISSUES_FOUND" -eq 0 ]; then RESULT=success; else RESULT=failure; fi
+          {
+            echo "result=$RESULT"
+            echo "files_checked=$FILES_CHECKED"
+            echo "issues_found=$ISSUES_FOUND"
+          } >> "$GITHUB_OUTPUT"
 
           # Summary
           echo "📊 Summary:"
           echo "  Files checked: $FILES_CHECKED"
           echo "  Issues found: $ISSUES_FOUND"
-          echo "  Result: $([ $ISSUES_FOUND -eq 0 ] && echo '✅ Success' || echo '❌ Failure')"
+          echo "  Result: $RESULT"
 
           # Always fail on errors (yamllint returns non-zero for errors even without --strict)
           # Strict mode controls whether warnings also cause failures

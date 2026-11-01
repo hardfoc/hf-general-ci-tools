@@ -1,0 +1,380 @@
+---
+# Host (native) CI for a CMake project: configure, build, test, then run
+# clang-tidy 18 and cppcheck over the same compilation database, so both
+# analysers see the include paths and defines the compiler sees and agree on
+# which files are analysed.
+name: 🖥️ [RU] Host CMake CI
+
+on:
+  workflow_call:
+    inputs:
+      preset:
+        description: >-
+          CMake configure preset (from CMakePresets.json in source_dir). Empty:
+          configure with -S source_dir -B build_dir.
+        type: string
+        required: false
+        default: ""
+      source_dir:
+        description: "CMake source directory, relative to the repository root"
+        type: string
+        required: false
+        default: "."
+      build_dir:
+        description: >-
+          Build directory, relative to the repository root. With a preset this
+          must be the preset's binaryDir; compile_commands.json is read from here.
+        type: string
+        required: false
+        default: "build/host"
+      cmake_args:
+        description: "Extra arguments for the configure step (space separated)"
+        type: string
+        required: false
+        default: ""
+      build_type:
+        description: "CMAKE_BUILD_TYPE when no preset is used"
+        type: string
+        required: false
+        default: "Debug"
+      run_tests:
+        description: "Run ctest after the build"
+        type: boolean
+        required: false
+        default: true
+      ctest_args:
+        description: "Extra arguments for ctest (space separated)"
+        type: string
+        required: false
+        default: ""
+      tidy_paths:
+        description: >-
+          Python regular expression matched (re.search) against each translation
+          unit's path relative to the repository root. Only matching files are
+          given to clang-tidy and cppcheck. Empty: every file in the database.
+        type: string
+        required: false
+        default: ""
+      exclude_paths:
+        description: >-
+          Python regular expression; translation units whose relative path matches
+          are never analysed, and findings in matching files are not counted.
+          The build directory is always excluded.
+        type: string
+        required: false
+        default: "(^|/)(third_party|external|vendor|_deps)/"
+      run_clang_tidy:
+        description: "Run clang-tidy 18 on the selected files"
+        type: boolean
+        required: false
+        default: true
+      clang_tidy_config:
+        description: "Path to a .clang-tidy file. Empty: clang-tidy's normal lookup from each source file"
+        type: string
+        required: false
+        default: ""
+      run_cppcheck:
+        description: "Run cppcheck on the selected files"
+        type: boolean
+        required: false
+        default: true
+      cppcheck_suppressions:
+        description: "Path to a cppcheck --suppressions-list file (optional)"
+        type: string
+        required: false
+        default: ""
+      cppcheck_enable:
+        description: "cppcheck --enable value"
+        type: string
+        required: false
+        default: "warning,performance,portability"
+      fail_on_findings:
+        description: "Fail the job when clang-tidy or cppcheck report findings"
+        type: boolean
+        required: false
+        default: true
+      apt_packages:
+        description: "Extra apt packages to install before configuring (space separated)"
+        type: string
+        required: false
+        default: ""
+      submodules:
+        description: "actions/checkout submodules value: false, true or recursive"
+        type: string
+        required: false
+        default: "false"
+      runs_on:
+        description: "Runner label (Ubuntu 24.04 or newer, for clang-tidy-18 from apt)"
+        type: string
+        required: false
+        default: "ubuntu-24.04"
+      artifact_name:
+        description: "Name of the uploaded report artifact"
+        type: string
+        required: false
+        default: "host-ci-reports"
+    outputs:
+      tidy_findings:
+        description: "Number of clang-tidy findings (empty if not run)"
+        value: ${{ jobs.host.outputs.tidy_findings }}
+      cppcheck_findings:
+        description: "Number of cppcheck findings (empty if not run)"
+        value: ${{ jobs.host.outputs.cppcheck_findings }}
+
+jobs:
+  host:
+    name: build, test, analyse
+    runs-on: ${{ inputs.runs_on }}
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    outputs:
+      tidy_findings: ${{ steps.tidy.outputs.findings }}
+      cppcheck_findings: ${{ steps.cppcheck.outputs.findings }}
+    env:
+      SOURCE_DIR: ${{ inputs.source_dir }}
+      BUILD_DIR: ${{ inputs.build_dir }}
+      REPORT_DIR: ${{ github.workspace }}/host-ci-reports
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          submodules: ${{ inputs.submodules }}
+          persist-credentials: false
+
+      - name: Install toolchain and analysers
+        env:
+          RUN_TIDY: ${{ inputs.run_clang_tidy }}
+          RUN_CPPCHECK: ${{ inputs.run_cppcheck }}
+          EXTRA_PACKAGES: ${{ inputs.apt_packages }}
+        run: |
+          set -euo pipefail
+          pkgs=(cmake ninja-build g++ python3)
+          if [ "$RUN_TIDY" = "true" ]; then pkgs+=(clang-tidy-18); fi
+          if [ "$RUN_CPPCHECK" = "true" ]; then pkgs+=(cppcheck); fi
+          read -r -a extra <<< "$EXTRA_PACKAGES"
+          pkgs+=("${extra[@]}")
+          for attempt in 1 2 3; do
+            if sudo apt-get update -q && sudo apt-get install -y -q --no-install-recommends "${pkgs[@]}"; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::apt-get install failed after 3 attempts"
+              exit 1
+            fi
+            sleep $((attempt * 15))
+          done
+          cmake --version | head -1
+          if [ "$RUN_TIDY" = "true" ]; then clang-tidy-18 --version | grep -m1 -i version; fi
+          if [ "$RUN_CPPCHECK" = "true" ]; then cppcheck --version; fi
+          mkdir -p "$REPORT_DIR"
+
+      - name: Configure (compile_commands.json exported)
+        id: configure
+        env:
+          PRESET: ${{ inputs.preset }}
+          CMAKE_ARGS: ${{ inputs.cmake_args }}
+          BUILD_TYPE: ${{ inputs.build_type }}
+        run: |
+          set -euo pipefail
+          read -r -a extra <<< "$CMAKE_ARGS"
+          if [ -n "$PRESET" ]; then
+            # Presets are read from the source directory's CMakePresets.json.
+            (cd "$SOURCE_DIR" && cmake --preset "$PRESET" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "${extra[@]}")
+          else
+            cmake -S "$SOURCE_DIR" -B "$BUILD_DIR" -G Ninja \
+              -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "${extra[@]}"
+          fi
+          if [ ! -f "$BUILD_DIR/compile_commands.json" ]; then
+            echo "::error::$BUILD_DIR/compile_commands.json was not written. With a preset, set build_dir to the preset's binaryDir (relative to the repository root); the generator must support CMAKE_EXPORT_COMPILE_COMMANDS (Ninja or Makefiles)."
+            exit 1
+          fi
+          cp "$BUILD_DIR/compile_commands.json" "$REPORT_DIR/compile_commands.json"
+
+      - name: Build
+        run: cmake --build "$BUILD_DIR" --parallel
+
+      - name: Test (ctest)
+        if: ${{ inputs.run_tests }}
+        env:
+          CTEST_ARGS: ${{ inputs.ctest_args }}
+        run: |
+          set -euo pipefail
+          read -r -a extra <<< "$CTEST_ARGS"
+          ctest --test-dir "$BUILD_DIR" --output-on-failure --parallel "$(nproc)" "${extra[@]}"
+
+      # One file set for both analysers, so they always agree on what is
+      # analysed: the selected translation units, as a filtered database.
+      - name: Select files to analyse
+        id: select
+        if: ${{ always() && steps.configure.outcome == 'success' && (inputs.run_clang_tidy || inputs.run_cppcheck) }}
+        env:
+          TIDY_PATHS: ${{ inputs.tidy_paths }}
+          EXCLUDE_PATHS: ${{ inputs.exclude_paths }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, sys
+          root = os.environ["GITHUB_WORKSPACE"]
+          build = os.path.normpath(os.path.join(root, os.environ["BUILD_DIR"]))
+          include = re.compile(os.environ.get("TIDY_PATHS") or ".")
+          exclude = os.environ.get("EXCLUDE_PATHS") or ""
+          exclude = re.compile(exclude) if exclude else None
+          db_path = os.path.join(build, "compile_commands.json")
+          entries = json.load(open(db_path, encoding="utf-8"))
+          keep, seen = [], set()
+          for e in entries:
+              f = e["file"] if os.path.isabs(e["file"]) else os.path.join(e["directory"], e["file"])
+              f = os.path.normpath(f)
+              if f == build or f.startswith(build + os.sep) or not f.startswith(root + os.sep):
+                  continue  # generated in the build tree, or outside the repository
+              rel = os.path.relpath(f, root).replace(os.sep, "/")
+              if exclude and exclude.search(rel):
+                  continue
+              if not include.search(rel) or f in seen:
+                  continue
+              seen.add(f)
+              keep.append(e)
+          out = os.path.join(build, "compile_commands.selected.json")
+          json.dump(keep, open(out, "w", encoding="utf-8"), indent=1)
+          files = sorted(os.path.relpath(p, root) for p in seen)
+          with open(os.path.join(os.environ["REPORT_DIR"], "analysed-files.txt"), "w") as fh:
+              fh.write("\n".join(files) + ("\n" if files else ""))
+          print(f"{len(files)} of {len(entries)} translation unit(s) selected")
+          for p in files:
+              print(f"  {p}")
+          if not files:
+              print("::error::No translation units matched tidy_paths/exclude_paths in " + db_path)
+              sys.exit(1)
+          PY
+
+      - name: clang-tidy 18
+        id: tidy
+        if: ${{ always() && inputs.run_clang_tidy && steps.select.outcome == 'success' }}
+        env:
+          TIDY_CONFIG: ${{ inputs.clang_tidy_config }}
+          EXCLUDE_PATHS: ${{ inputs.exclude_paths }}
+        run: |
+          set -euo pipefail
+          mapfile -t FILES < "$REPORT_DIR/analysed-files.txt"
+          args=(-p "$BUILD_DIR" --quiet)
+          if [ -n "$TIDY_CONFIG" ]; then
+            if [ ! -f "$TIDY_CONFIG" ]; then
+              echo "::error::clang_tidy_config '$TIDY_CONFIG' does not exist"
+              exit 1
+            fi
+            args+=("--config-file=$TIDY_CONFIG")
+          fi
+          echo "clang-tidy-18 on ${#FILES[@]} translation unit(s)"
+          # One log per file (parallel runs must not interleave lines), then one
+          # report. clang-tidy exits 0 even when it prints warnings, so the
+          # findings are counted from the report below.
+          LOG_DIR="$RUNNER_TEMP/clang-tidy-logs"
+          mkdir -p "$LOG_DIR"
+          # shellcheck disable=SC2016  # expanded by the inner bash
+          printf '%s\n' "${FILES[@]}" | xargs -r -P "$(nproc)" -I{} bash -c \
+            'dir="$1"; f="$2"; shift 2; clang-tidy-18 "$@" "$f" > "$dir/$(printf %s "$f" | tr / _).log" 2>&1 || true' \
+            _ "$LOG_DIR" {} "${args[@]}"
+          cat "$LOG_DIR"/*.log > "$REPORT_DIR/clang-tidy-report.txt" 2>/dev/null || true
+          python3 - <<'PY'
+          import os, re
+          report = os.path.join(os.environ["REPORT_DIR"], "clang-tidy-report.txt")
+          root = os.environ["GITHUB_WORKSPACE"]
+          exclude = os.environ.get("EXCLUDE_PATHS") or ""
+          exclude = re.compile(exclude) if exclude else None
+          diag = re.compile(r"^(?P<file>[^:\s][^:]*):(?P<line>\d+):(?P<col>\d+): (?P<sev>warning|error): (?P<msg>.*) \[(?P<check>[A-Za-z0-9_.,-]+)\]$")
+          hits = set()
+          for line in open(report, errors="replace"):
+              m = diag.match(line.rstrip("\n"))
+              if not m:
+                  continue
+              check = m["check"]
+              # Compiler warnings echoed by clang-tidy are not tidy findings; compile errors are.
+              if check.startswith("clang-diagnostic-") and check != "clang-diagnostic-error":
+                  continue
+              rel = os.path.relpath(m["file"], root) if os.path.isabs(m["file"]) else m["file"]
+              if exclude and exclude.search(rel.replace(os.sep, "/")):
+                  continue
+              hits.add((rel, int(m["line"]), int(m["col"]), m["sev"], m["msg"], check))
+          for rel, ln, col, sev, msg, check in sorted(hits):
+              level = "error" if sev == "error" else "warning"
+              print(f"::{level} file={rel},line={ln},col={col},title=clang-tidy {check}::{msg}")
+          print(f"[clang-tidy] {len(hits)} finding(s), full output in the report artifact")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"findings={len(hits)}\n")
+          PY
+
+      - name: cppcheck
+        id: cppcheck
+        if: ${{ always() && inputs.run_cppcheck && steps.select.outcome == 'success' }}
+        env:
+          SUPPRESSIONS: ${{ inputs.cppcheck_suppressions }}
+          CPPCHECK_ENABLE: ${{ inputs.cppcheck_enable }}
+          EXCLUDE_PATHS: ${{ inputs.exclude_paths }}
+        run: |
+          set -euo pipefail
+          args=(--quiet "--project=$BUILD_DIR/compile_commands.selected.json" -j "$(nproc)"
+                "--enable=$CPPCHECK_ENABLE" --inline-suppr
+                --suppress=missingIncludeSystem --suppress=unmatchedSuppression
+                "--template={file}:{line}:{column}: {severity}: {message} [{id}]")
+          if [ -n "$SUPPRESSIONS" ]; then
+            if [ ! -f "$SUPPRESSIONS" ]; then
+              echo "::error::cppcheck_suppressions '$SUPPRESSIONS' does not exist"
+              exit 1
+            fi
+            args+=("--suppressions-list=$SUPPRESSIONS")
+          fi
+          set +e
+          cppcheck "${args[@]}" 2> "$REPORT_DIR/cppcheck-report.txt" > /dev/null
+          rc=$?
+          set -e
+          python3 - "$rc" <<'PY'
+          import os, re, sys
+          rc = int(sys.argv[1])
+          report = os.path.join(os.environ["REPORT_DIR"], "cppcheck-report.txt")
+          root = os.environ["GITHUB_WORKSPACE"]
+          exclude = os.environ.get("EXCLUDE_PATHS") or ""
+          exclude = re.compile(exclude) if exclude else None
+          # Findings are error/warning/performance/portability/style; "information" lines are analysis limits.
+          diag = re.compile(r"^(?P<file>[^:\s][^:]*):(?P<line>\d+):(?P<col>\d+): (?P<sev>error|warning|performance|portability|style): (?P<msg>.*) \[(?P<id>\w+)\]$")
+          hits = []
+          text = open(report, errors="replace").read()
+          for line in text.splitlines():
+              m = diag.match(line)
+              if not m:
+                  continue
+              rel = os.path.relpath(m["file"], root) if os.path.isabs(m["file"]) else m["file"]
+              if exclude and exclude.search(rel.replace(os.sep, "/")):
+                  continue
+              hits.append((rel, m["line"], m["col"], m["sev"], m["msg"], m["id"]))
+          if rc != 0 and not hits:
+              print(text)
+              print(f"::error::cppcheck failed to run (exit {rc})")
+              sys.exit(2)
+          for rel, ln, col, sev, msg, cid in hits:
+              level = "error" if sev == "error" else "warning"
+              print(f"::{level} file={rel},line={ln},col={col},title=cppcheck {cid}::{msg}")
+          print(f"[cppcheck] {len(hits)} finding(s), full output in the report artifact")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"findings={len(hits)}\n")
+          PY
+
+      - name: Upload reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: host-ci-reports/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Enforce zero findings
+        if: ${{ always() && inputs.fail_on_findings && steps.select.outcome == 'success' }}
+        env:
+          TIDY: ${{ steps.tidy.outputs.findings }}
+          CPPCHECK: ${{ steps.cppcheck.outputs.findings }}
+        run: |
+          total=$(( ${TIDY:-0} + ${CPPCHECK:-0} ))
+          echo "clang-tidy: ${TIDY:-not run}, cppcheck: ${CPPCHECK:-not run}"
+          if [ "$total" -gt 0 ]; then
+            echo "::error::$total static-analysis finding(s); see the annotations and the ${{ inputs.artifact_name }} artifact"
+            exit 1
+          fi

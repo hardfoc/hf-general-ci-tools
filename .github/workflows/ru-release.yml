@@ -20,22 +20,21 @@ on:
         type: string
         default: ''
 
-permissions:
-  contents: write
-
 jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # create the release
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 0
 
       # Create basic release (source code only, no build artifacts)
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64  # v3.0.3
         with:
           tag_name: ${{ inputs.tag_name || github.ref_name }}
           draft: ${{ inputs.draft }}
