@@ -35,7 +35,7 @@ The workflow declares `permissions: {}` and grants each job only what it needs. 
 
 | Job | Permissions | Steps |
 | --- | --- | --- |
-| `build` | `contents: read` | Check out, install the pinned toolchain, run `check_commands`, `mkdocs build --strict`, Doxygen into `api/`, lychee `--offline` on the built site, upload the site as the `docs-site` artifact |
+| `build` | `contents: read` | Check out (plus `submodule_paths`), install the pinned toolchain, run `check_commands`, `mkdocs build --strict`, Doxygen into `api/`, lychee `--offline` on the built site, upload the site as the `docs-site` artifact |
 | `deploy` | `contents: write` | `mike deploy` to `deployment_branch`, add the API reference from the artifact to the version folder, `mike set-default`, push (never force) |
 
 Every action is pinned to a commit SHA with its version in a comment.
@@ -47,7 +47,8 @@ Every action is pinned to a commit SHA with its version in a comment.
 | `python_version` | string | `3.12` | Python used to build the site |
 | `requirements` | string | `requirements-docs.txt` | pip requirements with the pinned toolchain |
 | `mkdocs_config` | string | `mkdocs.yml` | Path of `mkdocs.yml` |
-| `submodules` | string | `false` | `false`, `true` or `recursive`: submodules the checks and the build need |
+| `submodules` | string | `false` | `false`, `true` or `recursive`: submodules checked out with the repository |
+| `submodule_paths` | string | empty | Space-separated submodule paths initialised (shallow) after checkout, nested ones included; each parent on the way is initialised without recursion. Prefer it to `recursive` when the checks need a few nested submodules |
 | `check_commands` | string | figkit and gen.py checks | Shell lines run before the build; the default runs `tools/figkit/build.py --check` and `tools/docs/gen.py --check` when they exist |
 | `doxygen_config` | string | empty | Doxyfile of the API reference; empty builds no API |
 | `doxygen_working_directory` | string | `.` | Directory Doxygen runs in |
@@ -86,7 +87,7 @@ jobs:
     permissions:
       contents: write
     with:
-      submodules: recursive
+      submodule_paths: lib/core/hf-core-drivers/internal/hf-pincfg
       doxygen_config: _config/Doxyfile
       deploy: ${{ vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true' }}
 ```

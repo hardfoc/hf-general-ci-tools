@@ -26,9 +26,16 @@ on:
         type: string
         default: "mkdocs.yml"
       submodules:
-        description: "Submodules to check out: 'false', 'true' (top level) or 'recursive'."
+        description: "Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'."
         type: string
         default: "false"
+      submodule_paths:
+        description: >-
+          Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent
+          submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it
+          instead of 'recursive' when the checks need a few nested submodules.
+        type: string
+        default: ""
       check_commands:
         description: >-
           Shell lines run before the build; any failure fails the job. The default runs the figure drift check
@@ -100,6 +107,28 @@ jobs:
         with:
           submodules: ${{ inputs.submodules }}
           persist-credentials: false
+
+      - name: Initialise the listed submodules
+        if: ${{ inputs.submodule_paths != '' }}
+        env:
+          PATHS: ${{ inputs.submodule_paths }}
+        run: |
+          set -euo pipefail
+          init_path() {
+            local repo="." rest="$1" sub
+            while [ -n "$rest" ]; do
+              sub=""
+              while read -r _key p; do
+                case "$rest/" in "$p"/*) [ ${#p} -gt ${#sub} ] && sub="$p" ;; esac
+              done < <(git -C "$repo" config -f .gitmodules --get-regexp '\.path$' || true)
+              [ -n "$sub" ] || { echo "::error::$1: no submodule of $repo contains $rest"; exit 1; }
+              git -C "$repo" submodule update --init --depth 1 -- "$sub"
+              repo="$repo/$sub"
+              rest="${rest#"$sub"}"
+              rest="${rest#/}"
+            done
+          }
+          for p in $PATHS; do init_path "$p"; done
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
@@ -186,7 +215,6 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 0
-          submodules: ${{ inputs.submodules }}
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0

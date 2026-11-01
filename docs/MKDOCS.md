@@ -96,7 +96,7 @@ moves a figure fails CI until the figure is rebuilt.
         permissions:
           contents: write
         with:
-          submodules: recursive
+          submodule_paths: lib/core/hf-core-drivers/internal/hf-pincfg
           doxygen_config: _config/Doxyfile
           deploy: ${{ vars.ENABLE_GITHUB_PAGES_DEPLOY == 'true' }}
     ```
