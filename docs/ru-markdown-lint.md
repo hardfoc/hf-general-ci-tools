@@ -35,7 +35,7 @@ on: [push, pull_request]
 
 jobs:
   markdown:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
 ```
 
 ### Advanced Configuration
@@ -47,7 +47,7 @@ on: [push, pull_request]
 
 jobs:
   markdown:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       globs: "docs/**/*.md README.md"
       config_file: "_config/.markdownlint.json"
@@ -81,7 +81,7 @@ on: [push, pull_request]
 
 jobs:
   markdown-lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       globs: "docs/**/*.md *.md"
       fix: false
@@ -92,7 +92,7 @@ jobs:
 ```yaml
 jobs:
   markdown-lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       globs: "docs/**/*.md README.md CONTRIBUTING.md"
       exclude_patterns: "node_modules/**,vendor/**,_site/**"
@@ -107,7 +107,7 @@ on:
 
 jobs:
   markdown-fix:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       fix: true  # Enable auto-fix
       globs: "**/*.md"
@@ -118,7 +118,7 @@ jobs:
 ```yaml
 jobs:
   markdown-strict:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       config_file: "_config/.markdownlint-strict.json"
       use_docker: true  # More control over environment
@@ -207,13 +207,13 @@ When `fix: true` is enabled, these issues are automatically corrected:
 ```yaml
 jobs:
   docs-lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       config_file: "_config/.markdownlint-docs.json"
       globs: "docs/**/*.md"
 
   readme-lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       config_file: "_config/.markdownlint-readme.json"
       globs: "README.md CONTRIBUTING.md"
@@ -225,7 +225,7 @@ jobs:
 jobs:
   markdown-lint:
     if: contains(github.event.head_commit.message, '[docs]')
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
 ```
 
 ### Integration with Other Workflows
@@ -236,15 +236,15 @@ on: [push, pull_request]
 
 jobs:
   markdown-lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     
   link-check:
     needs: [markdown-lint]
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     
   build-docs:
     needs: [markdown-lint, link-check]
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
 ```
 
 ---

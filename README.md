@@ -12,8 +12,8 @@ permalink: /
 
 ---
 
-[![Docs Publish CI](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg)](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml)
-[![YAML Lint CI](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml/badge.svg)](https://github.com/n3b3x/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml)
+[![Docs Publish CI](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg)](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml)
+[![YAML Lint CI](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml/badge.svg)](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml)
 [![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
 [![GitHub Pages](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://hardfoc.github.io/hf-general-ci-tools)
 
@@ -93,6 +93,10 @@ This repository provides a curated set of **reusable GitHub Actions workflows** 
 
 > **For other repositories** - Copy and customize these examples for your project
 
+**Version pinning:** callers pin the major tag `@v1`, which moves to the
+latest `v1.x.y` release. Pin a full tag (`@v1.2.3`) or a commit SHA if you
+need a fixed version. The `v1` tag is created with the first release.
+
 #### 🔧 Basic CI Pipeline
 
 ```yaml
@@ -104,7 +108,7 @@ on:
 jobs:
   # Code quality checks
   lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
     with:
       clang_version: "20"
       style: "file"
@@ -112,7 +116,7 @@ jobs:
 
   # Security analysis
   static:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1
     with:
       paths: "src include"
       std: "c++17"
@@ -120,14 +124,14 @@ jobs:
 
   # Documentation generation
   docs:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
     with:
       doxygen_config: "_config/Doxyfile"
       output_dir: "docs/doxygen/html"
 
   # Link validation
   link-check:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/**,*.md"
 ```
@@ -142,7 +146,7 @@ name: Code Quality
 on: [push, pull_request]
 jobs:
   lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
     with:
       source_dirs: "src/"
       include_patterns: "*.cpp,*.hpp,*.c,*.h"
@@ -159,7 +163,7 @@ name: Build Docs
 on: [push]
 jobs:
   docs:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
     with:
       jekyll_enabled: true
       jekyll_source: "docs"
@@ -176,7 +180,7 @@ name: Check Links
 on: [push, pull_request]
 jobs:
   link-check:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/**,*.md"
       verbose: true
@@ -192,7 +196,7 @@ name: Docs Quality
 on: [push, pull_request]
 jobs:
   markdown:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
     with:
       globs: "docs/**/*.md *.md"
       fix: false
@@ -209,7 +213,7 @@ on:
     tags: ['v*']
 jobs:
   release:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       draft: false
       prerelease: false
@@ -282,4 +286,4 @@ your-awesome-project/
 
 **⭐ Star this repository if you find it helpful!**
 
-[Report Bug](https://github.com/n3b3x/hf-general-ci-tools/issues) • [Request Feature](https://github.com/n3b3x/hf-general-ci-tools/issues) • [Contribute](CONTRIBUTING.md)
+[Report Bug](https://github.com/hardfoc/hf-general-ci-tools/issues) • [Request Feature](https://github.com/hardfoc/hf-general-ci-tools/issues) • [Contribute](CONTRIBUTING.md)
