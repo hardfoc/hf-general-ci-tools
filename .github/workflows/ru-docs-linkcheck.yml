@@ -60,23 +60,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           submodules: ${{ inputs.checkout_recursive && 'recursive' || 'false' }}
           fetch-depth: 0
 
       - name: Link check with Lychee
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8  # v2.9.0
         with:
+          # `fail` is the action's own switch (default true); the inputs are
+          # booleans, so they are tested directly, not compared with 'true'.
+          fail: ${{ inputs.fail_on_errors }}
           args: >-
             ${{ inputs.config_file != '' && format('--config {0}', inputs.config_file) || '' }}
             --no-progress
-            ${{ inputs.verbose == 'true' && '--verbose' || '' }}
+            ${{ inputs.verbose && '--verbose' || '' }}
             --format detailed
             --timeout ${{ inputs.timeout }}
             --max-retries ${{ inputs.max_retries }}
             --retry-wait-time ${{ inputs.retry_wait_time }}
             ${{ inputs.exclude_private && '--exclude-all-private' || '' }}
             ${{ !inputs.exclude_mail && '--include-mail' || '' }}
-            ${{ inputs.fail_on_errors == 'true' && '--fail' || '' }}
             ${{ inputs.paths }}
