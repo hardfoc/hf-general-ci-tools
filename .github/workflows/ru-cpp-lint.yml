@@ -68,14 +68,14 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
       - name: Prepare clang configuration
+        env:
+          FORMAT_CONFIG: ${{ inputs.clang_format_config }}
+          TIDY_CONFIG: ${{ inputs.clang_tidy_config }}
         run: |
           set -e
-
-          FORMAT_CONFIG="${{ inputs.clang_format_config }}"
-          TIDY_CONFIG="${{ inputs.clang_tidy_config }}"
 
           if [ -n "$FORMAT_CONFIG" ]; then
             if [ -f "$FORMAT_CONFIG" ]; then
@@ -104,10 +104,15 @@ jobs:
           fi
 
       - name: Report C/C++ files to lint
+        env:
+          LINT_EXTENSIONS: ${{ inputs.extensions }}
+          IGNORE_RAW: ${{ inputs.ignore }}
+          FILES_CHANGED_ONLY: ${{ inputs.files_changed_only }}
+          LINES_CHANGED_ONLY: ${{ inputs.lines_changed_only }}
         run: |
           echo "🔍 Gathering files for clang-format and clang-tidy..."
 
-          IFS=',' read -ra EXT_ARRAY <<< "${{ inputs.extensions }}"
+          IFS=',' read -ra EXT_ARRAY <<< "${LINT_EXTENSIONS}"
           PATTERNS=()
           for ext in "${EXT_ARRAY[@]}"; do
             ext=$(echo "$ext" | xargs)
@@ -117,7 +122,7 @@ jobs:
           done
 
           if [ ${#PATTERNS[@]} -eq 0 ]; then
-            echo "⚠️  No valid extensions specified in inputs.extensions (${{ inputs.extensions }})"
+            echo "⚠️  No valid extensions specified in inputs.extensions (${LINT_EXTENSIONS})"
             echo "✅ Skipping file list preview."
             exit 0
           fi
@@ -130,7 +135,6 @@ jobs:
             exit 0
           fi
 
-          IGNORE_RAW="${{ inputs.ignore }}"
           if [ -n "$IGNORE_RAW" ]; then
             IFS='|' read -ra IGNORE_ARRAY <<< "$IGNORE_RAW"
           else
@@ -163,15 +167,15 @@ jobs:
             echo "  - $file"
           done
 
-          if [ "${{ inputs.files_changed_only }}" = "true" ]; then
+          if [ "${FILES_CHANGED_ONLY}" = "true" ]; then
             echo "ℹ️  files_changed_only=true: cpp-linter will further restrict to changed files."
           fi
-          if [ "${{ inputs.lines_changed_only }}" = "true" ]; then
+          if [ "${LINES_CHANGED_ONLY}" = "true" ]; then
             echo "ℹ️  lines_changed_only=true: diagnostics limited to changed lines."
           fi
 
       - name: Run C/C++ Linter
-        uses: cpp-linter/cpp-linter-action@v2
+        uses: cpp-linter/cpp-linter-action@774040af57f011a5fc47911f08ff0c3059d1835a  # v2.24.0
         with:
           style: file
           tidy-checks: ${{ inputs.tidy_checks }}

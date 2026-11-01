@@ -55,12 +55,12 @@ jobs:
       issues_found: ${{ steps.consolidate.outputs.issues_found }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
       - name: Run markdownlint (Official Action - Simple)
         if: ${{ inputs.use_docker == false }}
         id: action_run
-        uses: DavidAnson/markdownlint-cli2-action@v20
+        uses: DavidAnson/markdownlint-cli2-action@992badcdf24e3b8eb7e87ff9287fe931bcb00c6e  # v20.0.0
         with:
           globs: ${{ inputs.globs }}
           config: ${{ inputs.config_file }}
@@ -71,20 +71,25 @@ jobs:
       - name: Process results (Official Action)
         if: ${{ inputs.use_docker == false }}
         id: action_outputs
+        env:
+          LINT_OUTCOME: ${{ steps.action_run.outcome }}
         run: |
           # The official action doesn't provide detailed outputs
           # Set basic outputs based on step outcome
-          if [ "${{ steps.action_run.outcome }}" == "success" ]; then
-            echo "result=success" >> $GITHUB_OUTPUT
-            echo "issues_found=0" >> $GITHUB_OUTPUT
-            FILES=$(git ls-files -- '*.md' | wc -l)
-            echo "files_checked=$FILES" >> $GITHUB_OUTPUT
+          FILES=$(git ls-files -- '*.md' | wc -l)
+          if [ "${LINT_OUTCOME}" = "success" ]; then
+            {
+              echo "result=success"
+              echo "issues_found=0"
+              echo "files_checked=$FILES"
+            } >> "$GITHUB_OUTPUT"
             echo "✅ Markdown linting passed"
           else
-            echo "result=failure" >> $GITHUB_OUTPUT
-            echo "issues_found=1" >> $GITHUB_OUTPUT
-            FILES=$(git ls-files -- '*.md' | wc -l)
-            echo "files_checked=$FILES" >> $GITHUB_OUTPUT
+            {
+              echo "result=failure"
+              echo "issues_found=1"
+              echo "files_checked=$FILES"
+            } >> "$GITHUB_OUTPUT"
             echo "❌ Markdown linting failed"
             exit 1
           fi
@@ -92,37 +97,29 @@ jobs:
       - name: Run markdownlint (Docker - Full Control with Excludes)
         if: ${{ inputs.use_docker == true }}
         id: docker_run
+        env:
+          GLOBS: ${{ inputs.globs }}
+          CONFIG_FILE: ${{ inputs.config_file }}
+          EXCLUDE_PATTERNS: ${{ inputs.exclude_patterns }}
+          LINT_FIX: ${{ inputs.fix }}
         run: |
-          # Parse inputs for configuration
-          GLOBS="${{ inputs.globs }}"
-          CONFIG_FILE="${{ inputs.config_file }}"
-          EXCLUDE_PATTERNS="${{ inputs.exclude_patterns }}"
+          IMAGE="markdownlint/markdownlint-cli2:latest"
 
           # Convert space-separated globs to array (markdownlint-cli2 uses space-separated)
           read -r -a GLOB_ARRAY <<< "$GLOBS"
           IFS=',' read -ra EXCLUDE_ARRAY <<< "$EXCLUDE_PATTERNS"
 
-          # Build markdownlint-cli2 command
-          MARKDOWNLINT_CMD="markdownlint-cli2"
-
-          # Add config file if it exists
+          CONFIG_ARGS=()
           if [ -f "$CONFIG_FILE" ]; then
             echo "✅ Using markdownlint config: $CONFIG_FILE"
-            MARKDOWNLINT_CMD="$MARKDOWNLINT_CMD --config $CONFIG_FILE"
+            CONFIG_ARGS=(--config "/workdir/$CONFIG_FILE")
           else
             echo "⚠️  No config file found at $CONFIG_FILE, using defaults"
           fi
 
-          # Initialize counters
-          FILES_CHECKED=0
-          ISSUES_FOUND=0
-
           # Get list of files to check using markdownlint-cli2 --list
-          if [ -f "$CONFIG_FILE" ]; then
-            mapfile -t ALL_FILES < <(docker run --rm -v "$PWD":/workdir markdownlint/markdownlint-cli2:latest --config "/workdir/$CONFIG_FILE" --list "${GLOB_ARRAY[@]}" 2>/dev/null || true)
-          else
-            mapfile -t ALL_FILES < <(docker run --rm -v "$PWD":/workdir markdownlint/markdownlint-cli2:latest --list "${GLOB_ARRAY[@]}" 2>/dev/null || true)
-          fi
+          mapfile -t ALL_FILES < <(docker run --rm -v "$PWD":/workdir "$IMAGE" \
+            "${CONFIG_ARGS[@]}" --list "${GLOB_ARRAY[@]}" 2>/dev/null || true)
 
           # Filter out excluded patterns
           filtered_files=()
@@ -142,55 +139,50 @@ jobs:
             fi
           done
 
-          # Debug: Show filtered files
-          if [ ${#filtered_files[@]} -gt 0 ]; then
-            echo "  ✅ ${#filtered_files[@]} files to lint:"
-            for file in "${filtered_files[@]}"; do
-              echo "    - $file"
-            done
-          else
+          if [ ${#filtered_files[@]} -eq 0 ]; then
             echo "  ⚠️  No markdown files found matching patterns: $GLOBS"
-            echo "result=success" >> $GITHUB_OUTPUT
-            echo "files_checked=0" >> $GITHUB_OUTPUT
-            echo "issues_found=0" >> $GITHUB_OUTPUT
+            {
+              echo "result=success"
+              echo "files_checked=0"
+              echo "issues_found=0"
+            } >> "$GITHUB_OUTPUT"
             echo "✅ Markdown linting skipped (no files to lint)"
             exit 0
           fi
 
-          # Run markdownlint-cli2 on filtered files using Docker
+          echo "  ✅ ${#filtered_files[@]} files to lint:"
+          for file in "${filtered_files[@]}"; do
+            echo "    - $file"
+          done
+
           FILES_CHECKED=${#filtered_files[@]}
           echo "🔍 Running markdownlint-cli2 on $FILES_CHECKED files..."
 
-          # Build docker command
-          DOCKER_CMD="docker run --rm -v \"$PWD\":/workdir markdownlint/markdownlint-cli2:latest"
-          if [ -f "$CONFIG_FILE" ]; then
-            DOCKER_CMD="$DOCKER_CMD --config \"/workdir/$CONFIG_FILE\""
-          fi
-          # Add --fix flag if enabled
-          if [ "${{ inputs.fix }}" == "true" ]; then
-            DOCKER_CMD="$DOCKER_CMD --fix"
+          LINT_ARGS=("${CONFIG_ARGS[@]}")
+          if [ "$LINT_FIX" = "true" ]; then
+            LINT_ARGS+=(--fix)
           fi
 
-          # Run on filtered files
-          if $DOCKER_CMD "${filtered_files[@]}" 2>&1; then
+          if docker run --rm -v "$PWD":/workdir "$IMAGE" "${LINT_ARGS[@]}" "${filtered_files[@]}" 2>&1; then
             ISSUES_FOUND=0
+            RESULT=success
           else
             ISSUES_FOUND=1
+            RESULT=failure
           fi
 
-          # Set outputs
-          echo "result=$([ $ISSUES_FOUND -eq 0 ] && echo 'success' || echo 'failure')" >> $GITHUB_OUTPUT
-          echo "files_checked=$FILES_CHECKED" >> $GITHUB_OUTPUT
-          echo "issues_found=$ISSUES_FOUND" >> $GITHUB_OUTPUT
+          {
+            echo "result=$RESULT"
+            echo "files_checked=$FILES_CHECKED"
+            echo "issues_found=$ISSUES_FOUND"
+          } >> "$GITHUB_OUTPUT"
 
-          # Summary
           echo "📊 Summary:"
           echo "  Files checked: $FILES_CHECKED"
           echo "  Issues found: $ISSUES_FOUND"
-          echo "  Result: $([ $ISSUES_FOUND -eq 0 ] && echo '✅ Success' || echo '❌ Failure')"
+          echo "  Result: $RESULT"
 
-          # Always fail on errors
-          if [ $ISSUES_FOUND -gt 0 ]; then
+          if [ "$ISSUES_FOUND" -gt 0 ]; then
             echo "❌ Failing due to markdown linting errors"
             exit 1
           fi
@@ -198,17 +190,14 @@ jobs:
       - name: Consolidate outputs
         id: consolidate
         if: always()
+        env:
+          RESULT: ${{ inputs.use_docker && steps.docker_run.outputs.result || steps.action_outputs.outputs.result }}
+          FILES_CHECKED: ${{ inputs.use_docker && steps.docker_run.outputs.files_checked || steps.action_outputs.outputs.files_checked }}
+          ISSUES_FOUND: ${{ inputs.use_docker && steps.docker_run.outputs.issues_found || steps.action_outputs.outputs.issues_found }}
         run: |
           # Consolidate outputs from either the official action or Docker path
-          if [ "${{ inputs.use_docker }}" == "true" ]; then
-            # Docker path sets outputs in docker_run step
-            echo "result=${{ steps.docker_run.outputs.result }}" >> $GITHUB_OUTPUT
-            echo "files_checked=${{ steps.docker_run.outputs.files_checked }}" >> $GITHUB_OUTPUT
-            echo "issues_found=${{ steps.docker_run.outputs.issues_found }}" >> $GITHUB_OUTPUT
-          else
-            # Official action path sets outputs in action_outputs step
-            echo "result=${{ steps.action_outputs.outputs.result }}" >> $GITHUB_OUTPUT
-            echo "files_checked=${{ steps.action_outputs.outputs.files_checked }}" >> $GITHUB_OUTPUT
-            echo "issues_found=${{ steps.action_outputs.outputs.issues_found }}" >> $GITHUB_OUTPUT
-          fi
-
+          {
+            echo "result=${RESULT}"
+            echo "files_checked=${FILES_CHECKED}"
+            echo "issues_found=${ISSUES_FOUND}"
+          } >> "$GITHUB_OUTPUT"
