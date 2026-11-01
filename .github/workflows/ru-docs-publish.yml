@@ -1652,6 +1652,11 @@ jobs:
         if: ${{ inputs.jekyll_enabled == true }}
         env:
           GENERATED_CONFIG_LIST: ${{ steps.jekyll-gen.outputs.config_list }}
+          # jekyll-github-metadata (bundled with github-pages) needs the
+          # repository name and, for its API calls, a token. Provide both so
+          # callers do not have to set `repository:` in their config.
+          PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # =============================================================================
           # Jekyll Build Configuration
