@@ -49,6 +49,8 @@ jobs:
   markdownlint:
     name: Markdown Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       result: ${{ steps.consolidate.outputs.result }}
       files_checked: ${{ steps.consolidate.outputs.files_checked }}

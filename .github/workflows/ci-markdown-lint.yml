@@ -8,6 +8,9 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   markdownlint:
     name: Markdown Lint

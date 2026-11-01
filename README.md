@@ -55,6 +55,31 @@ This repository provides a curated set of **reusable GitHub Actions workflows** 
 
 ---
 
+## 🔐 Permissions Contract
+
+Each reusable workflow declares minimal `permissions` on every job. A called
+workflow cannot ask for more than its caller grants: if it does, the run
+fails before any job starts (`startup_failure`). Grant **at least** the
+permissions below on the calling job, or at the top of the calling workflow.
+The self-CI (`.github/scripts/check_permissions.py`) fails if a workflow's job
+permissions ever differ from this table, so a change here is always visible,
+and a new required permission is a breaking change (see
+[docs/VERSIONING.md](docs/VERSIONING.md)).
+
+<!-- permissions-table:start -->
+| Workflow | Caller must grant | Why |
+|----------|-------------------|-----|
+| [`ru-cpp-analysis.yml`](.github/workflows/ru-cpp-analysis.yml) | `contents: read` | checkout |
+| [`ru-cpp-lint.yml`](.github/workflows/ru-cpp-lint.yml) | `contents: read`, `pull-requests: write` | checkout; cpp-linter thread comments and annotations |
+| [`ru-docs-linkcheck.yml`](.github/workflows/ru-docs-linkcheck.yml) | `contents: read` | checkout |
+| [`ru-docs-publish.yml`](.github/workflows/ru-docs-publish.yml) | `contents: write` | push to the deployment branch; required on pull requests too, although PRs never deploy |
+| [`ru-markdown-lint.yml`](.github/workflows/ru-markdown-lint.yml) | `contents: read` | checkout |
+| [`ru-release.yml`](.github/workflows/ru-release.yml) | `contents: write` | create the GitHub Release |
+| [`ru-yaml-lint.yml`](.github/workflows/ru-yaml-lint.yml) | `contents: read` | checkout |
+<!-- permissions-table:end -->
+
+---
+
 ## 🏠 Repository-Specific Workflows
 
 > **Internal workflows** - These are used by this repository itself.
