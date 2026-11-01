@@ -1,0 +1,1305 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(4)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(4) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(3) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(4) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list > li.nav-list-item:nth-child(4) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/hf-general-ci-tools/v1.0.0/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/hf-general-ci-tools/v1.0.0/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>🔗 Documentation Link Check (Reusable) | hf-general-ci-tools - v1.0.0</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="🔗 Documentation Link Check (Reusable)" />
+<meta name="author" content="N3b3x" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Reusable workflow for documentation link validation using Lychee" />
+<meta property="og:description" content="Reusable workflow for documentation link validation using Lychee" />
+<link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" />
+<meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" />
+<meta property="og:site_name" content="hf-general-ci-tools - v1.0.0" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="🔗 Documentation Link Check (Reusable)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Reusable workflow for documentation link validation using Lychee","headline":"🔗 Documentation Link Check (Reusable)","url":"https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Custom head content for hf-general-ci-tools documentation -->
+<link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/custom.css">
+<script src="/hf-general-ci-tools/v1.0.0/assets/js/custom.js" defer></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/hf-general-ci-tools/v1.0.0/" class="site-title lh-tight">
+  hf-general-ci-tools - v1.0.0
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/" class="nav-list-link">🚀 hf-general-ci-tools</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/" class="nav-list-link">📖 Documentation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="🔄 Reusable Workflows submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/hf-general-ci-tools/v1.0.0/workflows/" class="nav-list-link">🔄 Reusable Workflows</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html" class="nav-list-link">🔧 C++ Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html" class="nav-list-link">� C++ Static Analysis (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html" class="nav-list-link">📚 Documentation Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" class="nav-list-link">🔗 Documentation Link Check (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" class="nav-list-link">📝 YAML Linting Tools (Reusable)</a></li></ul></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" class="nav-list-link">🚀 CI Workflows & Design Philosophy</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-release.html" class="nav-list-link">📦 Release Management</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" class="nav-list-link">📄 Markdown Linting</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/cpp-ci-test/" class="nav-list-link">C/C++ Sample Sources for CI Experiments</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search workflows, examples, and guides..." autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search workflows, examples, and guides...</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="/hf-general-ci-tools/v1.0.0/api/index.html" class="site-button"
+          
+        >
+          📖 API Reference
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools" class="site-button"
+          
+        >
+          📚 GitHub Repository
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="site-button"
+          
+        >
+          🐛 Report Issues
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/stargazers" class="site-button"
+          
+        >
+          ⭐ Star on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/workflows/">🔄 Reusable Workflows</a></li>
+    <li class="breadcrumb-nav-list-item"><span>🔗 Documentation Link Check (Reusable)</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="-documentation-link-check-reusable">
+  
+  
+    <a href="#-documentation-link-check-reusable" class="anchor-heading" aria-labelledby="-documentation-link-check-reusable"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔗 Documentation Link Check (Reusable)
+  
+  
+</h1>
+    
+
+<p><strong>Workflow:</strong> <code class="language-plaintext highlighter-rouge">ru-docs-linkcheck.yml</code> → 🔗 <strong>[RU] Documentation Link Check</strong></p>
+
+<p>A comprehensive reusable workflow for automated documentation link validation using Lychee. Ensures all links in your documentation are valid, accessible, and properly formatted across multiple file types.</p><hr />
+<h2 id="-overview">
+  
+  
+    <a href="#-overview" class="anchor-heading" aria-labelledby="-overview"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📋 Overview
+  
+  
+</h2>
+    
+
+<p>This reusable workflow (<code class="language-plaintext highlighter-rouge">ru-docs-linkcheck.yml</code>) validates all documentation links in your repository using the powerful Lychee link checker. It supports extensive configuration options for different types of projects and documentation structures.</p>
+<h3 id="-live-ci-example">
+  
+  
+    <a href="#-live-ci-example" class="anchor-heading" aria-labelledby="-live-ci-example"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ✨ <strong>Live CI Example</strong>
+  
+  
+</h3>
+    
+<p>� See our comprehensive testing workflow: <a href="../.github/workflows/ci-docs-linkcheck.yml"><code class="language-plaintext highlighter-rouge">ci-docs-linkcheck.yml</code></a> which demonstrates <strong>all features</strong> of this reusable workflow by testing it against this repository’s documentation with maximum configuration options enabled.
+It ensures that all internal and external links are working correctly, preventing broken references in your documentation.</p>
+<h3 id="key-features">
+  
+  
+    <a href="#key-features" class="anchor-heading" aria-labelledby="key-features"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Key Features</strong>
+  
+  
+</h3>
+    
+
+<ul>
+  <li>🔍 <strong>Comprehensive Link Checking</strong> - Validates all markdown files and documentation using Lychee</li>
+  <li>🌐 <strong>External Link Validation</strong> - Checks external URLs for accessibility with retry logic</li>
+  <li>📁 <strong>Internal Link Validation</strong> - Verifies internal file references and anchors</li>
+  <li>⚡ <strong>Fast Processing</strong> - Efficient scanning with configurable timeouts and parallel processing</li>
+  <li>🎯 <strong>Flexible Path Patterns</strong> - Customizable file and directory patterns</li>
+  <li>📊 <strong>Detailed Reporting</strong> - Clear error messages and link status with verbose output</li>
+  <li>🛡️ <strong>Smart Filtering</strong> - Excludes private links and mailto addresses by default</li>
+  <li>🔄 <strong>Retry Logic</strong> - Configurable retry attempts with customizable wait times</li>
+</ul><hr />
+<h2 id="-quick-start">
+  
+  
+    <a href="#-quick-start" class="anchor-heading" aria-labelledby="-quick-start"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 Quick Start
+  
+  
+</h2>
+    
+<h3 id="basic-usage">
+  
+  
+    <a href="#basic-usage" class="anchor-heading" aria-labelledby="basic-usage"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Basic Usage</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Check Documentation Links</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="advanced-configuration">
+  
+  
+    <a href="#advanced-configuration" class="anchor-heading" aria-labelledby="advanced-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Advanced Configuration</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Advanced Link Check</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**</span><span class="nv"> </span><span class="s">*.md</span><span class="nv"> </span><span class="s">**/docs/**"</span>
+      <span class="na">fail_on_errors</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s2">"</span><span class="s">15"</span>
+      <span class="na">max_retries</span><span class="pi">:</span> <span class="s2">"</span><span class="s">5"</span>
+      <span class="na">retry_wait_time</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2"</span>
+      <span class="na">exclude_private</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">exclude_mail</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">verbose</span><span class="pi">:</span> <span class="no">true</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="using-toml-configuration-file">
+  
+  
+    <a href="#using-toml-configuration-file" class="anchor-heading" aria-labelledby="using-toml-configuration-file"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Using TOML Configuration File</strong>
+  
+  
+</h3>
+    
+
+<p>For advanced configuration, you can use a <code class="language-plaintext highlighter-rouge">lychee.toml</code> file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Link Check with TOML Config</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">lychee.toml"</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**</span><span class="nv"> </span><span class="s">*.md"</span>
+      <span class="na">verbose</span><span class="pi">:</span> <span class="no">true</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Creating a TOML Config File:</strong></p>
+
+<p>Create a custom configuration file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c"># Create lychee.toml in your repository root</span>
+<span class="nb">touch </span>lychee.toml
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p>Then customize it for your needs. The TOML file allows you to:</p>
+<ul>
+  <li>Set default timeouts and retry counts</li>
+  <li>Exclude specific domains or patterns</li>
+  <li>Configure HTTP headers and redirects</li>
+  <li>Enable caching for faster subsequent runs</li>
+</ul><hr />
+<h2 id="-input-parameters">
+  
+  
+    <a href="#-input-parameters" class="anchor-heading" aria-labelledby="-input-parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📖 Input Parameters
+  
+  
+</h2>
+    
+<h3 id="-file-selection">
+  
+  
+    <a href="#-file-selection" class="anchor-heading" aria-labelledby="-file-selection"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📁 File Selection
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">checkout_recursive</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>Checkout submodules recursively (for projects with docs in submodules)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">paths</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"docs/** *.md **/docs/**"</code></td>
+      <td>Space-separated paths to check for broken links</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="️-link-checking-configuration">
+  
+  
+    <a href="#️-link-checking-configuration" class="anchor-heading" aria-labelledby="️-link-checking-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Link Checking Configuration
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">timeout</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"10"</code></td>
+      <td>Timeout in seconds for each link check</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">max_retries</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"3"</code></td>
+      <td>Maximum number of retries per request</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">retry_wait_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"1"</code></td>
+      <td>Minimum wait time in seconds between retries</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exclude_private</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
+      <td>Exclude private/internal links</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exclude_mail</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
+      <td>Exclude mailto links</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">config_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">string</code></td>
+      <td><code class="language-plaintext highlighter-rouge">""</code></td>
+      <td>Path to lychee.toml config file (optional)</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="-output-control">
+  
+  
+    <a href="#-output-control" class="anchor-heading" aria-labelledby="-output-control"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📊 Output Control
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">fail_on_errors</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
+      <td>Fail the workflow if broken links are found</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">verbose</code></td>
+      <td><code class="language-plaintext highlighter-rouge">boolean</code></td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>Enable verbose output</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="path-patterns">
+  
+  
+    <a href="#path-patterns" class="anchor-heading" aria-labelledby="path-patterns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Path Patterns</strong>
+  
+  
+</h3>
+    
+
+<p>The <code class="language-plaintext highlighter-rouge">paths</code> parameter supports glob patterns:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">docs/**</code> - All files in docs directory and subdirectories</li>
+  <li><code class="language-plaintext highlighter-rouge">*.md</code> - All markdown files in repository root</li>
+  <li><code class="language-plaintext highlighter-rouge">**/docs/**</code> - All files in any docs directory</li>
+  <li><code class="language-plaintext highlighter-rouge">README.md</code> - Specific file</li>
+  <li><code class="language-plaintext highlighter-rouge">docs/** *.md</code> - Multiple patterns (space-separated)</li>
+</ul>
+
+<p><strong>Important</strong>: Paths must be <strong>space-separated</strong>, not comma-separated, as required by <code class="language-plaintext highlighter-rouge">lycheeverse/lychee-action@v2</code>.</p><hr />
+<h2 id="-usage-examples">
+  
+  
+    <a href="#-usage-examples" class="anchor-heading" aria-labelledby="-usage-examples"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔧 Usage Examples
+  
+  
+</h2>
+    
+<h3 id="basic-link-check">
+  
+  
+    <a href="#basic-link-check" class="anchor-heading" aria-labelledby="basic-link-check"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Basic Link Check</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Basic Link Check</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="custom-paths">
+  
+  
+    <a href="#custom-paths" class="anchor-heading" aria-labelledby="custom-paths"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Custom Paths</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Custom Link Check</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**</span><span class="nv"> </span><span class="s">README.md</span><span class="nv"> </span><span class="s">CONTRIBUTING.md"</span>
+      <span class="na">fail_on_errors</span><span class="pi">:</span> <span class="no">false</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="documentation-only">
+  
+  
+    <a href="#documentation-only" class="anchor-heading" aria-labelledby="documentation-only"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Documentation Only</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Documentation Link Check</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="all-markdown-files">
+  
+  
+    <a href="#all-markdown-files" class="anchor-heading" aria-labelledby="all-markdown-files"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>All Markdown Files</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">All Markdown Link Check</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">**/*.md"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="with-submodule-support">
+  
+  
+    <a href="#with-submodule-support" class="anchor-heading" aria-labelledby="with-submodule-support"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>With Submodule Support</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Link Check with Submodules</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">checkout_recursive</span><span class="pi">:</span> <span class="no">true</span>  <span class="c1"># Enable submodule checkout</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**</span><span class="nv"> </span><span class="s">*.md</span><span class="nv"> </span><span class="s">**/docs/**"</span>
+      <span class="na">fail_on_errors</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">timeout</span><span class="pi">:</span> <span class="s2">"</span><span class="s">15"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="️-integration-with-other-workflows">
+  
+  
+    <a href="#️-integration-with-other-workflows" class="anchor-heading" aria-labelledby="️-integration-with-other-workflows"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🛠️ Integration with Other Workflows
+  
+  
+</h2>
+    
+<h3 id="combined-with-documentation-workflow">
+  
+  
+    <a href="#combined-with-documentation-workflow" class="anchor-heading" aria-labelledby="combined-with-documentation-workflow"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Combined with Documentation Workflow</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Documentation Pipeline</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">doxygen_config</span><span class="pi">:</span> <span class="s">_config/Doxyfile</span>
+      <span class="na">run_link_check</span><span class="pi">:</span> <span class="no">true</span>
+
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="part-of-full-ci-pipeline">
+  
+  
+    <a href="#part-of-full-ci-pipeline" class="anchor-heading" aria-labelledby="part-of-full-ci-pipeline"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Part of Full CI Pipeline</strong>
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Full CI Pipeline</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</span>
+
+  <span class="na">static</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1</span>
+
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-how-it-works">
+  
+  
+    <a href="#-how-it-works" class="anchor-heading" aria-labelledby="-how-it-works"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔍 How It Works
+  
+  
+</h2>
+    
+<h3 id="link-checking-process">
+  
+  
+    <a href="#link-checking-process" class="anchor-heading" aria-labelledby="link-checking-process"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Link Checking Process</strong>
+  
+  
+</h3>
+    
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ Scan Files      │───▶│ Extract Links   │───▶│ Validate Links  │───▶│ Report Results  │
+│ (Lychee)        │    │ (Markdown       │    │ (HTTP requests  │    │ (Success/Error  │
+│                 │    │ parsing)        │    │ + retry logic)  │    │ messages)       │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="link-types-checked">
+  
+  
+    <a href="#link-types-checked" class="anchor-heading" aria-labelledby="link-types-checked"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Link Types Checked</strong>
+  
+  
+</h3>
+    
+
+<ol>
+  <li><strong>External Links</strong> - HTTP/HTTPS URLs</li>
+  <li><strong>Internal File Links</strong> - Relative file paths</li>
+  <li><strong>Anchor Links</strong> - Links to sections within files</li>
+  <li><strong>Image Links</strong> - Image file references</li>
+</ol>
+<h3 id="validation-methods">
+  
+  
+    <a href="#validation-methods" class="anchor-heading" aria-labelledby="validation-methods"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Validation Methods</strong>
+  
+  
+</h3>
+    
+
+<ul>
+  <li><strong>External Links</strong>: HTTP HEAD requests with configurable timeout and retry logic</li>
+  <li><strong>Internal Links</strong>: File system existence checks</li>
+  <li><strong>Anchor Links</strong>: Section header validation</li>
+  <li><strong>Image Links</strong>: File existence and format validation</li>
+  <li><strong>Private Links</strong>: Automatically excluded (configurable)</li>
+  <li><strong>Mailto Links</strong>: Automatically excluded (configurable)</li>
+</ul><hr />
+<h2 id="️-configuration-options">
+  
+  
+    <a href="#️-configuration-options" class="anchor-heading" aria-labelledby="️-configuration-options"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Configuration Options
+  
+  
+</h2>
+    
+<h3 id="lychee-parameters">
+  
+  
+    <a href="#lychee-parameters" class="anchor-heading" aria-labelledby="lychee-parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Lychee Parameters</strong>
+  
+  
+</h3>
+    
+
+<p>The workflow uses <code class="language-plaintext highlighter-rouge">lycheeverse/lychee-action@v2</code> with these default settings:</p>
+
+<ul>
+  <li><strong>Timeout</strong>: 10 seconds per link (configurable)</li>
+  <li><strong>Retry</strong>: 3 attempts for failed links (configurable)</li>
+  <li><strong>External Links</strong>: Enabled with retry logic</li>
+  <li><strong>Private Links</strong>: Excluded by default</li>
+  <li><strong>Mailto Links</strong>: Excluded by default</li>
+  <li><strong>Anchor Checking</strong>: Enabled</li>
+  <li><strong>SSL Validation</strong>: Enabled</li>
+  <li><strong>Verbose Output</strong>: Configurable</li>
+</ul>
+<h3 id="custom-configuration">
+  
+  
+    <a href="#custom-configuration" class="anchor-heading" aria-labelledby="custom-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Custom Configuration</strong>
+  
+  
+</h3>
+    
+
+<p>For advanced configuration, you can use a <code class="language-plaintext highlighter-rouge">lychee.toml</code> file:</p>
+
+<div class="language-toml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="nn">[input]</span>
+<span class="py">files</span> <span class="p">=</span> <span class="p">[</span><span class="s">"docs/**"</span><span class="p">,</span> <span class="s">"*.md"</span><span class="p">]</span>  <span class="c"># Note: TOML config uses array format, workflow uses space-separated</span>
+<span class="py">exclude</span> <span class="p">=</span> <span class="nn">["CHANGELOG.md"]</span>
+
+<span class="nn">[output]</span>
+<span class="py">format</span> <span class="p">=</span> <span class="s">"detailed"</span>
+<span class="py">verbose</span> <span class="p">=</span> <span class="kc">true</span>
+
+<span class="nn">[check]</span>
+<span class="py">timeout</span> <span class="p">=</span> <span class="mi">10</span>
+<span class="py">retry</span> <span class="p">=</span> <span class="mi">3</span>
+<span class="py">exclude_all_private</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="py">exclude_mail</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="py">exclude_github_issues</span> <span class="p">=</span> <span class="kc">false</span>
+
+<span class="nn">[http]</span>
+<span class="nn">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="py">"User-Agent"</span> <span class="p">=</span> <span class="s">"lychee/0.14.0"</span> <span class="p">}</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-troubleshooting">
+  
+  
+    <a href="#-troubleshooting" class="anchor-heading" aria-labelledby="-troubleshooting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚨 Troubleshooting
+  
+  
+</h2>
+    
+<h3 id="common-issues">
+  
+  
+    <a href="#common-issues" class="anchor-heading" aria-labelledby="common-issues"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Common Issues</strong>
+  
+  
+</h3>
+    
+<h4 id="link-check-fails">
+  
+  
+    <a href="#link-check-fails" class="anchor-heading" aria-labelledby="link-check-fails"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Link Check Fails</strong>
+  
+  
+</h4>
+    
+<p><strong>Symptoms</strong>: Workflow fails with “broken links found”
+<strong>Solutions</strong>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c"># Check specific links manually</span>
+curl <span class="nt">-I</span> https://example.com/broken-link
+
+<span class="c"># Verify internal file paths</span>
+<span class="nb">ls</span> <span class="nt">-la</span> docs/broken-file.md
+
+<span class="c"># Check anchor references</span>
+<span class="nb">grep</span> <span class="nt">-n</span> <span class="s2">"## Target Section"</span> docs/file.md
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="timeout-errors">
+  
+  
+    <a href="#timeout-errors" class="anchor-heading" aria-labelledby="timeout-errors"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Timeout Errors</strong>
+  
+  
+</h4>
+    
+<p><strong>Symptoms</strong>: “Timeout” or “Connection timeout” errors
+<strong>Solutions</strong>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="c"># Check if external site is accessible</span>
+ping example.com
+
+<span class="c"># Verify network connectivity</span>
+curl <span class="nt">-I</span> https://example.com
+
+<span class="c"># Check if site requires authentication</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="false-positives">
+  
+  
+    <a href="#false-positives" class="anchor-heading" aria-labelledby="false-positives"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>False Positives</strong>
+  
+  
+</h4>
+    
+<p><strong>Symptoms</strong>: Valid links reported as broken
+<strong>Solutions</strong>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c"># Check link format</span>
+<span class="nb">echo</span> <span class="s2">"https://example.com/path"</span>
+
+<span class="c"># Verify file encoding</span>
+file <span class="nt">-i</span> docs/file.md
+
+<span class="c"># Check for special characters</span>
+<span class="nb">grep</span> <span class="nt">-n</span> <span class="s2">"</span><span class="se">\[</span><span class="s2">.*</span><span class="se">\]</span><span class="s2">(.*)"</span> docs/file.md
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="debug-mode">
+  
+  
+    <a href="#debug-mode" class="anchor-heading" aria-labelledby="debug-mode"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Debug Mode</strong>
+  
+  
+</h3>
+    
+
+<p>Enable verbose output for debugging:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**"</span>
+      <span class="na">fail_on_errors</span><span class="pi">:</span> <span class="no">false</span>  <span class="c1"># Don't fail on errors for debugging</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-output-and-reporting">
+  
+  
+    <a href="#-output-and-reporting" class="anchor-heading" aria-labelledby="-output-and-reporting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📊 Output and Reporting
+  
+  
+</h2>
+    
+<h3 id="success-output">
+  
+  
+    <a href="#success-output" class="anchor-heading" aria-labelledby="success-output"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Success Output</strong>
+  
+  
+</h3>
+    
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>✅ Link check completed successfully
+📊 Checked 25 files
+🔗 Validated 150 links
+⏱️  Processing time: 45 seconds
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="error-output">
+  
+  
+    <a href="#error-output" class="anchor-heading" aria-labelledby="error-output"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Error Output</strong>
+  
+  
+</h3>
+    
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>❌ Link check failed
+📊 Checked 25 files
+🔗 Found 3 broken links
+⏱️  Processing time: 45 seconds
+
+Broken links:
+- docs/guide.md:5 → https://example.com/broken
+- docs/api.md:12 → ../missing-file.md
+- README.md:8 → #non-existent-section
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-related-documentation">
+  
+  
+    <a href="#-related-documentation" class="anchor-heading" aria-labelledby="-related-documentation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔗 Related Documentation
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html">Documentation Workflow</a> - Build and deploy documentation</li>
+  <li><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html">C/C++ Lint Workflow</a> - Code quality checks</li>
+  <li><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html">Static Analysis Workflow</a> - Security analysis</li>
+  <li><a href="/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html">CI Workflows &amp; Design</a> - Our testing philosophy and live examples</li>
+  <li><a href="/hf-general-ci-tools/v1.0.0/docs/">Main Documentation Index</a> - All workflow guides</li>
+</ul><hr />
+<h2 id="-external-resources">
+  
+  
+    <a href="#-external-resources" class="anchor-heading" aria-labelledby="-external-resources"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📚 External Resources
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="https://github.com/lycheeverse/lychee">Lychee Documentation</a></li>
+  <li><a href="https://github.com/lycheeverse/lychee-action">Lychee Action</a></li>
+  <li><a href="https://docs.github.com/en/actions">GitHub Actions Documentation</a></li>
+  <li><a href="https://www.markdownguide.org/basic-syntax/#links">Markdown Link Syntax</a></li>
+</ul><hr />
+
+<div class="table-wrapper"><table>
+  <tbody>
+    <tr>
+      <td><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html">← Previous: Documentation Workflow</a></td>
+      <td><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html">Next: YAML Lint Workflow →</a></td>
+    </tr>
+  </tbody>
+</table></div>
+
+<div class="table-wrapper"><table>
+  <tbody>
+    <tr>
+      <td><strong>📚 <a href="/hf-general-ci-tools/v1.0.0/docs/">All Documentation</a></strong></td>
+      <td><strong>🏠 <a href="/hf-general-ci-tools/v1.0.0/">Main README</a></strong></td>
+    </tr>
+  </tbody>
+</table></div>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+
+  <footer class="site-footer">
+  <div class="site-footer-credits">
+    <p>Built with ❤️ using <a href="https://just-the-docs.github.io/just-the-docs/">Just the Docs</a></p>
+    <p><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE">GPL v3 License</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools">View on GitHub</a></p>
+  </div>
+</footer>
+
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+<button id="search-button" class="search-button btn-reset" aria-label="Focus on search">
+  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+</button>
+
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

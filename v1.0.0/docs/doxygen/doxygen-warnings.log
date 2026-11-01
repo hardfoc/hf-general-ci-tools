@@ -1,0 +1,23 @@
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/cpp-ci-test/README.md:1: warning: found more than one \mainpage comment block! (first occurrence: /home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md, line 1), Skipping current block!
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/cpp-ci-test/src/geometry.c:13: warning: Member clamp_non_negative(double value) (function) of file geometry.c is not documented.
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/cpp-ci-test/src/geometry.c:11: warning: Member PERIMETER_MULTIPLIER (variable) of file geometry.c is not documented.
+<clamp_non_negative>:1: warning: parameters of member clamp_non_negative are not documented
+index:1: warning: expected whitespace after \{ command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:1: warning: expected whitespace after \{ command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:49: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:50: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:51: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:52: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:53: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:54: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:55: warning: unable to resolve reference to '-quick-start' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:79: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:80: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:81: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:82: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:83: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:84: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:85: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:277: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:278: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md' for \ref command
+/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/README.md:290: warning: unable to resolve reference to '/home/runner/work/hf-general-ci-tools/hf-general-ci-tools/CONTRIBUTING.md' for \ref command

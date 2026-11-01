@@ -1,0 +1,1723 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+    .site-nav ul li a {
+      background-image: none;
+    }
+
+  </style>
+
+  
+
+  
+    <script src="/hf-general-ci-tools/v1.0.0/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/hf-general-ci-tools/v1.0.0/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>🔀 Documentation Versioning Guide | hf-general-ci-tools - v1.0.0</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="🔀 Documentation Versioning Guide" />
+<meta name="author" content="N3b3x" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Complete guide to versioned documentation with Doxygen and Jekyll integration" />
+<meta property="og:description" content="Complete guide to versioned documentation with Doxygen and Jekyll integration" />
+<link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/versioning-guide.html" />
+<meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/versioning-guide.html" />
+<meta property="og:site_name" content="hf-general-ci-tools - v1.0.0" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="🔀 Documentation Versioning Guide" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Complete guide to versioned documentation with Doxygen and Jekyll integration","headline":"🔀 Documentation Versioning Guide","url":"https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/versioning-guide.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Custom head content for hf-general-ci-tools documentation -->
+<link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/custom.css">
+<script src="/hf-general-ci-tools/v1.0.0/assets/js/custom.js" defer></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/hf-general-ci-tools/v1.0.0/" class="site-title lh-tight">
+  hf-general-ci-tools - v1.0.0
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/" class="nav-list-link">🚀 hf-general-ci-tools</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/" class="nav-list-link">📖 Documentation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="🔄 Reusable Workflows submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/hf-general-ci-tools/v1.0.0/workflows/" class="nav-list-link">🔄 Reusable Workflows</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html" class="nav-list-link">🔧 C++ Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html" class="nav-list-link">� C++ Static Analysis (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html" class="nav-list-link">📚 Documentation Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" class="nav-list-link">🔗 Documentation Link Check (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" class="nav-list-link">📝 YAML Linting Tools (Reusable)</a></li></ul></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" class="nav-list-link">🚀 CI Workflows & Design Philosophy</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-release.html" class="nav-list-link">📦 Release Management</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" class="nav-list-link">📄 Markdown Linting</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/cpp-ci-test/" class="nav-list-link">C/C++ Sample Sources for CI Experiments</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search workflows, examples, and guides..." autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search workflows, examples, and guides...</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="/hf-general-ci-tools/v1.0.0/api/index.html" class="site-button"
+          
+        >
+          📖 API Reference
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools" class="site-button"
+          
+        >
+          📚 GitHub Repository
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="site-button"
+          
+        >
+          🐛 Report Issues
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/stargazers" class="site-button"
+          
+        >
+          ⭐ Star on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><span>🔀 Documentation Versioning Guide</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="-documentation-versioning-guide">
+  
+  
+    <a href="#-documentation-versioning-guide" class="anchor-heading" aria-labelledby="-documentation-versioning-guide"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔀 Documentation Versioning Guide
+  
+  
+</h1>
+    
+
+<p>Complete guide to implementing versioned documentation with automatic Doxygen and Jekyll integration using the
+enhanced <code class="language-plaintext highlighter-rouge">ru-docs-publish.yml</code> workflow.</p>
+<h2 id="-table-of-contents">
+  
+  
+    <a href="#-table-of-contents" class="anchor-heading" aria-labelledby="-table-of-contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📋 Table of Contents
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="#quick-start">Quick Start</a></li>
+  <li><a href="#versioning-strategies">Versioning Strategies</a></li>
+  <li><a href="#configuration-options">Configuration Options</a></li>
+  <li><a href="#doxygen-integration">Doxygen Integration</a></li>
+  <li><a href="#jekyll-integration">Jekyll Integration</a></li>
+  <li><a href="#deployment-strategies">Deployment Strategies</a></li>
+  <li><a href="#workflow-examples">Workflow Examples</a></li>
+  <li><a href="#best-practices">Best Practices</a></li>
+  <li><a href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+<h2 id="-quick-start">
+  
+  
+    <a href="#-quick-start" class="anchor-heading" aria-labelledby="-quick-start"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 Quick Start
+  
+  
+</h2>
+    
+<h3 id="1-enable-versioning-in-your-workflow">
+  
+  
+    <a href="#1-enable-versioning-in-your-workflow" class="anchor-heading" aria-labelledby="1-enable-versioning-in-your-workflow"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 1. Enable Versioning in Your Workflow
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">📚</span><span class="nv"> </span><span class="s">Publish</span><span class="nv"> </span><span class="s">Versioned</span><span class="nv"> </span><span class="s">Documentation'</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">main'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">release/*'</span><span class="pi">]</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">main'</span><span class="pi">]</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span>
+
+<span class="na">permissions</span><span class="pi">:</span>
+  <span class="na">contents</span><span class="pi">:</span> <span class="s1">'</span><span class="s">read'</span>
+  <span class="na">pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">write'</span>
+  <span class="na">id-token</span><span class="pi">:</span> <span class="s1">'</span><span class="s">write'</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">ci-docs-publish</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s1">'</span><span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="c1"># Versioning is now enabled by default</span>
+      <span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>  <span class="c1"># Required for versioned documentation</span>
+
+      <span class="c1"># Doxygen versioning</span>
+      <span class="na">doxygen_version_strategy</span><span class="pi">:</span> <span class="s1">'</span><span class="s">auto'</span>
+      <span class="na">doxygen_config</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_config/Doxyfile'</span>
+
+      <span class="c1"># Jekyll configuration</span>
+      <span class="na">jekyll_enabled</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">jekyll_source</span><span class="pi">:</span> <span class="s1">'</span><span class="s">docs'</span>
+      <span class="na">jekyll_destination</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_site'</span>
+
+      <span class="c1"># Versioned deployment</span>
+      <span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>
+
+      <span class="c1"># Quality checks</span>
+      <span class="na">run_link_check</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">run_markdown_lint</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="2-version-configuration-automatic">
+  
+  
+    <a href="#2-version-configuration-automatic" class="anchor-heading" aria-labelledby="2-version-configuration-automatic"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 2. Version Configuration (Automatic)
+  
+  
+</h3>
+    
+
+<p><strong>No separate config files needed!</strong> The workflow automatically handles versioning by:</p>
+
+<ol>
+  <li><strong>Using your main <code class="language-plaintext highlighter-rouge">_config.yml</code> as the base</strong></li>
+  <li><strong>Dynamically injecting version information</strong> during build</li>
+  <li><strong>Updating title and baseurl</strong> for versioned documentation</li>
+  <li><strong>Adding version metadata</strong> automatically</li>
+</ol>
+
+<p><strong>Example: Your main <code class="language-plaintext highlighter-rouge">_config.yml</code>:</strong></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">My</span><span class="nv"> </span><span class="s">Project"</span>
+<span class="na">description</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Documentation</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Project"</span>
+<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/myproject"</span>
+<span class="na">url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">https://myusername.github.io"</span>
+
+<span class="c1"># All your existing configuration...</span>
+<span class="na">markdown</span><span class="pi">:</span> <span class="s">kramdown</span>
+<span class="na">highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+<span class="na">theme</span><span class="pi">:</span> <span class="s">minima</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Automatically becomes for versioned docs:</strong></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">My</span><span class="nv"> </span><span class="s">Project</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">v1.2.3"</span>
+<span class="na">description</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Documentation</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Project"</span>
+<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/myproject/v1.2.3"</span>
+<span class="na">url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">https://myusername.github.io"</span>
+
+<span class="c1"># All your existing configuration...</span>
+<span class="na">markdown</span><span class="pi">:</span> <span class="s">kramdown</span>
+<span class="na">highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+<span class="na">theme</span><span class="pi">:</span> <span class="s">minima</span>
+
+<span class="c1"># Version information (auto-generated)</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">v1.2.3"</span>
+<span class="na">version_type</span><span class="pi">:</span> <span class="s2">"</span><span class="s">stable"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="3-dynamic-configuration-automatic">
+  
+  
+    <a href="#3-dynamic-configuration-automatic" class="anchor-heading" aria-labelledby="3-dynamic-configuration-automatic"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 3. Dynamic Configuration (Automatic)
+  
+  
+</h3>
+    
+
+<p>The workflow automatically modifies your main <code class="language-plaintext highlighter-rouge">_config.yml</code> to inject version-specific information:</p>
+
+<ul>
+  <li><strong>Title</strong>: Appends version name to the title</li>
+  <li><strong>Base URL</strong>: Updates to include version path</li>
+  <li><strong>Version Info</strong>: Adds <code class="language-plaintext highlighter-rouge">version</code> and <code class="language-plaintext highlighter-rouge">version_type</code> variables</li>
+  <li><strong>Comment-safe processing</strong>: Safely handles inline comments in configuration files</li>
+  <li><strong>Clean generation</strong>: Creates <code class="language-plaintext highlighter-rouge">_config_generated.yml</code> without syntax errors</li>
+</ul>
+
+<p>No custom templates are needed - the workflow handles everything automatically with robust configuration processing.</p>
+
+<p><strong>Navigation for Versioned Docs:</strong></p>
+
+<p>Just the Docs uses <strong>front matter navigation</strong> (not <code class="language-plaintext highlighter-rouge">_data/navigation.yml</code>), so versioned navigation is handled
+automatically through page front matter:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="nn">---</span>
+<span class="na">nav_order</span><span class="pi">:</span> <span class="m">1</span>
+<span class="na">parent</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Getting</span><span class="nv"> </span><span class="s">Started"</span>
+<span class="na">has_children</span><span class="pi">:</span> <span class="no">true</span>
+<span class="nn">---</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p>The workflow automatically generates the navigation menu based on the front matter in your markdown files.</p>
+
+<ul>
+  <li><strong>Page front matter</strong> - <code class="language-plaintext highlighter-rouge">nav_order</code>, <code class="language-plaintext highlighter-rouge">parent</code>, <code class="language-plaintext highlighter-rouge">has_children</code> work the same way</li>
+  <li><strong>Folder structure</strong> - Pages are organized in directories as usual</li>
+  <li><strong>Version-specific content</strong> - You can add version info to page titles in front matter</li>
+  <li><strong>No separate navigation files needed</strong> - Just the Docs handles this automatically</li>
+</ul>
+<h2 id="-versioning-vs-deployment-understanding-the-difference">
+  
+  
+    <a href="#-versioning-vs-deployment-understanding-the-difference" class="anchor-heading" aria-labelledby="-versioning-vs-deployment-understanding-the-difference"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🎯 Versioning vs Deployment: Understanding the Difference
+  
+  
+</h2>
+    
+
+<p><strong>Important</strong>: Versioning and deployment are separate concerns that can be combined in different ways:</p>
+<h3 id="architectural-design-decisions">
+  
+  
+    <a href="#architectural-design-decisions" class="anchor-heading" aria-labelledby="architectural-design-decisions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Architectural Design Decisions</strong>
+  
+  
+</h3>
+    
+
+<p><strong>The following features are automatically enabled with versioned documentation:</strong></p>
+
+<ul>
+  <li><strong>Version preservation</strong> - All existing version directories are preserved</li>
+  <li><strong>Root redirect</strong> - Creates redirect from root to latest stable version</li>
+  <li><strong>Version selector</strong> - Adds version selector component for navigation</li>
+</ul>
+
+<p><strong>Why these are automatic:</strong></p>
+<ul>
+  <li><strong>Root redirect is essential</strong> - Without it, the root URL would be broken</li>
+  <li><strong>Keeping existing versions is required</strong> - Otherwise versions get deleted on each deployment</li>
+  <li><strong>Version selector is necessary UX</strong> - Users need a way to navigate between versions</li>
+</ul>
+
+<p><strong>This architectural decision ensures:</strong></p>
+<ul>
+  <li>✅ <strong>Consistent behavior</strong> - Versioned deployment always works correctly</li>
+  <li>✅ <strong>Simplified configuration</strong> - Users don’t need to understand internal dependencies</li>
+  <li>✅ <strong>Professional results</strong> - All versioned deployments have proper UX features</li>
+</ul>
+<h3 id="automatic-base-url-extraction">
+  
+  
+    <a href="#automatic-base-url-extraction" class="anchor-heading" aria-labelledby="automatic-base-url-extraction"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Automatic Base URL Extraction</strong>
+  
+  
+</h3>
+    
+
+<p><strong>The <code class="language-plaintext highlighter-rouge">version_base_url</code> input has been deprecated</strong> in favor of automatic extraction from your Jekyll configuration:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1"># In your _config.yml</span>
+<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/myproject"</span>  <span class="c1"># This is automatically used as the base URL</span>
+
+<span class="c1"># In your workflow - no need to specify version_base_url</span>
+<span class="c1"># The base URL "/myproject" is automatically extracted and used</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Benefits:</strong></p>
+<ul>
+  <li>✅ <strong>Single source of truth</strong> - Base URL defined once in <code class="language-plaintext highlighter-rouge">_config.yml</code></li>
+  <li>✅ <strong>No duplication</strong> - Eliminates potential inconsistencies</li>
+  <li>✅ <strong>Simpler configuration</strong> - One less input to manage</li>
+  <li>✅ <strong>Automatic consistency</strong> - Versioned URLs always match your main site structure</li>
+</ul>
+<h3 id="versioning-without-deployment">
+  
+  
+    <a href="#versioning-without-deployment" class="anchor-heading" aria-labelledby="versioning-without-deployment"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Versioning Without Deployment
+  
+  
+</h3>
+    
+<p><strong>Purpose</strong>: Generate versioned documentation artifacts for internal use, testing, or future deployment.</p>
+
+<p><strong>What happens</strong>:</p>
+<ul>
+  <li>Doxygen gets versioned <code class="language-plaintext highlighter-rouge">PROJECT_NUMBER</code> (e.g., <code class="language-plaintext highlighter-rouge">v1.0.0</code>, <code class="language-plaintext highlighter-rouge">v1.1.0-dev</code>)</li>
+  <li>Jekyll generates versioned configurations</li>
+  <li>Documentation is built with version information</li>
+  <li><strong>But NOT deployed to GitHub Pages</strong></li>
+</ul>
+
+<p><strong>Use cases</strong>:</p>
+<ul>
+  <li>Development builds for testing</li>
+  <li>Pre-release validation</li>
+  <li>CI/CD artifact generation</li>
+  <li>Internal documentation review</li>
+</ul>
+
+<p><strong>Configuration</strong>:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">false'</span>        <span class="c1"># No deployment</span>
+<span class="c1"># Versioning is always enabled by default</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="versioning-with-deployment">
+  
+  
+    <a href="#versioning-with-deployment" class="anchor-heading" aria-labelledby="versioning-with-deployment"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Versioning With Deployment
+  
+  
+</h3>
+    
+<p><strong>Purpose</strong>: Publish versioned documentation to GitHub Pages for end users.</p>
+
+<p><strong>What happens</strong>:</p>
+<ul>
+  <li>Everything from versioning without deployment, PLUS</li>
+  <li>Deploy to versioned directories in <code class="language-plaintext highlighter-rouge">gh-pages</code> branch</li>
+  <li>Create version selector and redirects</li>
+  <li>Make documentation accessible to users</li>
+</ul>
+
+<p><strong>Use cases</strong>:</p>
+<ul>
+  <li>Production releases</li>
+  <li>Multi-version user access</li>
+  <li>Release management</li>
+</ul>
+
+<p><strong>Configuration</strong>:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>         <span class="c1"># Deploy to GitHub Pages</span>
+<span class="c1"># Versioning and versioned deployment are always enabled by default</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="versioning-strategies">
+  
+  
+    <a href="#versioning-strategies" class="anchor-heading" aria-labelledby="versioning-strategies"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Versioning Strategies
+  
+  
+</h3>
+    
+<h4 id="auto-detection-recommended">
+  
+  
+    <a href="#auto-detection-recommended" class="anchor-heading" aria-labelledby="auto-detection-recommended"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Auto Detection (Recommended)
+  
+  
+</h4>
+    
+
+<p>The workflow automatically detects versions from:</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Branch/Tag Pattern</th>
+      <th>Version Type</th>
+      <th>Deployment Path</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">main</code></td>
+      <td>Development</td>
+      <td><code class="language-plaintext highlighter-rouge">development/</code></td>
+      <td>Latest features</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">release/v1.0.0</code></td>
+      <td>Stable</td>
+      <td><code class="language-plaintext highlighter-rouge">v1.0.0/</code></td>
+      <td>Production release</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">release/v1.1.0-rc1</code></td>
+      <td>Pre-release</td>
+      <td><code class="language-plaintext highlighter-rouge">v1.1.0-rc1/</code></td>
+      <td>Release candidate</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">release/v2.0.0-beta1</code></td>
+      <td>Pre-release</td>
+      <td><code class="language-plaintext highlighter-rouge">v2.0.0-beta1/</code></td>
+      <td>Beta release</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">v1.2.0</code> (tag)</td>
+      <td>Stable</td>
+      <td><code class="language-plaintext highlighter-rouge">v1.2.0/</code></td>
+      <td>Tagged release</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="disabled-versioning">
+  
+  
+    <a href="#disabled-versioning" class="anchor-heading" aria-labelledby="disabled-versioning"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Disabled Versioning
+  
+  
+</h4>
+    
+
+<p><strong>For versioned documentation (now the default):</strong></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>  <span class="c1"># Required for versioned documentation</span>
+<span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>          <span class="c1"># Deploy to GitHub Pages</span>
+<span class="c1"># Versioning is always enabled by default</span>
+<span class="c1"># Automatically uses your main _config.yml as base</span>
+<span class="c1"># No separate config files needed!</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h2 id="️-configuration-matrix">
+  
+  
+    <a href="#️-configuration-matrix" class="anchor-heading" aria-labelledby="️-configuration-matrix"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Configuration Matrix
+  
+  
+</h2>
+    
+
+<p><strong>Understanding how deployment settings work with versioning (always enabled):</strong></p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th><code class="language-plaintext highlighter-rouge">deploy_pages</code></th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>Versioned docs built as artifacts (no deployment)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
+      <td>Versioned docs deployed to versioned directories</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="common-use-cases">
+  
+  
+    <a href="#common-use-cases" class="anchor-heading" aria-labelledby="common-use-cases"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Common Use Cases
+  
+  
+</h3>
+    
+
+<p><strong>Development/Testing</strong> (Build only):</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">false'</span>
+<span class="c1"># Result: Versioned docs built as artifacts</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>Production</strong> (All versions):</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+<span class="c1"># Result: Versioned docs deployed to versioned directories</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h2 id="️-configuration-options">
+  
+  
+    <a href="#️-configuration-options" class="anchor-heading" aria-labelledby="️-configuration-options"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Configuration Options
+  
+  
+</h2>
+    
+<h3 id="core-versioning-settings">
+  
+  
+    <a href="#core-versioning-settings" class="anchor-heading" aria-labelledby="core-versioning-settings"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Core Versioning Settings
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">deployment_branch</code></td>
+      <td>string</td>
+      <td><code class="language-plaintext highlighter-rouge">'gh-pages'</code></td>
+      <td>Branch for versioned documentation deployment (required)</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="doxygen-versioning">
+  
+  
+    <a href="#doxygen-versioning" class="anchor-heading" aria-labelledby="doxygen-versioning"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Doxygen Versioning
+  
+  
+</h3>
+    
+
+<p><strong>Note</strong>: Doxygen versioning is automatically synchronized with git-based versioning. No separate configuration needed.</p>
+<h4 id="automatic-version-generation">
+  
+  
+    <a href="#automatic-version-generation" class="anchor-heading" aria-labelledby="automatic-version-generation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Automatic Version Generation:</strong>
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Git Context</th>
+      <th>Version Type</th>
+      <th>Generated Doxygen Version</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">main</code> branch</td>
+      <td><code class="language-plaintext highlighter-rouge">development</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{latest_tag}-dev</code> or <code class="language-plaintext highlighter-rouge">0.1.0-dev</code></td>
+      <td><code class="language-plaintext highlighter-rouge">v1.2.0-dev</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">release/v1.0.0</code> branch</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{version_name}</code></td>
+      <td><code class="language-plaintext highlighter-rouge">v1.0.0</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">v1.1.0-rc1</code> tag</td>
+      <td><code class="language-plaintext highlighter-rouge">prerelease</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{version_name}</code></td>
+      <td><code class="language-plaintext highlighter-rouge">v1.1.0-rc1</code></td>
+    </tr>
+    <tr>
+      <td>Other branches</td>
+      <td><code class="language-plaintext highlighter-rouge">preview</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{latest_tag}-preview</code> or <code class="language-plaintext highlighter-rouge">0.1.0-preview</code></td>
+      <td><code class="language-plaintext highlighter-rouge">v1.2.0-preview</code></td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p><strong>Benefits:</strong></p>
+<ul>
+  <li>✅ <strong>Consistent formatting</strong> - All projects follow the same pattern</li>
+  <li>✅ <strong>No configuration errors</strong> - Can’t accidentally create malformed versions</li>
+  <li>✅ <strong>Semantic versioning compliance</strong> - Follows industry standards</li>
+  <li>✅ <strong>Git context awareness</strong> - Versions reflect actual git state</li>
+</ul>
+<h3 id="centralized-doxygen-architecture">
+  
+  
+    <a href="#centralized-doxygen-architecture" class="anchor-heading" aria-labelledby="centralized-doxygen-architecture"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Centralized Doxygen Architecture</strong>
+  
+  
+</h3>
+    
+
+<p><strong>Doxygen artifacts are centrally managed for optimal access:</strong></p>
+<h4 id="root-level-doxygen-organization">
+  
+  
+    <a href="#root-level-doxygen-organization" class="anchor-heading" aria-labelledby="root-level-doxygen-organization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Root-Level Doxygen Organization:</strong>
+  
+  
+</h4>
+    
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre>gh-pages branch:
+├── doxs/                   # Centralized Doxygen artifacts
+│   ├── v1.0.0/            # Doxygen docs for v1.0.0
+│   ├── v1.1.0/            # Doxygen docs for v1.1.0
+│   ├── v2.0.0-rc1/        # Doxygen docs for v2.0.0-rc1
+│   ├── development/        # Doxygen docs for main branch
+│   ├── latest -&gt; v1.1.0/  # Symlink to latest stable
+│   ├── version_selector.js # Centralized version selector
+│   └── versions.json       # Centralized version metadata
+├── v1.0.0/                 # Jekyll site for v1.0.0
+│   ├── api -&gt; ../../doxs/v1.0.0/  # Symlink to centralized API
+│   ├── guides/             # Jekyll content
+│   └── ...
+└── development/            # Jekyll site for development
+    ├── api -&gt; ../../doxs/development/  # Symlink to centralized API
+    ├── guides/
+    └── ...
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="benefits-of-centralized-architecture">
+  
+  
+    <a href="#benefits-of-centralized-architecture" class="anchor-heading" aria-labelledby="benefits-of-centralized-architecture"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>Benefits of Centralized Architecture:</strong>
+  
+  
+</h4>
+    
+<ul>
+  <li>✅ <strong>Single source of truth</strong> - All API versions in one location</li>
+  <li>✅ <strong>Easy discovery</strong> - Users know exactly where to find API docs</li>
+  <li>✅ <strong>Efficient storage</strong> - No duplication of Doxygen artifacts</li>
+  <li>✅ <strong>Flexible access</strong> - Works with or without Jekyll</li>
+  <li>✅ <strong>Version selector</strong> - Centralized navigation between API versions</li>
+  <li>✅ <strong>Symlink integration</strong> - Jekyll sites link to centralized API docs</li>
+</ul>
+<h3 id="deployment-settings">
+  
+  
+    <a href="#deployment-settings" class="anchor-heading" aria-labelledby="deployment-settings"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Deployment Settings
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">deployment_branch</code></td>
+      <td>string</td>
+      <td><code class="language-plaintext highlighter-rouge">gh-pages</code></td>
+      <td>Branch for deployment</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="-doxygen-integration">
+  
+  
+    <a href="#-doxygen-integration" class="anchor-heading" aria-labelledby="-doxygen-integration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔧 Doxygen Integration
+  
+  
+</h2>
+    
+<h3 id="automatic-version-detection">
+  
+  
+    <a href="#automatic-version-detection" class="anchor-heading" aria-labelledby="automatic-version-detection"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Automatic Version Detection
+  
+  
+</h3>
+    
+
+<p>The workflow automatically sets Doxygen’s <code class="language-plaintext highlighter-rouge">PROJECT_NUMBER</code> based on:</p>
+
+<ol>
+  <li><strong>Git Tags</strong>: Uses the latest tag for stable releases</li>
+  <li><strong>Branch Names</strong>: Extracts version from <code class="language-plaintext highlighter-rouge">release/v*</code> branches</li>
+  <li><strong>Development</strong>: Uses latest tag + “-dev” suffix</li>
+</ol>
+<h3 id="version-examples">
+  
+  
+    <a href="#version-examples" class="anchor-heading" aria-labelledby="version-examples"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Version Examples
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Doxygen PROJECT_NUMBER</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">release/v1.0.0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">v1.0.0</code></td>
+      <td>Stable release</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">release/v1.1.0-rc1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">v1.1.0-rc1</code></td>
+      <td>Release candidate</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">main</code> (with v1.0.0 tag)</td>
+      <td><code class="language-plaintext highlighter-rouge">v1.0.0-dev</code></td>
+      <td>Development build</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">main</code> (no tags)</td>
+      <td><code class="language-plaintext highlighter-rouge">0.1.0-dev</code></td>
+      <td>Initial development</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="-jekyll-integration">
+  
+  
+    <a href="#-jekyll-integration" class="anchor-heading" aria-labelledby="-jekyll-integration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🎨 Jekyll Integration
+  
+  
+</h2>
+    
+<h3 id="template-system">
+  
+  
+    <a href="#template-system" class="anchor-heading" aria-labelledby="template-system"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Template System
+  
+  
+</h3>
+    
+
+<p>Use placeholders in your Jekyll templates:</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Placeholder</th>
+      <th>Replaced With</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">{VERSION}</code></td>
+      <td>Version name</td>
+      <td><code class="language-plaintext highlighter-rouge">v1.0.0</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">{VERSION_TYPE}</code></td>
+      <td>Version type</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">{BASE_URL}</code></td>
+      <td>Full base URL</td>
+      <td><code class="language-plaintext highlighter-rouge">/myproject/v1.0.0</code></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="generated-files">
+  
+  
+    <a href="#generated-files" class="anchor-heading" aria-labelledby="generated-files"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Generated Files
+  
+  
+</h3>
+    
+
+<p>The workflow generates:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_config_generated.yml</code> - Versioned Jekyll configuration</li>
+  <li><code class="language-plaintext highlighter-rouge">version_info.json</code> - Version metadata</li>
+</ul>
+<h3 id="version-metadata">
+  
+  
+    <a href="#version-metadata" class="anchor-heading" aria-labelledby="version-metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Version Metadata
+  
+  
+</h3>
+    
+
+<p>Each version includes metadata:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"v1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stable"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"deployed_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-15T10:30:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"commit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"abc123..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refs/heads/release/v1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"doxygen_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"v1.0.0"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></div></code></pre></div></div>
+<h2 id="-deployment-strategies">
+  
+  
+    <a href="#-deployment-strategies" class="anchor-heading" aria-labelledby="-deployment-strategies"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 Deployment Strategies
+  
+  
+</h2>
+    
+<h3 id="versioned-deployment-structure">
+  
+  
+    <a href="#versioned-deployment-structure" class="anchor-heading" aria-labelledby="versioned-deployment-structure"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Versioned Deployment Structure
+  
+  
+</h3>
+    
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre>gh-pages branch:
+├── index.html              # Redirects to latest stable
+├── v1.0.0/                 # Stable release
+│   ├── api/                # Doxygen docs
+│   ├── guides/             # Jekyll content
+│   ├── index.html
+│   └── version_info.json
+├── v1.1.0/                 # Another stable release
+│   ├── api/
+│   ├── guides/
+│   └── ...
+├── v2.0.0-rc1/             # Pre-release
+│   ├── api/
+│   ├── guides/
+│   └── ...
+└── development/            # Development (main branch)
+    ├── api/
+    ├── guides/
+    └── ...
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="url-structure">
+  
+  
+    <a href="#url-structure" class="anchor-heading" aria-labelledby="url-structure"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> URL Structure
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>URL</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Latest Stable</td>
+      <td><code class="language-plaintext highlighter-rouge">/</code></td>
+      <td>Redirects to latest stable</td>
+    </tr>
+    <tr>
+      <td>v1.0.0</td>
+      <td><code class="language-plaintext highlighter-rouge">/v1.0.0/</code></td>
+      <td>Specific stable version</td>
+    </tr>
+    <tr>
+      <td>v2.0.0-rc1</td>
+      <td><code class="language-plaintext highlighter-rouge">/v2.0.0-rc1/</code></td>
+      <td>Pre-release version</td>
+    </tr>
+    <tr>
+      <td>Development</td>
+      <td><code class="language-plaintext highlighter-rouge">/development/</code></td>
+      <td>Latest development</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="custom-deployment-branch">
+  
+  
+    <a href="#custom-deployment-branch" class="anchor-heading" aria-labelledby="custom-deployment-branch"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Custom Deployment Branch
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">docs-deploy'</span>  <span class="c1"># Use custom branch</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h2 id="-workflow-examples">
+  
+  
+    <a href="#-workflow-examples" class="anchor-heading" aria-labelledby="-workflow-examples"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📝 Workflow Examples
+  
+  
+</h2>
+    
+<h3 id="basic-versioning">
+  
+  
+    <a href="#basic-versioning" class="anchor-heading" aria-labelledby="basic-versioning"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Basic Versioning
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Documentation</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">Versioning'</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">main'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">release/*'</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s1">'</span><span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>
+      <span class="na">doxygen_config</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_config/Doxyfile'</span>
+      <span class="na">jekyll_enabled</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="advanced-configuration">
+  
+  
+    <a href="#advanced-configuration" class="anchor-heading" aria-labelledby="advanced-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Advanced Configuration
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Advanced</span><span class="nv"> </span><span class="s">Versioned</span><span class="nv"> </span><span class="s">Documentation'</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">main'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">release/*'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">feature/*'</span><span class="pi">]</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">main'</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s1">'</span><span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="c1"># Versioning (always enabled)</span>
+      <span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>
+
+      <span class="c1"># Doxygen (auto-synchronized with git versioning)</span>
+      <span class="na">doxygen_config</span><span class="pi">:</span> <span class="s1">'</span><span class="s">docs/Doxyfile'</span>
+
+      <span class="c1"># Jekyll</span>
+      <span class="na">jekyll_enabled</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">jekyll_source</span><span class="pi">:</span> <span class="s1">'</span><span class="s">docs'</span>
+      <span class="na">jekyll_destination</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_site'</span>
+
+      <span class="c1"># Deployment</span>
+      <span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>  <span class="c1"># Optional: defaults to 'gh-pages'</span>
+
+      <span class="c1"># Quality</span>
+      <span class="na">run_link_check</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">run_markdown_lint</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">run_spell_check</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+      <span class="na">verbose</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+
+      <span class="c1"># Standard deployment</span>
+      <span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="manual-versioning">
+  
+  
+    <a href="#manual-versioning" class="anchor-heading" aria-labelledby="manual-versioning"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Manual Versioning
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Manual</span><span class="nv"> </span><span class="s">Version</span><span class="nv"> </span><span class="s">Control'</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span>
+    <span class="na">inputs</span><span class="pi">:</span>
+      <span class="na">version</span><span class="pi">:</span>
+        <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Version</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">deploy'</span>
+        <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s1">'</span><span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main'</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>  <span class="c1"># Required for versioned documentation</span>
+      <span class="na">deploy_pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>          <span class="c1"># Deploy to GitHub Pages</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h2 id="-best-practices">
+  
+  
+    <a href="#-best-practices" class="anchor-heading" aria-labelledby="-best-practices"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🎯 Best Practices
+  
+  
+</h2>
+    
+<h3 id="1-git-based-versioning-enforced">
+  
+  
+    <a href="#1-git-based-versioning-enforced" class="anchor-heading" aria-labelledby="1-git-based-versioning-enforced"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 1. Git-Based Versioning (Enforced)
+  
+  
+</h3>
+    
+<p><strong>Always use git-based versioning for security and consistency:</strong></p>
+<ul>
+  <li>✅ <strong>Tags</strong>: <code class="language-plaintext highlighter-rouge">v1.0.0</code>, <code class="language-plaintext highlighter-rouge">v1.1.0-rc1</code>, <code class="language-plaintext highlighter-rouge">v2.0.0-beta1</code></li>
+  <li>✅ <strong>Release branches</strong>: <code class="language-plaintext highlighter-rouge">release/v1.0.0</code>, <code class="language-plaintext highlighter-rouge">release/v1.1.0-rc1</code></li>
+  <li>❌ <strong>Manual input</strong>: Never allow manual version names (security risk)</li>
+</ul>
+<h3 id="2-branch-naming-convention">
+  
+  
+    <a href="#2-branch-naming-convention" class="anchor-heading" aria-labelledby="2-branch-naming-convention"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 2. Branch Naming Convention
+  
+  
+</h3>
+    
+
+<p>Follow semantic versioning for branches:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="c"># Stable releases</span>
+release/v1.0.0
+release/v1.1.0
+release/v2.0.0
+
+<span class="c"># Pre-releases</span>
+release/v1.1.0-rc1
+release/v2.0.0-beta1
+release/v1.2.0-alpha1
+
+<span class="c"># Development</span>
+main
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="3-configuration-management">
+  
+  
+    <a href="#3-configuration-management" class="anchor-heading" aria-labelledby="3-configuration-management"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 3. Configuration Management
+  
+  
+</h3>
+    
+
+<p>The workflow automatically handles configuration without requiring templates:</p>
+
+<ul>
+  <li>Uses your main <code class="language-plaintext highlighter-rouge">_config.yml</code> as the base</li>
+  <li>Dynamically injects version information</li>
+  <li>No template files needed</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>
+### 4. Version Selector Integration
+
+The version selector is automatically included in your documentation:
+
+```html
+&lt;!-- Version selector is automatically generated and injected --&gt;
+&lt;!-- No manual inclusion needed - it's handled by the workflow --&gt;
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p>The workflow automatically creates version selector JavaScript for easy navigation between versions.</p>
+<h3 id="5-quality-assurance">
+  
+  
+    <a href="#5-quality-assurance" class="anchor-heading" aria-labelledby="5-quality-assurance"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 5. Quality Assurance
+  
+  
+</h3>
+    
+
+<p>Enable all quality checks:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="na">run_link_check</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+<span class="na">run_markdown_lint</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+<span class="na">run_spell_check</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+<span class="na">verbose</span><span class="pi">:</span> <span class="s1">'</span><span class="s">true'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="6-deployment-strategy">
+  
+  
+    <a href="#6-deployment-strategy" class="anchor-heading" aria-labelledby="6-deployment-strategy"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 6. Deployment Strategy
+  
+  
+</h3>
+    
+
+<p>Choose the right deployment strategy:</p>
+
+<ul>
+  <li><strong>Versioned Deployment</strong>: For projects with multiple versions</li>
+  <li><strong>Standard Deployment</strong>: For simple single-version docs</li>
+  <li><strong>Custom Branch</strong>: For specialized deployment needs</li>
+</ul>
+<h2 id="-troubleshooting">
+  
+  
+    <a href="#-troubleshooting" class="anchor-heading" aria-labelledby="-troubleshooting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔧 Troubleshooting
+  
+  
+</h2>
+    
+<h3 id="common-issues">
+  
+  
+    <a href="#common-issues" class="anchor-heading" aria-labelledby="common-issues"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Common Issues
+  
+  
+</h3>
+    
+<h4 id="1-version-not-detected">
+  
+  
+    <a href="#1-version-not-detected" class="anchor-heading" aria-labelledby="1-version-not-detected"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 1. Version Not Detected
+  
+  
+</h4>
+    
+
+<p><strong>Problem</strong>: Version detection fails or returns empty values.</p>
+
+<p><strong>Solution</strong>: Check branch naming convention and ensure deployment branch is specified:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>  <span class="c1"># Required for versioned documentation</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="2-doxygen-version-not-set">
+  
+  
+    <a href="#2-doxygen-version-not-set" class="anchor-heading" aria-labelledby="2-doxygen-version-not-set"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 2. Doxygen Version Not Set
+  
+  
+</h4>
+    
+
+<p><strong>Problem</strong>: Doxygen <code class="language-plaintext highlighter-rouge">PROJECT_NUMBER</code> is not updated.</p>
+
+<p><strong>Solution</strong>: Ensure Doxygen versioning is enabled:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="na">doxygen_version_strategy</span><span class="pi">:</span> <span class="s1">'</span><span class="s">auto'</span>  <span class="c1"># or 'manual'</span>
+<span class="na">doxygen_config</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_config/Doxyfile'</span>  <span class="c1"># Ensure Doxyfile exists</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="3-jekyll-build-fails">
+  
+  
+    <a href="#3-jekyll-build-fails" class="anchor-heading" aria-labelledby="3-jekyll-build-fails"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 3. Jekyll Build Fails
+  
+  
+</h4>
+    
+
+<p><strong>Problem</strong>: Jekyll build fails with versioned configuration.</p>
+
+<p><strong>Solution</strong>: Check Jekyll configuration:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c"># Check if main config exists</span>
+<span class="nb">ls </span>_config.yml
+
+<span class="c"># Verify Jekyll configuration</span>
+jekyll doctor
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="4-deployment-issues">
+  
+  
+    <a href="#4-deployment-issues" class="anchor-heading" aria-labelledby="4-deployment-issues"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 4. Deployment Issues
+  
+  
+</h4>
+    
+
+<p><strong>Problem</strong>: Versioned deployment fails.</p>
+
+<p><strong>Solution</strong>: Check deployment branch and permissions:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="na">deployment_branch</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>  <span class="c1"># Ensure branch exists</span>
+<span class="c1"># Check repository permissions</span>
+<span class="na">permissions</span><span class="pi">:</span>
+  <span class="na">contents</span><span class="pi">:</span> <span class="s1">'</span><span class="s">read'</span>
+  <span class="na">pages</span><span class="pi">:</span> <span class="s1">'</span><span class="s">write'</span>
+  <span class="na">id-token</span><span class="pi">:</span> <span class="s1">'</span><span class="s">write'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="debug-commands">
+  
+  
+    <a href="#debug-commands" class="anchor-heading" aria-labelledby="debug-commands"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Debug Commands
+  
+  
+</h3>
+    
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="c"># Check version detection</span>
+<span class="nb">echo</span> <span class="s2">"Version: $"</span>
+<span class="nb">echo</span> <span class="s2">"Type: $"</span>
+<span class="nb">echo</span> <span class="s2">"Doxygen: $"</span>
+
+<span class="c"># Check generated files</span>
+<span class="nb">ls</span> <span class="nt">-la</span> docs/_config_generated.yml
+
+<span class="c"># Check deployment structure</span>
+<span class="nb">ls</span> <span class="nt">-la</span> gh-pages-deploy/
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="getting-help">
+  
+  
+    <a href="#getting-help" class="anchor-heading" aria-labelledby="getting-help"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Getting Help
+  
+  
+</h3>
+    
+
+<ol>
+  <li><strong>Check Workflow Logs</strong>: Review the GitHub Actions logs for detailed error messages</li>
+  <li><strong>Validate Configuration</strong>: Ensure all required inputs are provided</li>
+  <li><strong>Test Locally</strong>: Run Doxygen and Jekyll locally to verify configuration</li>
+  <li><strong>Check Permissions</strong>: Ensure the workflow has necessary repository permissions</li>
+</ol>
+<h2 id="-further-reading">
+  
+  
+    <a href="#-further-reading" class="anchor-heading" aria-labelledby="-further-reading"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📚 Further Reading
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="https://github.com/orgs/hardfoc/discussions/1">HardFOC Versioning Policy</a> - Organization versioning strategy and guidelines</li>
+  <li><a href="/hf-general-ci-tools/v1.0.0/docs/jekyll-guide.html">Jekyll Guide</a> - Jekyll configuration details</li>
+  <li><a href="https://www.doxygen.nl/manual/">Doxygen Documentation</a> - Doxygen reference</li>
+  <li><a href="https://semver.org/">Semantic Versioning</a> - Version numbering standard</li>
+  <li><a href="https://docs.github.com/en/pages">GitHub Pages Documentation</a> - GitHub Pages reference</li>
+</ul><hr />
+
+<p><strong>Built for the HardFOC ecosystem - Enabling seamless multi-version documentation with proper Semantic Versioning</strong></p>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+
+  <footer class="site-footer">
+  <div class="site-footer-credits">
+    <p>Built with ❤️ using <a href="https://just-the-docs.github.io/just-the-docs/">Just the Docs</a></p>
+    <p><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE">GPL v3 License</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools">View on GitHub</a></p>
+  </div>
+</footer>
+
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+<button id="search-button" class="search-button btn-reset" aria-label="Focus on search">
+  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+</button>
+
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

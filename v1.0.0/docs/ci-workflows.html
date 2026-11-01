@@ -1,0 +1,640 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    
+    .site-nav > ul.nav-list:first-child > li:not(:nth-child(4)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(4) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(4) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(4) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/hf-general-ci-tools/v1.0.0/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/hf-general-ci-tools/v1.0.0/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>🚀 CI Workflows &amp; Design Philosophy | hf-general-ci-tools - v1.0.0</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="🚀 CI Workflows &amp; Design Philosophy" />
+<meta name="author" content="N3b3x" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Understanding our comprehensive CI testing approach and design decisions" />
+<meta property="og:description" content="Understanding our comprehensive CI testing approach and design decisions" />
+<link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" />
+<meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" />
+<meta property="og:site_name" content="hf-general-ci-tools - v1.0.0" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="🚀 CI Workflows &amp; Design Philosophy" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Understanding our comprehensive CI testing approach and design decisions","headline":"🚀 CI Workflows &amp; Design Philosophy","url":"https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Custom head content for hf-general-ci-tools documentation -->
+<link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/custom.css">
+<script src="/hf-general-ci-tools/v1.0.0/assets/js/custom.js" defer></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/hf-general-ci-tools/v1.0.0/" class="site-title lh-tight">
+  hf-general-ci-tools - v1.0.0
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/" class="nav-list-link">🚀 hf-general-ci-tools</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/" class="nav-list-link">📖 Documentation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="🔄 Reusable Workflows submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/hf-general-ci-tools/v1.0.0/workflows/" class="nav-list-link">🔄 Reusable Workflows</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html" class="nav-list-link">🔧 C++ Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html" class="nav-list-link">� C++ Static Analysis (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html" class="nav-list-link">📚 Documentation Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" class="nav-list-link">🔗 Documentation Link Check (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" class="nav-list-link">📝 YAML Linting Tools (Reusable)</a></li></ul></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" class="nav-list-link">🚀 CI Workflows & Design Philosophy</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-release.html" class="nav-list-link">📦 Release Management</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" class="nav-list-link">📄 Markdown Linting</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/cpp-ci-test/" class="nav-list-link">C/C++ Sample Sources for CI Experiments</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search workflows, examples, and guides..." autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search workflows, examples, and guides...</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="/hf-general-ci-tools/v1.0.0/api/index.html" class="site-button"
+          
+        >
+          📖 API Reference
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools" class="site-button"
+          
+        >
+          📚 GitHub Repository
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="site-button"
+          
+        >
+          🐛 Report Issues
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/stargazers" class="site-button"
+          
+        >
+          ⭐ Star on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="-ci-workflows--design-philosophy">
+  
+  
+    <a href="#-ci-workflows--design-philosophy" class="anchor-heading" aria-labelledby="-ci-workflows--design-philosophy"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 CI Workflows &amp; Design Philosophy
+  
+  
+</h1>
+    
+
+<p><strong>Understanding Our Comprehensive Testing &amp; Validation Approach</strong></p><hr />
+<h2 id="-overview">
+  
+  
+    <a href="#-overview" class="anchor-heading" aria-labelledby="-overview"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📋 Overview
+  
+  
+</h2>
+    
+
+<p>This repository uses a <strong>dual-workflow architecture</strong> that separates <strong>reusable tools</strong> from <strong>comprehensive testing</strong>. This design ensures our workflows are thoroughly validated while providing clean, reliable tools for external use.</p>
+<h3 id="-architecture-philosophy">
+  
+  
+    <a href="#-architecture-philosophy" class="anchor-heading" aria-labelledby="-architecture-philosophy"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🎯 Architecture Philosophy</strong>
+  
+  
+</h3>
+    
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>🔧 REUSABLE WORKFLOWS (ru-*.yml)     🚀 CI WORKFLOWS (ci-*.yml)
+├── ru-cpp-lint.yml                 ├── ci-cpp-lint.yml
+├── ru-cpp-analysis.yml             ├── ci-cpp-analysis.yml
+├── ru-docs-publish.yml             ├── ci-docs-publish.yml
+├── ru-docs-linkcheck.yml           ├── ci-docs-linkcheck.yml
+└── ru-yaml-lint.yml                └── ci-yaml-lint.yml
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p><strong>🔧 Reusable Workflows</strong> = Clean, documented tools for other repositories
+<strong>🚀 CI Workflows</strong> = Comprehensive testing that validates every feature</p><hr />
+<h2 id="-reusable-workflows-production-tools">
+  
+  
+    <a href="#-reusable-workflows-production-tools" class="anchor-heading" aria-labelledby="-reusable-workflows-production-tools"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔧 Reusable Workflows (Production Tools)
+  
+  
+</h2>
+    
+
+<p>These are the <strong>production-ready tools</strong> that external repositories should use:</p>
+<h3 id="-ru-cpp-lintyml---c-linting-tools">
+  
+  
+    <a href="#-ru-cpp-lintyml---c-linting-tools" class="anchor-heading" aria-labelledby="-ru-cpp-lintyml---c-linting-tools"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔧 ru-cpp-lint.yml</strong> - C++ Linting Tools
+  
+  
+</h3>
+    
+<ul>
+  <li><strong>Purpose:</strong> Provides clang-format and clang-tidy linting for any C++ project</li>
+  <li><strong>Features:</strong> Configurable versions, custom rules, extensive file pattern matching</li>
+  <li><strong>Documentation:</strong> <a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html">→ C++ Linting Guide</a></li>
+</ul>
+<h3 id="-ru-cpp-analysisyml---c-static-analysis">
+  
+  
+    <a href="#-ru-cpp-analysisyml---c-static-analysis" class="anchor-heading" aria-labelledby="-ru-cpp-analysisyml---c-static-analysis"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔍 ru-cpp-analysis.yml</strong> - C++ Static Analysis
+  
+  
+</h3>
+    
+<ul>
+  <li><strong>Purpose:</strong> Provides cppcheck static analysis for security and bug detection</li>
+  <li><strong>Features:</strong> Configurable strictness, multiple C++ standards, Docker-based analysis</li>
+  <li><strong>Documentation:</strong> <a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html">→ C++ Analysis Guide</a></li>
+</ul>
+<h3 id="-ru-docs-publishyml---documentation-publisher">
+  
+  
+    <a href="#-ru-docs-publishyml---documentation-publisher" class="anchor-heading" aria-labelledby="-ru-docs-publishyml---documentation-publisher"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>📚 ru-docs-publish.yml</strong> - Documentation Publisher
+  
+  
+</h3>
+    
+<ul>
+  <li><strong>Purpose:</strong> Comprehensive documentation building and GitHub Pages deployment</li>
+  <li><strong>Features:</strong> Doxygen, Jekyll, versioning, link checking, multi-format support</li>
+  <li><strong>Documentation:</strong> <a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html">→ Docs Publisher Guide</a></li>
+</ul>
+<h3 id="-ru-docs-linkcheckyml---documentation-link-check">
+  
+  
+    <a href="#-ru-docs-linkcheckyml---documentation-link-check" class="anchor-heading" aria-labelledby="-ru-docs-linkcheckyml---documentation-link-check"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔗 ru-docs-linkcheck.yml</strong> - Documentation Link Check
+  
+  
+</h3>
+    
+<ul>
+  <li><strong>Purpose:</strong> Validates all links in documentation using Lychee</li>
+  <li><strong>Features:</strong> External link checking, anchor validation, custom configurations</li>
+  <li><strong>Documentation:</strong> <a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html">→ Link Check Guide</a></li>
+</ul>
+<h3 id="-ru-yaml-lintyml---yaml-linting-tools">
+  
+  
+    <a href="#-ru-yaml-lintyml---yaml-linting-tools" class="anchor-heading" aria-labelledby="-ru-yaml-lintyml---yaml-linting-tools"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>📝 ru-yaml-lint.yml</strong> - YAML Linting Tools
+  
+  
+</h3>
+    
+<ul>
+  <li><strong>Purpose:</strong> Validates YAML files using yamllint with extensive configuration</li>
+  <li><strong>Features:</strong> Custom rules, multiple file patterns, strict/permissive modes</li>
+  <li><strong>Documentation:</strong> <a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html">→ YAML Linting Guide</a></li>
+</ul><hr />
+<h2 id="-ci-workflows-comprehensive-testing">
+  
+  
+    <a href="#-ci-workflows-comprehensive-testing" class="anchor-heading" aria-labelledby="-ci-workflows-comprehensive-testing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 CI Workflows (Comprehensive Testing)
+  
+  
+</h2>
+    
+
+<p>These workflows <strong>test and validate</strong> our reusable workflows by exercising <strong>all their features</strong> against real code:</p>
+<h3 id="-ci-cpp-lintyml---c-lint-testing">
+  
+  
+    <a href="#-ci-cpp-lintyml---c-lint-testing" class="anchor-heading" aria-labelledby="-ci-cpp-lintyml---c-lint-testing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔧 ci-cpp-lint.yml</strong> - C++ Lint Testing
+  
+  
+</h3>
+    
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="c1"># Tests ru-cpp-lint.yml with maximum configuration</span>
+<span class="pi">-</span> <span class="na">clang_version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">20"</span>           <span class="c1"># Latest version</span>
+<span class="pi">-</span> <span class="na">extensions</span><span class="pi">:</span> <span class="s2">"</span><span class="s">c,cpp,cc,cxx,h,hpp"</span>  <span class="c1"># All C++ extensions</span>
+<span class="pi">-</span> <span class="na">files_changed_only</span><span class="pi">:</span> <span class="no">false</span>     <span class="c1"># Test full analysis</span>
+<span class="pi">-</span> <span class="na">lines_changed_only</span><span class="pi">:</span> <span class="no">false</span>     <span class="c1"># Test comprehensive checking</span>
+<span class="pi">-</span> <span class="na">step_summary</span><span class="pi">:</span> <span class="no">true</span>           <span class="c1"># Test reporting features</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<p><strong>→ Validates:</strong> All clang-format/clang-tidy features against real C++ code in <code class="language-plaintext highlighter-rouge">cpp-ci-test/</code></p>
+<h3 id="-ci-cpp-analysisyml---c-analysis-testing">
+  
+  
+    <a href="#-ci-cpp-analysisyml---c-analysis-testing" class="anchor-heading" aria-labelledby="-ci-cpp-analysisyml---c-analysis-testing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔍 ci-cpp-analysis.yml</strong> - C++ Analysis Testing
+  
+  
+</h3>
+    
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1"># Tests ru-cpp-analysis.yml with comprehensive settings</span>
+<span class="pi">-</span> <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">cpp-ci-test/src</span><span class="nv"> </span><span class="s">cpp-ci-test/include"</span>  <span class="c1"># Real code paths</span>
+<span class="pi">-</span> <span class="na">std</span><span class="pi">:</span> <span class="s2">"</span><span class="s">c++17"</span>                 <span class="c1"># Modern C++ standard</span>
+<span class="pi">-</span> <span class="na">strict</span><span class="pi">:</span> <span class="no">false</span>               <span class="c1"># Test permissive mode for CI</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<p><strong>→ Validates:</strong> Cppcheck analysis capabilities against actual C++ codebase</p>
+<h3 id="-ci-docs-publishyml---docs-publishing-testing">
+  
+  
+    <a href="#-ci-docs-publishyml---docs-publishing-testing" class="anchor-heading" aria-labelledby="-ci-docs-publishyml---docs-publishing-testing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>📚 ci-docs-publish.yml</strong> - Docs Publishing Testing
+  
+  
+</h3>
+    
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1"># Tests ru-docs-publish.yml with full feature set</span>
+<span class="pi">-</span> <span class="na">doxygen_config</span><span class="pi">:</span> <span class="s2">"</span><span class="s">_config/Doxyfile"</span>    <span class="c1"># Real Doxygen setup</span>
+<span class="pi">-</span> <span class="na">jekyll_enabled</span><span class="pi">:</span> <span class="no">true</span>                  <span class="c1"># Full Jekyll integration</span>
+<span class="pi">-</span> <span class="na">deploy_pages</span><span class="pi">:</span> <span class="no">true</span>                    <span class="c1"># Actual GitHub Pages deployment</span>
+<span class="pi">-</span> <span class="na">run_link_check</span><span class="pi">:</span> <span class="no">true</span>                  <span class="c1"># Integrated link validation</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<p><strong>→ Validates:</strong> Complete documentation pipeline including this repository’s live docs</p>
+<h3 id="-ci-docs-linkcheckyml---link-check-testing">
+  
+  
+    <a href="#-ci-docs-linkcheckyml---link-check-testing" class="anchor-heading" aria-labelledby="-ci-docs-linkcheckyml---link-check-testing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔗 ci-docs-linkcheck.yml</strong> - Link Check Testing
+  
+  
+</h3>
+    
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1"># Tests ru-docs-linkcheck.yml with maximum features</span>
+<span class="pi">-</span> <span class="na">check_external_links</span><span class="pi">:</span> <span class="no">true</span>    <span class="c1"># Test external link validation</span>
+<span class="pi">-</span> <span class="na">check_anchors</span><span class="pi">:</span> <span class="no">true</span>          <span class="c1"># Test anchor link validation</span>
+<span class="pi">-</span> <span class="na">follow_redirects</span><span class="pi">:</span> <span class="no">true</span>       <span class="c1"># Test redirect handling</span>
+<span class="pi">-</span> <span class="na">timeout</span><span class="pi">:</span> <span class="m">30</span>                  <span class="c1"># Test timeout configurations</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<p><strong>→ Validates:</strong> Link checking against all documentation in this repository</p>
+<h3 id="-ci-yaml-lintyml---yaml-lint-testing">
+  
+  
+    <a href="#-ci-yaml-lintyml---yaml-lint-testing" class="anchor-heading" aria-labelledby="-ci-yaml-lintyml---yaml-lint-testing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>📝 ci-yaml-lint.yml</strong> - YAML Lint Testing
+  
+  
+</h3>
+    
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c1"># Tests ru-yaml-lint.yml against repository YAML files</span>
+<span class="pi">-</span> <span class="na">paths</span><span class="pi">:</span> <span class="s1">'</span><span class="s">**/*.yml,**/*.yaml'</span>   <span class="c1"># All YAML files in repo</span>
+<span class="pi">-</span> <span class="na">strict_mode</span><span class="pi">:</span> <span class="no">false</span>           <span class="c1"># Test permissive validation</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<p><strong>→ Validates:</strong> YAML linting against all workflow files in <code class="language-plaintext highlighter-rouge">.github/workflows/</code></p><hr />
+<h2 id="-design-decisions--benefits">
+  
+  
+    <a href="#-design-decisions--benefits" class="anchor-heading" aria-labelledby="-design-decisions--benefits"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🎯 Design Decisions &amp; Benefits
+  
+  
+</h2>
+    
+<h3 id="-why-this-architecture">
+  
+  
+    <a href="#-why-this-architecture" class="anchor-heading" aria-labelledby="-why-this-architecture"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>✅ Why This Architecture?</strong>
+  
+  
+</h3>
+    
+
+<ol>
+  <li><strong>🔒 Quality Assurance</strong>
+    <ul>
+      <li>Every reusable workflow is continuously tested with real-world scenarios</li>
+      <li>CI workflows catch regressions and validate new features</li>
+      <li>External users get battle-tested, reliable tools</li>
+    </ul>
+  </li>
+  <li><strong>📋 Documentation by Example</strong>
+    <ul>
+      <li>CI workflows serve as <strong>live documentation</strong> showing all features</li>
+      <li>No need for separate example files - the CI IS the example</li>
+      <li>Always up-to-date examples that actually run</li>
+    </ul>
+  </li>
+  <li><strong>🚀 Continuous Validation</strong>
+    <ul>
+      <li>Every push tests all workflows against real code</li>
+      <li>Ensures compatibility across different configurations</li>
+      <li>Validates integration between different tools</li>
+    </ul>
+  </li>
+  <li><strong>🎯 Clear Separation of Concerns</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">ru-*.yml</code> = Clean, focused, reusable tools</li>
+      <li><code class="language-plaintext highlighter-rouge">ci-*.yml</code> = Comprehensive testing and validation</li>
+      <li>No confusion about what external users should use</li>
+    </ul>
+  </li>
+</ol>
+<h3 id="-development-workflow">
+  
+  
+    <a href="#-development-workflow" class="anchor-heading" aria-labelledby="-development-workflow"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <strong>🔄 Development Workflow</strong>
+  
+  
+</h3>
+    
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>1. Modify reusable workflow (ru-*.yml)
+2. Update corresponding CI test (ci-*.yml)
+3. CI automatically validates changes
+4. Documentation shows working examples
+5. External users get reliable, tested tools
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-related-guides">
+  
+  
+    <a href="#-related-guides" class="anchor-heading" aria-labelledby="-related-guides"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📚 Related Guides
+  
+  
+</h2>
+    
+
+<ul>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/jekyll-guide.html">Jekyll Integration Guide</a></strong> - Advanced Jekyll configuration for documentation sites</li>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/versioning-guide.html">Versioning Guide</a></strong> - Multi-version documentation strategies</li>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/workflows/">All Reusable Workflows</a></strong> - Complete workflow documentation index</li>
+</ul><hr />
+<h2 id="-for-external-users">
+  
+  
+    <a href="#-for-external-users" class="anchor-heading" aria-labelledby="-for-external-users"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🤝 For External Users
+  
+  
+</h2>
+    
+
+<p><strong>Use the reusable workflows (<code class="language-plaintext highlighter-rouge">ru-*.yml</code>)</strong> - they’re production-ready, well-documented, and continuously tested.</p>
+
+<p><strong>Reference the CI workflows (<code class="language-plaintext highlighter-rouge">ci-*.yml</code>)</strong> - they show you exactly how to configure and use every feature.</p>
+
+<p><strong>Never copy example files</strong> - use the live CI workflows as your examples since they actually run and validate!</p><hr />
+
+<p><em>This design ensures you always get reliable, tested, and well-documented workflows for your projects.</em> ✨</p>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+
+  <footer class="site-footer">
+  <div class="site-footer-credits">
+    <p>Built with ❤️ using <a href="https://just-the-docs.github.io/just-the-docs/">Just the Docs</a></p>
+    <p><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE">GPL v3 License</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools">View on GitHub</a></p>
+  </div>
+</footer>
+
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+<button id="search-button" class="search-button btn-reset" aria-label="Focus on search">
+  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+</button>
+
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

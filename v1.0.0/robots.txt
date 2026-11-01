@@ -1,0 +1,1 @@
+Sitemap: https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/sitemap.xml

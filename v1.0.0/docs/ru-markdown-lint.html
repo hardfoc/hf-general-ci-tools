@@ -1,0 +1,964 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    
+    .site-nav > ul.nav-list:first-child > li:not(:nth-child(6)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(6) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(6) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(6) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/hf-general-ci-tools/v1.0.0/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/hf-general-ci-tools/v1.0.0/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>📄 Markdown Linting | hf-general-ci-tools - v1.0.0</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="📄 Markdown Linting" />
+<meta name="author" content="N3b3x" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Markdown file validation with ru-markdown-lint.yml reusable workflow" />
+<meta property="og:description" content="Markdown file validation with ru-markdown-lint.yml reusable workflow" />
+<link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" />
+<meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" />
+<meta property="og:site_name" content="hf-general-ci-tools - v1.0.0" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="📄 Markdown Linting" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Markdown file validation with ru-markdown-lint.yml reusable workflow","headline":"📄 Markdown Linting","url":"https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Custom head content for hf-general-ci-tools documentation -->
+<link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/custom.css">
+<script src="/hf-general-ci-tools/v1.0.0/assets/js/custom.js" defer></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/hf-general-ci-tools/v1.0.0/" class="site-title lh-tight">
+  hf-general-ci-tools - v1.0.0
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/" class="nav-list-link">🚀 hf-general-ci-tools</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/" class="nav-list-link">📖 Documentation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="🔄 Reusable Workflows submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/hf-general-ci-tools/v1.0.0/workflows/" class="nav-list-link">🔄 Reusable Workflows</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html" class="nav-list-link">🔧 C++ Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html" class="nav-list-link">� C++ Static Analysis (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html" class="nav-list-link">📚 Documentation Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" class="nav-list-link">🔗 Documentation Link Check (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" class="nav-list-link">📝 YAML Linting Tools (Reusable)</a></li></ul></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" class="nav-list-link">🚀 CI Workflows & Design Philosophy</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-release.html" class="nav-list-link">📦 Release Management</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" class="nav-list-link">📄 Markdown Linting</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/cpp-ci-test/" class="nav-list-link">C/C++ Sample Sources for CI Experiments</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search workflows, examples, and guides..." autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search workflows, examples, and guides...</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="/hf-general-ci-tools/v1.0.0/api/index.html" class="site-button"
+          
+        >
+          📖 API Reference
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools" class="site-button"
+          
+        >
+          📚 GitHub Repository
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="site-button"
+          
+        >
+          🐛 Report Issues
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/stargazers" class="site-button"
+          
+        >
+          ⭐ Star on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="-markdown-linting">
+  
+  
+    <a href="#-markdown-linting" class="anchor-heading" aria-labelledby="-markdown-linting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📄 Markdown Linting
+  
+  
+</h1>
+    
+
+<p><strong>Markdown file validation with <code class="language-plaintext highlighter-rouge">ru-markdown-lint.yml</code> reusable workflow</strong></p><hr />
+<h2 id="-overview">
+  
+  
+    <a href="#-overview" class="anchor-heading" aria-labelledby="-overview"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🎯 Overview
+  
+  
+</h2>
+    
+
+<p>The <code class="language-plaintext highlighter-rouge">ru-markdown-lint.yml</code> workflow provides comprehensive Markdown file validation:</p>
+
+<ul>
+  <li>✅ <strong>Markdown syntax checking</strong> with markdownlint</li>
+  <li>✅ <strong>Style consistency</strong> enforcement</li>
+  <li>✅ <strong>Auto-fix capabilities</strong> for common issues</li>
+  <li>✅ <strong>Flexible configuration</strong> with custom rules</li>
+  <li>✅ <strong>Glob pattern matching</strong> for targeted validation</li>
+</ul><hr />
+<h2 id="-quick-start">
+  
+  
+    <a href="#-quick-start" class="anchor-heading" aria-labelledby="-quick-start"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 Quick Start
+  
+  
+</h2>
+    
+<h3 id="basic-markdown-validation">
+  
+  
+    <a href="#basic-markdown-validation" class="anchor-heading" aria-labelledby="basic-markdown-validation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Basic Markdown Validation
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="c1"># .github/workflows/docs.yml</span>
+<span class="na">name</span><span class="pi">:</span> <span class="s">📚 Documentation Quality</span>
+
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="advanced-configuration">
+  
+  
+    <a href="#advanced-configuration" class="anchor-heading" aria-labelledby="advanced-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Advanced Configuration
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">📚 Documentation Quality</span>
+
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**/*.md</span><span class="nv"> </span><span class="s">README.md"</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">_config/.markdownlint.json"</span>
+      <span class="na">exclude_patterns</span><span class="pi">:</span> <span class="s2">"</span><span class="s">node_modules/**,_site/**"</span>
+      <span class="na">fix</span><span class="pi">:</span> <span class="no">false</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="️-configuration">
+  
+  
+    <a href="#️-configuration" class="anchor-heading" aria-labelledby="️-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Configuration
+  
+  
+</h2>
+    
+<h3 id="inputs">
+  
+  
+    <a href="#inputs" class="anchor-heading" aria-labelledby="inputs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Inputs
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">globs</code></td>
+      <td>string</td>
+      <td><code class="language-plaintext highlighter-rouge">**/*.md</code></td>
+      <td>Space-separated glob patterns for files to check</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">config_file</code></td>
+      <td>string</td>
+      <td><code class="language-plaintext highlighter-rouge">_config/.markdownlint.json</code></td>
+      <td>Path to markdownlint configuration file</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exclude_patterns</code></td>
+      <td>string</td>
+      <td><code class="language-plaintext highlighter-rouge">.git/**,node_modules/**,...</code></td>
+      <td>Comma-separated patterns to exclude</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_docker</code></td>
+      <td>boolean</td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>Use Docker container for more control</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">fix</code></td>
+      <td>boolean</td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>Automatically fix fixable issues</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h2 id="-usage-patterns">
+  
+  
+    <a href="#-usage-patterns" class="anchor-heading" aria-labelledby="-usage-patterns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📋 Usage Patterns
+  
+  
+</h2>
+    
+<h3 id="1-documentation-only-projects">
+  
+  
+    <a href="#1-documentation-only-projects" class="anchor-heading" aria-labelledby="1-documentation-only-projects"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 1. Documentation-Only Projects
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Docs Quality</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown-lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**/*.md</span><span class="nv"> </span><span class="s">*.md"</span>
+      <span class="na">fix</span><span class="pi">:</span> <span class="no">false</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="2-project-with-mixed-content">
+  
+  
+    <a href="#2-project-with-mixed-content" class="anchor-heading" aria-labelledby="2-project-with-mixed-content"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 2. Project with Mixed Content
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown-lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**/*.md</span><span class="nv"> </span><span class="s">README.md</span><span class="nv"> </span><span class="s">CONTRIBUTING.md"</span>
+      <span class="na">exclude_patterns</span><span class="pi">:</span> <span class="s2">"</span><span class="s">node_modules/**,vendor/**,_site/**"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="3-auto-fix-in-development">
+  
+  
+    <a href="#3-auto-fix-in-development" class="anchor-heading" aria-labelledby="3-auto-fix-in-development"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 3. Auto-Fix in Development
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Fix Documentation</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span>  <span class="c1"># Manual trigger</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown-fix</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">fix</span><span class="pi">:</span> <span class="no">true</span>  <span class="c1"># Enable auto-fix</span>
+      <span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">**/*.md"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="4-strict-validation">
+  
+  
+    <a href="#4-strict-validation" class="anchor-heading" aria-labelledby="4-strict-validation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 4. Strict Validation
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown-strict</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">_config/.markdownlint-strict.json"</span>
+      <span class="na">use_docker</span><span class="pi">:</span> <span class="no">true</span>  <span class="c1"># More control over environment</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-configuration-files">
+  
+  
+    <a href="#-configuration-files" class="anchor-heading" aria-labelledby="-configuration-files"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔧 Configuration Files
+  
+  
+</h2>
+    
+<h3 id="basic-configuration">
+  
+  
+    <a href="#basic-configuration" class="anchor-heading" aria-labelledby="basic-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Basic Configuration
+  
+  
+</h3>
+    
+
+<p>Create <code class="language-plaintext highlighter-rouge">_config/.markdownlint.json</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD013"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"line_length"</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"code_blocks"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"tables"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD033"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD041"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="advanced-configuration-1">
+  
+  
+    <a href="#advanced-configuration-1" class="anchor-heading" aria-labelledby="advanced-configuration-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Advanced Configuration
+  
+  
+</h3>
+    
+
+<p>Create <code class="language-plaintext highlighter-rouge">_config/.markdownlint.json</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD001"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD003"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"style"</span><span class="p">:</span><span class="w"> </span><span class="s2">"atx"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD004"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"style"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dash"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD007"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"indent"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD013"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"line_length"</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"heading_line_length"</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"code_blocks"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"tables"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"headings"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD022"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD025"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD026"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"punctuation"</span><span class="p">:</span><span class="w"> </span><span class="s2">".,;:!"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD029"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"style"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ordered"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD033"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"allowed_elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"br"</span><span class="p">,</span><span class="w"> </span><span class="s2">"sub"</span><span class="p">,</span><span class="w"> </span><span class="s2">"sup"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MD036"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD041"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"MD046"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"style"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fenced"</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-common-rules">
+  
+  
+    <a href="#-common-rules" class="anchor-heading" aria-labelledby="-common-rules"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📝 Common Rules
+  
+  
+</h2>
+    
+<h3 id="key-markdownlint-rules">
+  
+  
+    <a href="#key-markdownlint-rules" class="anchor-heading" aria-labelledby="key-markdownlint-rules"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Key Markdownlint Rules
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Rule</th>
+      <th>Description</th>
+      <th>Fix</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MD001</strong></td>
+      <td>Heading levels increment by one</td>
+      <td>Use proper heading hierarchy</td>
+    </tr>
+    <tr>
+      <td><strong>MD003</strong></td>
+      <td>Heading style consistency</td>
+      <td>Use consistent <code class="language-plaintext highlighter-rouge">#</code> or <code class="language-plaintext highlighter-rouge">===</code> style</td>
+    </tr>
+    <tr>
+      <td><strong>MD013</strong></td>
+      <td>Line length limits</td>
+      <td>Break long lines or adjust config</td>
+    </tr>
+    <tr>
+      <td><strong>MD022</strong></td>
+      <td>Headings surrounded by blank lines</td>
+      <td>Add blank lines around headings</td>
+    </tr>
+    <tr>
+      <td><strong>MD025</strong></td>
+      <td>Single top-level heading</td>
+      <td>Ensure only one H1 per document</td>
+    </tr>
+    <tr>
+      <td><strong>MD033</strong></td>
+      <td>No inline HTML</td>
+      <td>Use Markdown syntax instead</td>
+    </tr>
+    <tr>
+      <td><strong>MD041</strong></td>
+      <td>First line in file should be H1</td>
+      <td>Start with main heading</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="auto-fixable-issues">
+  
+  
+    <a href="#auto-fixable-issues" class="anchor-heading" aria-labelledby="auto-fixable-issues"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Auto-Fixable Issues
+  
+  
+</h3>
+    
+
+<p>When <code class="language-plaintext highlighter-rouge">fix: true</code> is enabled, these issues are automatically corrected:</p>
+<ul>
+  <li>Trailing whitespace</li>
+  <li>Missing blank lines</li>
+  <li>Inconsistent list markers</li>
+  <li>Heading spacing issues</li>
+</ul><hr />
+<h2 id="️-advanced-scenarios">
+  
+  
+    <a href="#️-advanced-scenarios" class="anchor-heading" aria-labelledby="️-advanced-scenarios"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🛠️ Advanced Scenarios
+  
+  
+</h2>
+    
+<h3 id="multiple-configuration-files">
+  
+  
+    <a href="#multiple-configuration-files" class="anchor-heading" aria-labelledby="multiple-configuration-files"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Multiple Configuration Files
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs-lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">_config/.markdownlint-docs.json"</span>
+      <span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**/*.md"</span>
+
+  <span class="na">readme-lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s2">"</span><span class="s">_config/.markdownlint-readme.json"</span>
+      <span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">README.md</span><span class="nv"> </span><span class="s">CONTRIBUTING.md"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="conditional-execution">
+  
+  
+    <a href="#conditional-execution" class="anchor-heading" aria-labelledby="conditional-execution"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Conditional Execution
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown-lint</span><span class="pi">:</span>
+    <span class="na">if</span><span class="pi">:</span> <span class="s">contains(github.event.head_commit.message, '[docs]')</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="integration-with-other-workflows">
+  
+  
+    <a href="#integration-with-other-workflows" class="anchor-heading" aria-labelledby="integration-with-other-workflows"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Integration with Other Workflows
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Complete Documentation CI</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown-lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    
+  <span class="na">link-check</span><span class="pi">:</span>
+    <span class="na">needs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">markdown-lint</span><span class="pi">]</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    
+  <span class="na">build-docs</span><span class="pi">:</span>
+    <span class="na">needs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">markdown-lint</span><span class="pi">,</span> <span class="nv">link-check</span><span class="pi">]</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-troubleshooting">
+  
+  
+    <a href="#-troubleshooting" class="anchor-heading" aria-labelledby="-troubleshooting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🐛 Troubleshooting
+  
+  
+</h2>
+    
+<h3 id="common-issues">
+  
+  
+    <a href="#common-issues" class="anchor-heading" aria-labelledby="common-issues"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Common Issues
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Issue</th>
+      <th>Solution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Line too long</strong></td>
+      <td>Adjust <code class="language-plaintext highlighter-rouge">MD013</code> rule or break lines</td>
+    </tr>
+    <tr>
+      <td><strong>HTML not allowed</strong></td>
+      <td>Use Markdown syntax or allow specific tags in <code class="language-plaintext highlighter-rouge">MD033</code></td>
+    </tr>
+    <tr>
+      <td><strong>Heading issues</strong></td>
+      <td>Follow proper heading hierarchy (H1 → H2 → H3)</td>
+    </tr>
+    <tr>
+      <td><strong>List formatting</strong></td>
+      <td>Use consistent markers (-, *, +) as configured</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="debug-tips">
+  
+  
+    <a href="#debug-tips" class="anchor-heading" aria-labelledby="debug-tips"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Debug Tips
+  
+  
+</h3>
+    
+
+<ol>
+  <li><strong>Test locally</strong> with markdownlint CLI before pushing</li>
+  <li><strong>Check configuration</strong> file syntax and location</li>
+  <li><strong>Review glob patterns</strong> to ensure correct file matching</li>
+  <li><strong>Use Docker mode</strong> for consistent environment</li>
+  <li><strong>Enable auto-fix</strong> to see what can be automatically corrected</li>
+</ol>
+<h3 id="glob-pattern-examples">
+  
+  
+    <a href="#glob-pattern-examples" class="anchor-heading" aria-labelledby="glob-pattern-examples"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Glob Pattern Examples
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="c1"># All markdown files</span>
+<span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">**/*.md"</span>
+
+<span class="c1"># Specific directories</span>
+<span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**/*.md</span><span class="nv"> </span><span class="s">src/**/*.md"</span>
+
+<span class="c1"># Exclude patterns in input</span>
+<span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">**/*.md"</span>
+<span class="na">exclude_patterns</span><span class="pi">:</span> <span class="s2">"</span><span class="s">node_modules/**,vendor/**"</span>
+
+<span class="c1"># Specific files</span>
+<span class="na">globs</span><span class="pi">:</span> <span class="s2">"</span><span class="s">README.md</span><span class="nv"> </span><span class="s">CONTRIBUTING.md</span><span class="nv"> </span><span class="s">docs/index.md"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div><hr />
+<h2 id="-related-workflows">
+  
+  
+    <a href="#-related-workflows" class="anchor-heading" aria-labelledby="-related-workflows"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔗 Related Workflows
+  
+  
+</h2>
+    
+
+<ul>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html">Link Check</a></strong> - Validate links in Markdown files</li>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html">Documentation Publisher</a></strong> - Build and deploy documentation</li>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html">YAML Linting</a></strong> - Validate YAML in documentation</li>
+</ul><hr />
+
+<p><strong>📖 <a href="/hf-general-ci-tools/v1.0.0/docs/">← Back to Documentation Index</a></strong></p>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+
+  <footer class="site-footer">
+  <div class="site-footer-credits">
+    <p>Built with ❤️ using <a href="https://just-the-docs.github.io/just-the-docs/">Just the Docs</a></p>
+    <p><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE">GPL v3 License</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools">View on GitHub</a></p>
+  </div>
+</footer>
+
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+<button id="search-button" class="search-button btn-reset" aria-label="Focus on search">
+  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+</button>
+
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

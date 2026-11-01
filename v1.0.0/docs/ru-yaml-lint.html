@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(5)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(5) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(3) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(5) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list > li.nav-list-item:nth-child(5) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/hf-general-ci-tools/v1.0.0/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/hf-general-ci-tools/v1.0.0/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>📝 YAML Linting Tools (Reusable) | hf-general-ci-tools - v1.0.0</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="📝 YAML Linting Tools (Reusable)" />
+<meta name="author" content="N3b3x" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Reusable workflow for YAML file validation and formatting using yamllint" />
+<meta property="og:description" content="Reusable workflow for YAML file validation and formatting using yamllint" />
+<link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" />
+<meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" />
+<meta property="og:site_name" content="hf-general-ci-tools - v1.0.0" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="📝 YAML Linting Tools (Reusable)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Reusable workflow for YAML file validation and formatting using yamllint","headline":"📝 YAML Linting Tools (Reusable)","url":"https://hardfoc.github.io/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Custom head content for hf-general-ci-tools documentation -->
+<link rel="stylesheet" href="/hf-general-ci-tools/v1.0.0/assets/css/custom.css">
+<script src="/hf-general-ci-tools/v1.0.0/assets/js/custom.js" defer></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/hf-general-ci-tools/v1.0.0/" class="site-title lh-tight">
+  hf-general-ci-tools - v1.0.0
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/" class="nav-list-link">🚀 hf-general-ci-tools</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/" class="nav-list-link">📖 Documentation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="🔄 Reusable Workflows submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/hf-general-ci-tools/v1.0.0/workflows/" class="nav-list-link">🔄 Reusable Workflows</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html" class="nav-list-link">🔧 C++ Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html" class="nav-list-link">� C++ Static Analysis (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html" class="nav-list-link">📚 Documentation Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html" class="nav-list-link">🔗 Documentation Link Check (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-yaml-lint.html" class="nav-list-link">📝 YAML Linting Tools (Reusable)</a></li></ul></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ci-workflows.html" class="nav-list-link">🚀 CI Workflows & Design Philosophy</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-release.html" class="nav-list-link">📦 Release Management</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/docs/ru-markdown-lint.html" class="nav-list-link">📄 Markdown Linting</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/cpp-ci-test/" class="nav-list-link">C/C++ Sample Sources for CI Experiments</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search workflows, examples, and guides..." autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search workflows, examples, and guides...</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="/hf-general-ci-tools/v1.0.0/api/index.html" class="site-button"
+          
+        >
+          📖 API Reference
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools" class="site-button"
+          
+        >
+          📚 GitHub Repository
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="site-button"
+          
+        >
+          🐛 Report Issues
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/stargazers" class="site-button"
+          
+        >
+          ⭐ Star on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/hf-general-ci-tools/v1.0.0/workflows/">🔄 Reusable Workflows</a></li>
+    <li class="breadcrumb-nav-list-item"><span>📝 YAML Linting Tools (Reusable)</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="-yaml-linting-tools-reusable">
+  
+  
+    <a href="#-yaml-linting-tools-reusable" class="anchor-heading" aria-labelledby="-yaml-linting-tools-reusable"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📝 YAML Linting Tools (Reusable)
+  
+  
+</h1>
+    
+
+<p><strong>Workflow:</strong> <code class="language-plaintext highlighter-rouge">ru-yaml-lint.yml</code> → 📝 <strong>[RU] YAML Linting Tools</strong></p>
+
+<p>A comprehensive reusable workflow for YAML file validation and formatting using yamllint. Ensures proper syntax, formatting, and adherence to best practices across all YAML files in your repository.</p><hr />
+<h2 id="-overview">
+  
+  
+    <a href="#-overview" class="anchor-heading" aria-labelledby="-overview"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📋 Overview
+  
+  
+</h2>
+    
+
+<p>This reusable workflow (<code class="language-plaintext highlighter-rouge">ru-yaml-lint.yml</code>) validates YAML files in your repository using yamllint to ensure proper formatting and syntax. It’s designed for maximum configurability and can be easily integrated into any project with YAML files.</p>
+<h3 id="-live-ci-example">
+  
+  
+    <a href="#-live-ci-example" class="anchor-heading" aria-labelledby="-live-ci-example"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ✨ <strong>Live CI Example</strong>
+  
+  
+</h3>
+    
+<p>👀 See our comprehensive testing workflow: <a href="../.github/workflows/ci-yaml-lint.yml"><code class="language-plaintext highlighter-rouge">ci-yaml-lint.yml</code></a> which demonstrates <strong>all features</strong> of this reusable workflow by testing it against this repository’s YAML files with comprehensive configuration options.</p>
+<h2 id="-table-of-contents">
+  
+  
+    <a href="#-table-of-contents" class="anchor-heading" aria-labelledby="-table-of-contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📋 Table of Contents
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="#-overview">Overview</a></li>
+  <li><a href="#-inputs">Inputs</a></li>
+  <li><a href="#-outputs">Outputs</a></li>
+  <li><a href="#-usage-examples">Usage Examples</a></li>
+  <li><a href="#-configuration">Configuration</a></li>
+  <li><a href="#-troubleshooting">Troubleshooting</a></li>
+  <li><a href="#-related-workflows">Related Workflows</a></li>
+</ul>
+<h2 id="-overview-1">
+  
+  
+    <a href="#-overview-1" class="anchor-heading" aria-labelledby="-overview-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🎯 Overview
+  
+  
+</h2>
+    
+
+<p><strong>Purpose</strong>: YAML file validation and formatting
+<strong>Key Features</strong>:</p>
+<ul>
+  <li>yamllint integration</li>
+  <li>Configurable rules</li>
+  <li>Flexible path specification</li>
+  <li>Exclude patterns support</li>
+  <li>Strict mode option</li>
+  <li>Detailed reporting</li>
+</ul>
+
+<p><strong>Use Case</strong>: YAML file quality and consistency enforcement</p>
+<h2 id="️-inputs">
+  
+  
+    <a href="#️-inputs" class="anchor-heading" aria-labelledby="️-inputs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Inputs
+  
+  
+</h2>
+    
+<h3 id="-file-selection">
+  
+  
+    <a href="#-file-selection" class="anchor-heading" aria-labelledby="-file-selection"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📁 File Selection
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Description</th>
+      <th>Required</th>
+      <th>Default</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">paths</code></td>
+      <td>Comma-separated list of paths to check</td>
+      <td>No</td>
+      <td><code class="language-plaintext highlighter-rouge">**/*.yml,**/*.yaml</code></td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exclude_patterns</code></td>
+      <td>Comma-separated patterns to exclude</td>
+      <td>No</td>
+      <td><code class="language-plaintext highlighter-rouge">.git/**,node_modules/**,venv/**,.venv/**</code></td>
+      <td>string</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="️-configuration">
+  
+  
+    <a href="#️-configuration" class="anchor-heading" aria-labelledby="️-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Configuration
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Description</th>
+      <th>Required</th>
+      <th>Default</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">config_file</code></td>
+      <td>Path to yamllint configuration file</td>
+      <td>No</td>
+      <td><code class="language-plaintext highlighter-rouge">_config/.yamllint</code></td>
+      <td>string</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">strict_mode</code></td>
+      <td>Enable strict mode (fail on warnings)</td>
+      <td>No</td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
+      <td>boolean</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="-outputs">
+  
+  
+    <a href="#-outputs" class="anchor-heading" aria-labelledby="-outputs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📤 Outputs
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Output</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">result</code></td>
+      <td>YAML lint result (success/failure)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">files_checked</code></td>
+      <td>Number of files checked</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">issues_found</code></td>
+      <td>Number of issues found</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="-usage-examples">
+  
+  
+    <a href="#-usage-examples" class="anchor-heading" aria-labelledby="-usage-examples"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 Usage Examples
+  
+  
+</h2>
+    
+<h3 id="basic-usage">
+  
+  
+    <a href="#basic-usage" class="anchor-heading" aria-labelledby="basic-usage"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Basic Usage
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">YAML Lint</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">yamllint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="advanced-usage">
+  
+  
+    <a href="#advanced-usage" class="anchor-heading" aria-labelledby="advanced-usage"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Advanced Usage
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">YAML Lint</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">yamllint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s1">'</span><span class="s">.github/workflows/*.yml,docs/*.yml'</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_config/.yamllint'</span>
+      <span class="na">strict_mode</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">exclude_patterns</span><span class="pi">:</span> <span class="s1">'</span><span class="s">.git/**,node_modules/**,_site/**'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="workflow-only-checking">
+  
+  
+    <a href="#workflow-only-checking" class="anchor-heading" aria-labelledby="workflow-only-checking"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Workflow-Only Checking
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Workflow YAML Lint</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">yamllint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s1">'</span><span class="s">.github/workflows/*.yml'</span>
+      <span class="na">strict_mode</span><span class="pi">:</span> <span class="no">true</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="comprehensive-configuration">
+  
+  
+    <a href="#comprehensive-configuration" class="anchor-heading" aria-labelledby="comprehensive-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Comprehensive Configuration
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="na">name</span><span class="pi">:</span> <span class="s">Complete YAML Lint</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">push</span><span class="pi">,</span> <span class="nv">pull_request</span><span class="pi">]</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">yamllint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s1">'</span><span class="s">.github/workflows/*.yml,docs/*.yml,**/*.yaml'</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s1">'</span><span class="s">_config/.yamllint'</span>
+      <span class="na">strict_mode</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">exclude_patterns</span><span class="pi">:</span> <span class="s1">'</span><span class="s">.git/**,node_modules/**,venv/**,.venv/**,_site/**'</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h2 id="️-configuration-1">
+  
+  
+    <a href="#️-configuration-1" class="anchor-heading" aria-labelledby="️-configuration-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ⚙️ Configuration
+  
+  
+</h2>
+    
+<h3 id="_configyamllint-configuration">
+  
+  
+    <a href="#_configyamllint-configuration" class="anchor-heading" aria-labelledby="_configyamllint-configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">_config/.yamllint</code> Configuration
+  
+  
+</h3>
+    
+
+<p>Create a <code class="language-plaintext highlighter-rouge">_config/.yamllint</code> file in your project (relative to the repository root):</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="na">extends</span><span class="pi">:</span> <span class="s">default</span>
+
+<span class="na">rules</span><span class="pi">:</span>
+  <span class="na">line-length</span><span class="pi">:</span>
+    <span class="na">max</span><span class="pi">:</span> <span class="m">120</span>
+    <span class="na">level</span><span class="pi">:</span> <span class="s">warning</span>
+  <span class="na">indentation</span><span class="pi">:</span>
+    <span class="na">spaces</span><span class="pi">:</span> <span class="m">2</span>
+  <span class="na">comments</span><span class="pi">:</span>
+    <span class="na">min-spaces-from-content</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">document-start</span><span class="pi">:</span>
+    <span class="na">present</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">truthy</span><span class="pi">:</span>
+    <span class="na">allowed-values</span><span class="pi">:</span> <span class="pi">[</span><span class="s1">'</span><span class="s">true'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">false'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">on'</span><span class="pi">,</span> <span class="s1">'</span><span class="s">off'</span><span class="pi">]</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h3 id="default-rules">
+  
+  
+    <a href="#default-rules" class="anchor-heading" aria-labelledby="default-rules"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Default Rules
+  
+  
+</h3>
+    
+
+<p>The workflow uses yamllint with these default settings:</p>
+<ul>
+  <li>Line length: 120 characters (warning)</li>
+  <li>Indentation: 2 spaces</li>
+  <li>Document start: Required</li>
+  <li>Comments: Proper spacing</li>
+</ul>
+<h2 id="-troubleshooting">
+  
+  
+    <a href="#-troubleshooting" class="anchor-heading" aria-labelledby="-troubleshooting"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔧 Troubleshooting
+  
+  
+</h2>
+    
+<h3 id="common-issues">
+  
+  
+    <a href="#common-issues" class="anchor-heading" aria-labelledby="common-issues"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Common Issues
+  
+  
+</h3>
+    
+
+<p><strong>YAML Syntax Errors</strong></p>
+<ul>
+  <li>Check for proper indentation (2 spaces)</li>
+  <li>Verify YAML syntax is valid</li>
+  <li>Ensure proper document structure</li>
+</ul>
+
+<p><strong>Line Length Issues</strong></p>
+<ul>
+  <li>Adjust line length in <code class="language-plaintext highlighter-rouge">_config/.yamllint</code> configuration</li>
+  <li>Break long lines appropriately</li>
+  <li>Use YAML’s line continuation features</li>
+</ul>
+
+<p><strong>Indentation Problems</strong></p>
+<ul>
+  <li>Use consistent 2-space indentation</li>
+  <li>Avoid mixing tabs and spaces</li>
+  <li>Check for proper nesting</li>
+</ul>
+<h3 id="debug-mode">
+  
+  
+    <a href="#debug-mode" class="anchor-heading" aria-labelledby="debug-mode"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Debug Mode
+  
+  
+</h3>
+    
+
+<p>Enable debug output by checking the workflow logs in GitHub Actions.</p>
+<h2 id="-related-workflows">
+  
+  
+    <a href="#-related-workflows" class="anchor-heading" aria-labelledby="-related-workflows"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 📚 Related Workflows
+  
+  
+</h2>
+    
+
+<ul>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-lint.html">C/C++ Lint</a></strong> - Code quality checks</li>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/ru-cpp-analysis.html">Static Analysis</a></strong> - Security analysis</li>
+  <li><strong><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-publish.html">Documentation</a></strong> - Documentation generation</li>
+</ul>
+<h2 id="-related-resources">
+  
+  
+    <a href="#-related-resources" class="anchor-heading" aria-labelledby="-related-resources"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🔗 Related Resources
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="https://yamllint.readthedocs.io/">yamllint Documentation</a></li>
+  <li><a href="https://yaml.org/spec/">YAML Specification</a></li>
+  <li><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions">GitHub Actions YAML Reference</a></li>
+</ul><hr />
+
+<p><a href="/hf-general-ci-tools/v1.0.0/docs/ru-docs-linkcheck.html">← Previous: Link Check Workflow</a></p>
+
+<div class="table-wrapper"><table>
+  <tbody>
+    <tr>
+      <td><strong>📚 <a href="/hf-general-ci-tools/v1.0.0/docs/">All Documentation</a></strong></td>
+      <td><strong>🏠 <a href="/hf-general-ci-tools/v1.0.0/">Main README</a></strong></td>
+    </tr>
+  </tbody>
+</table></div>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+
+  <footer class="site-footer">
+  <div class="site-footer-credits">
+    <p>Built with ❤️ using <a href="https://just-the-docs.github.io/just-the-docs/">Just the Docs</a></p>
+    <p><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE">GPL v3 License</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools">View on GitHub</a></p>
+  </div>
+</footer>
+
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+<button id="search-button" class="search-button btn-reset" aria-label="Focus on search">
+  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+</button>
+
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+
