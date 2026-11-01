@@ -37,7 +37,7 @@ on:
 
 jobs:
   release:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     permissions:
       contents: write
 ```
@@ -54,7 +54,7 @@ on:
 
 jobs:
   release:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       draft: ${{ contains(github.ref_name, 'rc') }}
       prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}
@@ -95,7 +95,7 @@ on:
 
 jobs:
   release:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       draft: false
       prerelease: false
@@ -113,7 +113,7 @@ on:
 
 jobs:
   prerelease:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       prerelease: true
     permissions:
@@ -134,7 +134,7 @@ on:
 
 jobs:
   draft:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       draft: true
       tag_name: ${{ inputs.tag }}
@@ -157,7 +157,7 @@ jobs:
   # Run tests first
   test:
     if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
     with:
       source_dirs: "src/"
 
@@ -165,7 +165,7 @@ jobs:
   release:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [test]
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     permissions:
       contents: write
 ```
@@ -200,7 +200,7 @@ GitHub automatically generates release notes including:
 ```yaml
 jobs:
   release:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       tag_name: "release-${{ github.run_number }}"
     permissions:
@@ -212,7 +212,7 @@ jobs:
 ```yaml
 jobs:
   release:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
     with:
       draft: ${{ github.event_name == 'workflow_dispatch' }}
       prerelease: ${{ contains(github.ref_name, '-') }}
@@ -224,7 +224,7 @@ jobs:
 
 ## 🔗 Related Workflows
 
-- **[ESP32 Releases](https://github.com/n3b3x/hf-espidf-ci-tools)** - Use `ru-release-with-artifacts.yml` for firmware releases
+- **[ESP32 Releases](https://github.com/hardfoc/hf-espidf-ci-tools)** - Use `ru-release-with-artifacts.yml` for firmware releases
 - **[Documentation](ru-docs-publish.md)** - Often combined with release workflows
 - **[C/C++ Linting](ru-cpp-lint.md)** - Quality checks before releases
 

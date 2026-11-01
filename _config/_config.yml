@@ -5,7 +5,7 @@ description: >
   A comprehensive collection of reusable GitHub Actions workflows for general CI/CD tasks,
   including C/C++ linting, static analysis, documentation generation, and link checking
 baseurl: "/hf-general-ci-tools"  # GitHub Pages subpath
-url: "https://n3b3x.github.io"
+url: "https://hardfoc.github.io"
 
 # Author and social information
 author:
@@ -94,17 +94,17 @@ toggle_auto_mode: true
 # Auxiliary links with better organization
 aux_links:
   "📚 GitHub Repository":
-    - "https://github.com/n3b3x/hf-general-ci-tools"
+    - "https://github.com/hardfoc/hf-general-ci-tools"
   "🐛 Report Issues":
-    - "https://github.com/n3b3x/hf-general-ci-tools/issues"
+    - "https://github.com/hardfoc/hf-general-ci-tools/issues"
   "⭐ Star on GitHub":
-    - "https://github.com/n3b3x/hf-general-ci-tools/stargazers"
+    - "https://github.com/hardfoc/hf-general-ci-tools/stargazers"
 
 # Footer customization
 footer_content: >
   Built with ❤️ using <a href='https://just-the-docs.github.io/just-the-docs/'>Just the Docs</a> •
-  <a href='https://github.com/n3b3x/hf-general-ci-tools/blob/main/LICENSE'>GPL v3 License</a> •
-  <a href='https://github.com/n3b3x/hf-general-ci-tools'>View on GitHub</a>
+  <a href='https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE'>GPL v3 License</a> •
+  <a href='https://github.com/hardfoc/hf-general-ci-tools'>View on GitHub</a>
 
 # Collections for better organization
 collections:
@@ -119,9 +119,9 @@ just_the_docs:
   nav_fold: true
   nav_external_links:
     - title: "📚 GitHub Repository"
-      url: https://github.com/n3b3x/hf-general-ci-tools
+      url: https://github.com/hardfoc/hf-general-ci-tools
     - title: "🐛 Issues"
-      url: https://github.com/n3b3x/hf-general-ci-tools/issues
+      url: https://github.com/hardfoc/hf-general-ci-tools/issues
 
   # Custom head content
   head_custom: _includes/head_custom.html
@@ -173,7 +173,7 @@ seo:
 social:
   name: "hf-general-ci-tools"
   links:
-    - "https://github.com/n3b3x/hf-general-ci-tools"
+    - "https://github.com/hardfoc/hf-general-ci-tools"
     - "https://github.com/n3b3x"
 
 # Analytics (uncomment and configure if needed)

@@ -32,8 +32,8 @@ permalink: /docs/
 
 | Workflow | Purpose | Trigger |
 |----------|---------|---------|
-| **[Publish Documentation](https://github.com/n3b3x/hf-general-ci-tools/blob/main/.github/workflows/ci-docs-publish.yml)** | Builds and deploys this repo's documentation site | Push to main, PRs |
-| **[YAML Lint](https://github.com/n3b3x/hf-general-ci-tools/blob/main/.github/workflows/ci-yaml-lint.yml)** | Validates YAML syntax in this repository | Push, PRs |
+| **[Publish Documentation](https://github.com/hardfoc/hf-general-ci-tools/blob/main/.github/workflows/ci-docs-publish.yml)** | Builds and deploys this repo's documentation site | Push to main, PRs |
+| **[YAML Lint](https://github.com/hardfoc/hf-general-ci-tools/blob/main/.github/workflows/ci-yaml-lint.yml)** | Validates YAML syntax in this repository | Push, PRs |
 
 ## 📚 Documentation Structure
 
@@ -59,22 +59,22 @@ Select the appropriate **reusable workflow** for your needs:
 
 ```yaml
 # For C/C++ projects
-uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
+uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
 
 # For documentation
-uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
 
 # For link checking
-uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
 
 # For YAML validation
-uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1
+uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1
 
 # For Markdown validation
-uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
+uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1
 
 # For releases
-uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
+uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1
 ```
 
 > **Note:** These are **reusable workflows** designed to be called from other repositories.
@@ -104,7 +104,7 @@ These workflows are designed to be **called from other repositories** using the 
 ```yaml
 jobs:
   my-job:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
     with:
       jekyll_enabled: true
       deploy_pages: true
@@ -127,7 +127,7 @@ name: Code Quality
 on: [push, pull_request]
 jobs:
   lint:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1
     with:
       source_dirs: "src/"
       include_patterns: "*.cpp,*.hpp,*.c,*.h"
@@ -140,7 +140,7 @@ name: Documentation
 on: [push]
 jobs:
   docs:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1
     with:
       jekyll_enabled: true
       run_link_check: true
@@ -154,7 +154,7 @@ name: Link Check
 on: [push, pull_request]
 jobs:
   links:
-    uses: n3b3x/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1
     with:
       paths: "docs/** *.md"
       verbose: true
@@ -162,12 +162,12 @@ jobs:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see our [Contributing Guidelines](https://github.com/n3b3x/hf-general-ci-tools/blob/main/CONTRIBUTING.md)
+Contributions are welcome! Please see our [Contributing Guidelines](https://github.com/hardfoc/hf-general-ci-tools/blob/main/CONTRIBUTING.md)
 for details.
 
 ## 📄 License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](https://github.com/n3b3x/hf-general-ci-tools/blob/main/LICENSE)
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE)
 file for details.
 
 ## 🙏 Acknowledgments
@@ -182,4 +182,4 @@ file for details.
 
 **Made with ❤️ by [N3b3x](https://github.com/n3b3x)**
 
-[GitHub](https://github.com/n3b3x/hf-general-ci-tools) • [Issues](https://github.com/n3b3x/hf-general-ci-tools/issues)
+[GitHub](https://github.com/hardfoc/hf-general-ci-tools) • [Issues](https://github.com/hardfoc/hf-general-ci-tools/issues)
