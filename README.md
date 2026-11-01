@@ -69,6 +69,7 @@ and a new required permission is a breaking change (see
 <!-- permissions-table:start -->
 | Workflow | Caller must grant | Why |
 |----------|-------------------|-----|
+| [`ru-ci-gate.yml`](.github/workflows/ru-ci-gate.yml) | `contents: read` | read the calling workflow to verify `needs` |
 | [`ru-cpp-analysis.yml`](.github/workflows/ru-cpp-analysis.yml) | `contents: read` | checkout |
 | [`ru-cpp-lint.yml`](.github/workflows/ru-cpp-lint.yml) | `contents: read`, `pull-requests: write` | checkout; cpp-linter thread comments and annotations |
 | [`ru-docs-linkcheck.yml`](.github/workflows/ru-docs-linkcheck.yml) | `contents: read` | checkout |

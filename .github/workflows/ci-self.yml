@@ -88,3 +88,14 @@ jobs:
 
       - name: Unit tests for the check scripts
         run: python .github/scripts/test_checks.py
+
+  # Dogfood the gate: this repository's required check is "CI gate / gate".
+  ci-gate:
+    name: CI gate
+    needs: [actionlint, workflow-checks]
+    if: always()
+    uses: ./.github/workflows/ru-ci-gate.yml
+    permissions:
+      contents: read
+    with:
+      needs_json: ${{ toJSON(needs) }}

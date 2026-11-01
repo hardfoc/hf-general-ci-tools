@@ -1,0 +1,145 @@
+---
+# Single required check for a repository's CI.
+#
+# Caller pattern (put it last in the workflow; list EVERY other job in needs):
+#
+#   ci-gate:
+#     name: CI gate
+#     needs: [build, lint, docs]
+#     if: always()          # without this a failed job skips the gate, and a
+#                           # skipped required check counts as passing
+#     uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-ci-gate.yml@v1
+#     permissions:
+#       contents: read
+#     with:
+#       needs_json: ${{ toJSON(needs) }}
+#       allow_skipped: docs   # jobs that may legitimately be skipped
+#
+# The check is reported as "CI gate / gate" (caller job name / this job's
+# name); make that the only required status check in the ruleset.
+name: ✅ [RU] CI Gate
+
+on:
+  workflow_call:
+    inputs:
+      needs_json:
+        description: "The caller's needs context as JSON: the expression toJSON(needs)"
+        type: string
+        required: true
+      allow_skipped:
+        description: >-
+          Jobs (ids from `needs`) that may be skipped without failing the gate,
+          separated by commas, spaces or newlines. Every other job must succeed.
+        type: string
+        required: false
+        default: ""
+      verify_needs:
+        description: >-
+          Read the calling workflow file and fail if a job is missing from the
+          gate's `needs`, or if the gate job lacks `if: always()`.
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  gate:
+    name: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read  # read the calling workflow file (verify_needs)
+    steps:
+      - name: Evaluate needed jobs
+        env:
+          NEEDS_JSON: ${{ inputs.needs_json }}
+          ALLOW_SKIPPED: ${{ inputs.allow_skipped }}
+          VERIFY_NEEDS: ${{ inputs.verify_needs }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # Best effort: fetch the calling workflow and convert it to JSON
+          # (Ruby's YAML is in the standard library on every hosted runner).
+          export CALLER_WORKFLOW_JSON=""
+          if [ "$VERIFY_NEEDS" = "true" ]; then
+            ref="${WORKFLOW_REF#*@}"
+            path="${WORKFLOW_REF%@*}"
+            path="${path#*/}"; path="${path#*/}"
+            if raw="$(gh api "repos/$GITHUB_REPOSITORY/contents/$path?ref=$ref" -H 'Accept: application/vnd.github.raw' 2>/dev/null)"; then
+              # shellcheck disable=SC2016  # $stdin is Ruby, not shell
+              CALLER_WORKFLOW_JSON="$(printf '%s' "$raw" | ruby -ryaml -rjson -e 'puts YAML.safe_load($stdin.read, aliases: true).to_json')" || CALLER_WORKFLOW_JSON=""
+            fi
+            if [ -z "$CALLER_WORKFLOW_JSON" ]; then
+              echo "::warning::Could not read $path at $ref; skipping the needs completeness check"
+            fi
+          fi
+
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+
+          EXPR = "$" "{{ toJSON(needs) }}"
+          errors = []
+          raw = os.environ.get("NEEDS_JSON", "").strip()
+          try:
+              needs = json.loads(raw or "null")
+          except json.JSONDecodeError as exc:
+              print(f"::error::needs_json is not JSON ({exc}); pass needs_json: {EXPR}")
+              sys.exit(1)
+          if not isinstance(needs, dict) or not needs:
+              print("::error::needs_json is empty. The gate job must list every other job in `needs:` "
+                    f"and pass needs_json: {EXPR}")
+              sys.exit(1)
+
+          allowed = {a for a in re.split(r"[\s,]+", os.environ.get("ALLOW_SKIPPED", "")) if a}
+          unknown = sorted(allowed - needs.keys())
+          if unknown:
+              errors.append(f"allow_skipped names jobs that are not in needs: {', '.join(unknown)}")
+
+          rows = []
+          for job, info in sorted(needs.items()):
+              result = (info or {}).get("result", "unknown")
+              if result == "success":
+                  verdict = "ok"
+              elif result == "skipped" and job in allowed:
+                  verdict = "ok (allowed skip)"
+              else:
+                  verdict = "FAIL"
+                  hint = " (not in allow_skipped)" if result == "skipped" else ""
+                  errors.append(f"job '{job}' finished with '{result}'{hint}")
+              rows.append((job, result, verdict))
+
+          caller = os.environ.get("CALLER_WORKFLOW_JSON", "")
+          if caller:
+              jobs = (json.loads(caller) or {}).get("jobs") or {}
+              gates = [j for j, d in jobs.items()
+                       if isinstance(d, dict) and "ru-ci-gate.yml" in str(d.get("uses", ""))]
+              for gate in gates:
+                  spec = jobs[gate]
+                  listed = spec.get("needs") or []
+                  listed = [listed] if isinstance(listed, str) else listed
+                  missing = sorted(set(jobs) - set(gates) - set(listed))
+                  if missing:
+                      errors.append(f"gate job '{gate}' does not list these jobs in needs: {', '.join(missing)}. "
+                                    "A job outside needs can fail without failing the gate")
+                  if "always()" not in str(spec.get("if", "")):
+                      errors.append(f"gate job '{gate}' has no `if: always()`. When a needed job fails the gate "
+                                    "is skipped, and a skipped required check counts as passing")
+
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          lines = ["## CI gate", "", "| Job | Result | Gate |", "|---|---|---|"]
+          lines += [f"| `{j}` | {r} | {v} |" for j, r, v in rows]
+          if errors:
+              lines += ["", "**Failed:**", ""] + [f"- {e}" for e in errors]
+          text = "\n".join(lines) + "\n"
+          print(text)
+          if summary:
+              with open(summary, "a", encoding="utf-8") as fh:
+                  fh.write(text)
+          for e in errors:
+              print(f"::error::{e}")
+          sys.exit(1 if errors else 0)
+          PY
