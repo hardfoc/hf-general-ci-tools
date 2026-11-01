@@ -76,7 +76,7 @@ jobs:
             --timeout ${{ inputs.timeout }}
             --max-retries ${{ inputs.max_retries }}
             --retry-wait-time ${{ inputs.retry_wait_time }}
-            ${{ inputs.exclude_private == 'true' && '--exclude-all-private' || '' }}
-            ${{ inputs.exclude_mail == 'true' && '--exclude-mail' || '' }}
+            ${{ inputs.exclude_private && '--exclude-all-private' || '' }}
+            ${{ !inputs.exclude_mail && '--include-mail' || '' }}
             ${{ inputs.fail_on_errors == 'true' && '--fail' || '' }}
             ${{ inputs.paths }}

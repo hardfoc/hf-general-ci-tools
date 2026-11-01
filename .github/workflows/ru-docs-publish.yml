@@ -222,10 +222,9 @@ on:
         type: boolean
         default: false
 
+# contents: write for the gh-pages branch deploy (peaceiris/actions-gh-pages); nothing else is needed.
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   # =============================================================================
@@ -284,7 +283,7 @@ jobs:
 
           # Validate markdown lint paths format
           if [[ -n "${{ inputs.markdown_lint_paths }}" ]]; then
-            if [[ "${{ inputs.markdown_lint_paths }}" =~ ^[a-zA-Z0-9_/.*-]+(\s+[a-zA-Z0-9_/.*-]+)*$ ]]; then
+            if [[ "${{ inputs.markdown_lint_paths }}" =~ ^[a-zA-Z0-9_/.*-]+([[:space:]]+[a-zA-Z0-9_/.*-]+)*$ ]]; then
               echo "✅ Markdown lint paths format is valid: ${{ inputs.markdown_lint_paths }}"
             else
               echo "❌ Error: Invalid markdown lint paths format. Expected: 'pattern1 pattern2' or 'pattern1'"
@@ -294,7 +293,7 @@ jobs:
 
           # Validate spell check paths format
           if [[ -n "${{ inputs.spell_check_paths }}" ]]; then
-            if [[ "${{ inputs.spell_check_paths }}" =~ ^[a-zA-Z0-9_/.*-]+(\s+[a-zA-Z0-9_/.*-]+)*$ ]]; then
+            if [[ "${{ inputs.spell_check_paths }}" =~ ^[a-zA-Z0-9_/.*-]+([[:space:]]+[a-zA-Z0-9_/.*-]+)*$ ]]; then
               echo "✅ Spell check paths format is valid: ${{ inputs.spell_check_paths }}"
             else
               echo "❌ Error: Invalid spell check paths format. Expected: 'pattern1 pattern2' or 'pattern1'"
@@ -762,12 +761,6 @@ jobs:
         with:
           submodules: ${{ inputs.checkout_recursive && 'recursive' || 'false' }}
           fetch-depth: 0
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
-        with:
-          enablement: true
 
       # =============================================================================
       # Doxygen Configuration Detection
@@ -1935,7 +1928,7 @@ jobs:
       # Deploy Jekyll Site to GitHub Pages using peaceiris/actions-gh-pages
       # =============================================================================
       - name: Deploy Jekyll site to GitHub Pages
-        if: ${{ inputs.deploy_pages == true }}
+        if: ${{ inputs.deploy_pages == true && github.event_name != 'pull_request' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -1957,7 +1950,7 @@ jobs:
       # Deploy Centralized Doxygen Artifacts using peaceiris/actions-gh-pages
       # =============================================================================
       - name: Deploy Doxygen artifacts to GitHub Pages
-        if: ${{ inputs.deploy_pages == true && steps.doxygen-check.outputs.doxygen_needed == 'true' }}
+        if: ${{ inputs.deploy_pages == true && github.event_name != 'pull_request' && steps.doxygen-check.outputs.doxygen_needed == 'true' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
