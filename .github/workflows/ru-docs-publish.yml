@@ -726,7 +726,7 @@ jobs:
           echo "🔍 Generated base_url: $BASE_URL"
           echo "🔍 Version name: $VERSION_NAME"
           echo "🔍 Repository name: ${{ github.event.repository.name }}"
-          echo "🔍 Expected final URL: https://n3b3x.github.io$BASE_URL/"
+          echo "🔍 Expected final URL: https://${GITHUB_REPOSITORY_OWNER,,}.github.io$BASE_URL/"
           echo "base_url=$BASE_URL" >> "$GITHUB_OUTPUT"
 
           # Generate config file names
