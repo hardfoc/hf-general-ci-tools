@@ -1,0 +1,268 @@
+---
+# Reusable workflow: build, check and publish a MkDocs (Material) documentation site, versioned with mike, with the
+# Doxygen API reference merged under api/.
+#
+#   pull request        strict build + figure / generated-table drift checks + offline link check; no deploy
+#   push to main        the same, then publish as version `dev`
+#   push of a v* tag    the same, then publish as version `X.Y` and move the `latest` alias to it
+#
+# The site, its hooks and figkit come from templates/mkdocs-site in this repository; docs/MKDOCS.md says how a
+# repository adopts it and docs/ru-mkdocs-publish.md lists every input.
+name: "[RU] MkDocs Publish"
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        description: "Python used to build the site."
+        type: string
+        default: "3.12"
+      requirements:
+        description: "pip requirements file with the pinned site toolchain (mkdocs, mkdocs-material, mike, ...)."
+        type: string
+        default: "requirements-docs.txt"
+      mkdocs_config:
+        description: "Path of mkdocs.yml."
+        type: string
+        default: "mkdocs.yml"
+      submodules:
+        description: "Submodules to check out: 'false', 'true' (top level) or 'recursive'."
+        type: string
+        default: "false"
+      check_commands:
+        description: >-
+          Shell lines run before the build; any failure fails the job. The default runs the figure drift check
+          (tools/figkit/build.py --check) and the generated-table check (tools/docs/gen.py --check) when present.
+        type: string
+        default: |
+          if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi
+          if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi
+      doxygen_config:
+        description: "Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API."
+        type: string
+        default: ""
+      doxygen_working_directory:
+        description: "Directory Doxygen runs in; relative paths in the Doxyfile resolve against it."
+        type: string
+        default: "."
+      doxygen_html_dir:
+        description: >-
+          Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and
+          HTML_OUTPUT from the Doxyfile.
+        type: string
+        default: ""
+      api_dir:
+        description: "Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml)."
+        type: string
+        default: "api"
+      link_check:
+        description: "Run lychee offline on the built site (internal links, anchors and images, API included)."
+        type: boolean
+        default: true
+      link_check_args:
+        description: "Extra lychee arguments, for example --exclude-path patterns."
+        type: string
+        default: ""
+      deploy:
+        description: >-
+          Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually
+          pass a repository-variable gate here.
+        type: boolean
+        default: false
+      deployment_branch:
+        description: "Branch GitHub Pages serves from."
+        type: string
+        default: "gh-pages"
+      dev_version:
+        description: "mike version name a push to the default branch publishes to."
+        type: string
+        default: "dev"
+      latest_alias:
+        description: "mike alias moved to each release (v* tag)."
+        type: string
+        default: "latest"
+
+permissions: {}
+
+env:
+  NO_MKDOCS_2_WARNING: "1"
+
+jobs:
+  build:
+    name: Build and check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          submodules: ${{ inputs.submodules }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: ${{ inputs.python_version }}
+          cache: pip
+          cache-dependency-path: ${{ inputs.requirements }}
+
+      - name: Install the site toolchain
+        env:
+          REQUIREMENTS: ${{ inputs.requirements }}
+        run: python3 -m pip install -r "$REQUIREMENTS"
+
+      - name: Drift checks (figures, generated tables)
+        if: ${{ inputs.check_commands != '' }}
+        env:
+          CHECKS: ${{ inputs.check_commands }}
+        run: |
+          set -euo pipefail
+          bash -euo pipefail -c "$CHECKS"
+
+      - name: Build the site (strict)
+        env:
+          CONFIG: ${{ inputs.mkdocs_config }}
+        run: python3 -m mkdocs build --strict --config-file "$CONFIG" --site-dir "$RUNNER_TEMP/site"
+
+      - name: Install Doxygen
+        if: ${{ inputs.doxygen_config != '' }}
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq doxygen graphviz
+
+      - name: Build the API reference
+        if: ${{ inputs.doxygen_config != '' }}
+        env:
+          DOXYFILE: ${{ inputs.doxygen_config }}
+          WORKDIR: ${{ inputs.doxygen_working_directory }}
+          HTML_DIR: ${{ inputs.doxygen_html_dir }}
+          API_DIR: ${{ inputs.api_dir }}
+        run: |
+          set -euo pipefail
+          cd "$WORKDIR"
+          doxygen "$DOXYFILE"
+          if [ -z "$HTML_DIR" ]; then
+            out=$(doxygen -x "$DOXYFILE" 2>/dev/null | sed -n 's/^OUTPUT_DIRECTORY *= *//p' | tr -d '"')
+            html=$(doxygen -x "$DOXYFILE" 2>/dev/null | sed -n 's/^HTML_OUTPUT *= *//p' | tr -d '"')
+            HTML_DIR="${out:-.}/${html:-html}"
+          fi
+          test -f "$HTML_DIR/index.html" || { echo "::error::no Doxygen index.html in $HTML_DIR"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/site/$API_DIR"
+          cp -a "$HTML_DIR/." "$RUNNER_TEMP/site/$API_DIR/"
+          echo "API reference: $(find "$RUNNER_TEMP/site/$API_DIR" -name '*.html' | wc -l) pages"
+
+      - name: Check links on the built site (offline)
+        if: ${{ inputs.link_check }}
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8  # v2.9.0
+        with:
+          fail: true
+          args: >-
+            --offline --no-progress --include-fragments
+            --root-dir ${{ runner.temp }}/site
+            --exclude-path '404\.html$'
+            ${{ inputs.link_check_args }}
+            '${{ runner.temp }}/site/**/*.html'
+
+      - name: Keep the built site
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: docs-site
+          path: ${{ runner.temp }}/site
+          retention-days: 7
+
+  deploy:
+    name: Publish (mike)
+    needs: build
+    if: ${{ inputs.deploy && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write  # push to the deployment branch
+    concurrency:
+      group: mkdocs-publish-${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        with:
+          fetch-depth: 0
+          submodules: ${{ inputs.submodules }}
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: ${{ inputs.python_version }}
+          cache: pip
+          cache-dependency-path: ${{ inputs.requirements }}
+
+      - name: Install the site toolchain
+        env:
+          REQUIREMENTS: ${{ inputs.requirements }}
+        run: python3 -m pip install -r "$REQUIREMENTS"
+
+      - name: Fetch the built site (for the API reference)
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: docs-site
+          path: ${{ runner.temp }}/built
+
+      - name: Work out the version
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          DEV: ${{ inputs.dev_version }}
+          LATEST: ${{ inputs.latest_alias }}
+        run: |
+          set -euo pipefail
+          if [ "$REF_TYPE" = tag ] && [[ "$REF_NAME" =~ ^v([0-9]+)\.([0-9]+) ]]; then
+            echo "version=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}" >> "$GITHUB_OUTPUT"
+            echo "aliases=$LATEST" >> "$GITHUB_OUTPUT"
+          elif [ "$REF_TYPE" = branch ] && [ "$REF_NAME" = "$DEFAULT_BRANCH" ]; then
+            echo "version=$DEV" >> "$GITHUB_OUTPUT"
+            echo "aliases=" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::publishes only from $DEFAULT_BRANCH or a vX.Y[.Z] tag, not $REF_TYPE $REF_NAME"
+            exit 1
+          fi
+
+      - name: Publish with mike
+        env:
+          CONFIG: ${{ inputs.mkdocs_config }}
+          BRANCH: ${{ inputs.deployment_branch }}
+          VERSION: ${{ steps.version.outputs.version }}
+          ALIASES: ${{ steps.version.outputs.aliases }}
+          LATEST: ${{ inputs.latest_alias }}
+          DEV: ${{ inputs.dev_version }}
+          API_DIR: ${{ inputs.api_dir }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$BRANCH:$BRANCH" || true
+          # shellcheck disable=SC2086  # ALIASES is empty or one word
+          python3 -m mike deploy --config-file "$CONFIG" --branch "$BRANCH" --update-aliases \
+            --message "Publish docs $VERSION from ${GITHUB_SHA::12}" "$VERSION" $ALIASES
+          if [ -d "$RUNNER_TEMP/built/$API_DIR" ]; then
+            git worktree add "$RUNNER_TEMP/pages" "$BRANCH"
+            rm -rf "${RUNNER_TEMP:?}/pages/$VERSION/$API_DIR"
+            mkdir -p "$RUNNER_TEMP/pages/$VERSION"
+            cp -a "$RUNNER_TEMP/built/$API_DIR" "$RUNNER_TEMP/pages/$VERSION/$API_DIR"
+            touch "$RUNNER_TEMP/pages/.nojekyll"
+            git -C "$RUNNER_TEMP/pages" add -A
+            git -C "$RUNNER_TEMP/pages" commit -q -m "Add API reference to docs $VERSION" || true
+            git worktree remove "$RUNNER_TEMP/pages"
+          fi
+          if python3 -m mike list --config-file "$CONFIG" --branch "$BRANCH" | grep -qE "\[.*\b$LATEST\b.*\]"; then
+            default="$LATEST"
+          else
+            default="$DEV"
+          fi
+          python3 -m mike set-default --config-file "$CONFIG" --branch "$BRANCH" "$default"
+          git push origin "$BRANCH"
+          {
+            echo "### Published docs \`$VERSION\`"
+            echo ""
+            python3 -m mike list --config-file "$CONFIG" --branch "$BRANCH" | sed 's/^/    /'
+          } >> "$GITHUB_STEP_SUMMARY"
