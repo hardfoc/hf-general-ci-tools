@@ -91,10 +91,18 @@ on:
       # Deployment Configuration Section
       # =============================================================================
       deploy_pages:
-        description: 'Deploy to GitHub Pages'
+        description: >-
+          Deploy to GitHub Pages. Ignored on pull_request, pull_request_target and
+          merge_group events, which always take the PR build path (build and upload
+          the docs-html artifact, no deploy).
         required: false
         type: boolean
         default: true
+      artifact_name:
+        description: 'Name of the uploaded site artifact (set it when calling this workflow more than once in one run)'
+        required: false
+        type: string
+        default: 'docs-html'
       # =============================================================================
       # Doxygen Configuration Section
       # =============================================================================
@@ -922,7 +930,11 @@ jobs:
 
           HTML_DIR="$(python3 -c 'import os,sys; print(os.path.normpath(sys.argv[1]))' "$HTML_DIR")"
 
-          echo "html_dir=$HTML_DIR" >> "$GITHUB_OUTPUT"
+          BASE_OUT="$(python3 -c 'import os,sys; print(os.path.normpath(sys.argv[1]))' "$BASE_OUT")"
+          {
+            echo "html_dir=$HTML_DIR"
+            echo "output_dir=$BASE_OUT"
+          } >> "$GITHUB_OUTPUT"
           echo "Resolved Doxygen HTML dir (working dir: $WORK_DIR): $HTML_DIR"
 
       # =============================================================================
@@ -994,58 +1006,96 @@ jobs:
 
       - name: Validate Jekyll configuration
         if: ${{ inputs.jekyll_enabled == true }}
+        env:
+          JEKYLL_SOURCE: ${{ inputs.jekyll_source }}
+          JEKYLL_CONFIG: ${{ inputs.jekyll_config }}
         run: |
           echo "🔍 Validating Jekyll configuration..."
 
-          JEKYLL_SOURCE="${{ inputs.jekyll_source }}"
-          JEKYLL_CONFIG="${{ inputs.jekyll_config }}"
-          JEKYLL_ENV="${{ inputs.jekyll_environment }}"
-
           # Check if source directory exists
           if [ ! -d "$JEKYLL_SOURCE" ]; then
-            echo "❌ Jekyll source directory not found: $JEKYLL_SOURCE"
+            echo "::error::Jekyll source directory not found: $JEKYLL_SOURCE"
             exit 1
           fi
 
-          # Validate config files
+          # Pre-flight: validate the shape of settings that the theme only
+          # checks at render time. just-the-docs requires every entry under
+          # `callouts:` to be a mapping with a `color` key; the shorthand
+          # `note: blue` builds an unusable site.
+          validate_config() {
+            ruby -ryaml -rdate -e '
+              file = ARGV[0]
+              begin
+                cfg = YAML.safe_load(File.read(file), permitted_classes: [Date, Time], aliases: true) || {}
+              rescue Psych::Exception => e
+                puts "::error file=#{file}::YAML syntax error: #{e.message}"
+                exit 1
+              end
+              unless cfg.is_a?(Hash)
+                puts "::error file=#{file}::top level of a Jekyll config must be a mapping"
+                exit 1
+              end
+              errors = []
+              callouts = cfg["callouts"]
+              if !callouts.nil? && !callouts.is_a?(Hash)
+                errors << "callouts must be a mapping of callout name to {title, color}, found #{callouts.class}"
+              elsif callouts
+                callouts.each do |name, spec|
+                  if !spec.is_a?(Hash)
+                    errors << "callouts.#{name} must be a mapping with a color key, found #{spec.inspect}. Write it as: callouts: { #{name}: { title: #{name.to_s.capitalize}, color: #{spec.is_a?(String) ? spec : "blue"} } }"
+                  elsif spec["color"].nil? || spec["color"].to_s.strip.empty?
+                    errors << "callouts.#{name} has no color (just-the-docs requires one)"
+                  end
+                end
+              end
+              errors.each { |m| puts "::error file=#{file}::#{m}" }
+              exit(errors.empty? ? 0 : 1)
+            ' "$1"
+          }
+
+          # Config paths are relative to the repository root (as `jekyll build
+          # --config` resolves them); source-relative paths are still accepted.
+          FAILED=0
           IFS=',' read -ra CONFIG_FILES <<< "$JEKYLL_CONFIG"
           for config_file in "${CONFIG_FILES[@]}"; do
-            if [ -f "$JEKYLL_SOURCE/$config_file" ]; then
-              echo "✅ Validating config file: $config_file"
-
-              # Basic YAML syntax validation
-              if command -v yq >/dev/null 2>&1; then
-                if yq eval '.' "$JEKYLL_SOURCE/$config_file" >/dev/null 2>&1; then
-                  echo "  ✅ YAML syntax is valid"
-                else
-                  echo "  ❌ YAML syntax error in $config_file"
-                  exit 1
-                fi
-              else
-                echo "  ⚠️  yq not available, skipping YAML validation"
-              fi
-
-              # Check for common configuration issues
-              if grep -q "baseurl.*/$" "$JEKYLL_SOURCE/$config_file"; then
-                echo "  ⚠️  Warning: baseurl should not end with '/' in $config_file"
-              fi
-
-              if grep -q "url.*/$" "$JEKYLL_SOURCE/$config_file"; then
-                echo "  ⚠️  Warning: url should not end with '/' in $config_file"
-              fi
-
+            config_file="$(echo "$config_file" | xargs)"
+            if [ -f "$config_file" ]; then
+              config_path="$config_file"
+            elif [ -f "$JEKYLL_SOURCE/$config_file" ]; then
+              config_path="$JEKYLL_SOURCE/$config_file"
             else
-              echo "⚠️  Config file not found: $config_file"
+              echo "::error::Jekyll config file not found: $config_file (looked in the repository root and in $JEKYLL_SOURCE)"
+              FAILED=1
+              continue
+            fi
+            echo "✅ Validating config file: $config_path"
+            if validate_config "$config_path"; then
+              echo "  ✅ YAML syntax and callouts are valid"
+            else
+              FAILED=1
+            fi
+
+            # Check for common configuration issues
+            if grep -q "baseurl.*/$" "$config_path"; then
+              echo "  ⚠️  Warning: baseurl should not end with '/' in $config_path"
+            fi
+            if grep -q "url.*/$" "$config_path"; then
+              echo "  ⚠️  Warning: url should not end with '/' in $config_path"
             fi
           done
+          if [ "$FAILED" -ne 0 ]; then
+            echo "::error::Jekyll configuration pre-flight failed; fix the errors above"
+            exit 1
+          fi
+          config_file="${config_path:-$JEKYLL_SOURCE/_config.yml}"
 
           # Check for required directories based on config
           # Read directory paths from _config.yml
-          LAYOUTS_DIR=$(grep -E "^layouts_dir:" "$JEKYLL_SOURCE/$config_file" | \
+          LAYOUTS_DIR=$(grep -E "^layouts_dir:" "$config_file" | \
             sed 's/.*: *//' | sed 's/  #.*$//' | tr -d ' ')
-          INCLUDES_DIR=$(grep -E "^includes_dir:" "$JEKYLL_SOURCE/$config_file" | \
+          INCLUDES_DIR=$(grep -E "^includes_dir:" "$config_file" | \
             sed 's/.*: *//' | sed 's/  #.*$//' | tr -d ' ')
-          SASS_DIR=$(grep -E "^sass:" -A 1 "$JEKYLL_SOURCE/$config_file" | \
+          SASS_DIR=$(grep -E "^sass:" -A 1 "$config_file" | \
             grep -E "sass_dir:" | sed 's/.*: *//' | sed 's/  #.*$//' | tr -d ' ')
 
           # Check layouts directory
@@ -1078,9 +1128,9 @@ jobs:
           # Check for common files in the same directory as the config file
           COMMON_FILES=("index.md" "index.html" "404.html" "robots.txt")
           for file in "${COMMON_FILES[@]}"; do
-            if [ -f "$JEKYLL_SOURCE/$config_file" ]; then
+            if [ -f "$config_file" ]; then
               # Get the directory containing the config file
-              CONFIG_DIR=$(dirname "$JEKYLL_SOURCE/$config_file")
+              CONFIG_DIR=$(dirname "$config_file")
               if [ -f "$CONFIG_DIR/$file" ]; then
                 echo "✅ Found file: $file"
               else
@@ -1181,6 +1231,17 @@ jobs:
 
           echo "📄 Using Doxyfile: $DOXYFILE_PATH"
           echo "📂 Running Doxygen from: $WORK_DIR"
+
+          # Doxygen creates OUTPUT_DIRECTORY itself but not its missing parents,
+          # and then fails. Create the whole path up front.
+          OUTPUT_DIR="${{ steps.doxy_out.outputs.output_dir }}"
+          if [ -n "$OUTPUT_DIR" ]; then
+            if ! mkdir -p "$OUTPUT_DIR"; then
+              echo "::error file=${{ inputs.doxygen_config }}::Cannot create Doxygen OUTPUT_DIRECTORY '$OUTPUT_DIR' (resolved against working directory '$WORK_DIR'). Fix OUTPUT_DIRECTORY in the Doxyfile."
+              exit 1
+            fi
+            echo "📁 Doxygen output directory: $OUTPUT_DIR"
+          fi
 
           LOG_PATH="$ROOT_DIR/doxygen.log"
 
@@ -1428,37 +1489,79 @@ jobs:
       # =============================================================================
       - name: Generate version-specific configuration
         if: ${{ inputs.jekyll_enabled == true }}
+        id: jekyll-gen
+        env:
+          JEKYLL_SOURCE: ${{ inputs.jekyll_source }}
+          JEKYLL_CONFIG_INPUT: ${{ inputs.jekyll_config || '_config.yml' }}
         run: |
           # Generate Jekyll config for versioned documentation
           echo "📝 Generating versioned Jekyll configuration..."
 
+          # jekyll_config entries are paths relative to the repository root (that is
+          # how `jekyll build --config` resolves them). Entries that only exist
+          # relative to jekyll_source are accepted for backward compatibility.
+          resolve_config() {
+            if [ -f "$1" ]; then
+              printf '%s\n' "$1"
+            elif [ -f "$JEKYLL_SOURCE/$1" ]; then
+              printf '%s\n' "$JEKYLL_SOURCE/$1"
+            else
+              return 1
+            fi
+          }
+
+          IFS=',' read -ra CONFIG_ENTRIES <<< "$JEKYLL_CONFIG_INPUT"
+          RESOLVED=()
+          for entry in "${CONFIG_ENTRIES[@]}"; do
+            entry="$(echo "$entry" | xargs)"
+            [ -z "$entry" ] && continue
+            if ! path="$(resolve_config "$entry")"; then
+              echo "::error::Jekyll config '$entry' not found (looked in the repository root and in jekyll_source '$JEKYLL_SOURCE')"
+              exit 1
+            fi
+            RESOLVED+=("$path")
+          done
+          if [ "${#RESOLVED[@]}" -eq 0 ]; then
+            echo "::error::jekyll_config is empty"
+            exit 1
+          fi
+          BASE_CONFIG="${RESOLVED[0]}"
+
+          # The generated config is written to, and later passed to Jekyll by,
+          # this one path. Jekyll resolves --config against the working
+          # directory (the repository root), not against --source.
+          GEN_CONFIG="$JEKYLL_SOURCE/_config_generated.yml"
+          GEN_CONFIG="$(python3 -c 'import os,sys; print(os.path.normpath(sys.argv[1]))' "$GEN_CONFIG")"
+          echo "  Base config:      $BASE_CONFIG"
+          echo "  Generated config: $GEN_CONFIG"
+
           # Use main config as base and inject version info
-          cp "${{ inputs.jekyll_config || '_config.yml' }}" "${{ inputs.jekyll_source }}/_config_generated.yml"
+          cp "$BASE_CONFIG" "$GEN_CONFIG"
 
           # Inject version-specific values
           # Extract and clean title from config
-          TITLE=$(grep '^title:' "${{ inputs.jekyll_config || '_config.yml' }}" | \
+          TITLE=$(grep '^title:' "$BASE_CONFIG" | \
             sed 's/^title: *//' | sed 's/^"//' | sed 's/"$//' | \
             sed 's/  #.*$//' | sed 's/^ *//' | sed 's/ *$//')
           sed -i "s|^title:.*|title: \"$TITLE - ${{ needs.version-detection.outputs.version_name }}\"|" \
-            "${{ inputs.jekyll_source }}/_config_generated.yml"
+            "$GEN_CONFIG"
           echo "🔍 Setting baseurl to: ${{ needs.version-detection.outputs.base_url }}"
           sed -i "s|^baseurl:.*|baseurl: \"${{ needs.version-detection.outputs.base_url }}\"|" \
-            "${{ inputs.jekyll_source }}/_config_generated.yml"
+            "$GEN_CONFIG"
 
           # Verify the baseurl was set correctly
           echo "🔍 Verifying baseurl in generated config:"
-          grep "baseurl:" "${{ inputs.jekyll_source }}/_config_generated.yml" || echo "⚠️  baseurl not found in config"
+          grep "baseurl:" "$GEN_CONFIG" || echo "⚠️  baseurl not found in config"
 
           # Show the full generated config for debugging
           echo "🔍 Full generated config file:"
-          cat "${{ inputs.jekyll_source }}/_config_generated.yml"
+          cat "$GEN_CONFIG"
 
           # Add version information
-          echo "" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-          echo "# Version information (auto-generated)" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-          echo "version: \"${{ needs.version-detection.outputs.version_name }}\"" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-          echo "version_type: \"${{ needs.version-detection.outputs.version_type }}\"" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
+          echo "" >> "$GEN_CONFIG"
+          echo "# Version information (auto-generated)" >> "$GEN_CONFIG"
+          echo "version: \"${{ needs.version-detection.outputs.version_name }}\"" >> "$GEN_CONFIG"
+          echo "version_type: \"${{ needs.version-detection.outputs.version_type }}\"" >> "$GEN_CONFIG"
 
           # =============================================================================
           # API Reference Link Injection
@@ -1478,14 +1581,14 @@ jobs:
             echo "📖 API Reference URL: $API_URL"
 
             # Check if aux_links section already exists
-            if grep -q "^aux_links:" "${{ inputs.jekyll_source }}/_config_generated.yml"; then
+            if grep -q "^aux_links:" "$GEN_CONFIG"; then
               echo "✅ aux_links section found, adding API reference..."
 
               # Check if API reference already exists in aux_links
-              if grep -q "API Reference" "${{ inputs.jekyll_source }}/_config_generated.yml"; then
+              if grep -q "API Reference" "$GEN_CONFIG"; then
                 echo "⚠️  API Reference already exists in aux_links, updating..."
                 # Remove existing API reference line
-                sed -i "/API Reference/d" "${{ inputs.jekyll_source }}/_config_generated.yml"
+                sed -i "/API Reference/d" "$GEN_CONFIG"
               fi
 
               # Add API reference to existing aux_links section
@@ -1500,19 +1603,19 @@ jobs:
                   echo "  \"📖 API Reference\":" >> "$TEMP_FILE"
                   echo "    - \"$API_URL\"" >> "$TEMP_FILE"
                 fi
-              done < "${{ inputs.jekyll_source }}/_config_generated.yml"
+              done < "$GEN_CONFIG"
 
-              mv "$TEMP_FILE" "${{ inputs.jekyll_source }}/_config_generated.yml"
+              mv "$TEMP_FILE" "$GEN_CONFIG"
 
             else
               echo "📝 aux_links section not found, creating new section..."
 
               # Create new aux_links section
-              echo "" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-              echo "# Auxiliary links (auto-generated)" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-              echo "aux_links:" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-              echo "  \"📖 API Reference\":" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
-              echo "    - \"$API_URL\"" >> "${{ inputs.jekyll_source }}/_config_generated.yml"
+              echo "" >> "$GEN_CONFIG"
+              echo "# Auxiliary links (auto-generated)" >> "$GEN_CONFIG"
+              echo "aux_links:" >> "$GEN_CONFIG"
+              echo "  \"📖 API Reference\":" >> "$GEN_CONFIG"
+              echo "    - \"$API_URL\"" >> "$GEN_CONFIG"
             fi
 
             echo "✅ API reference link injected successfully"
@@ -1520,22 +1623,36 @@ jobs:
             echo "⚠️  No Doxygen detected, skipping API reference link injection"
           fi
 
-          # Update jekyll_config to use generated config
-          echo "jekyll_config=_config_generated.yml" >> $GITHUB_ENV
+          # Hand the exact config list to the build step: the generated file
+          # replaces the base entry, any further entries keep their order.
+          CONFIG_LIST="$GEN_CONFIG"
+          for extra in "${RESOLVED[@]:1}"; do
+            CONFIG_LIST="$CONFIG_LIST,$extra"
+          done
+          echo "config_list=$CONFIG_LIST" >> "$GITHUB_OUTPUT"
+          echo "✅ Jekyll will build with --config $CONFIG_LIST"
 
       - name: Build Jekyll site
         if: ${{ inputs.jekyll_enabled == true }}
+        env:
+          GENERATED_CONFIG_LIST: ${{ steps.jekyll-gen.outputs.config_list }}
+          # jekyll-github-metadata (bundled with github-pages) needs the
+          # repository name and, for its API calls, a token. Provide both so
+          # callers do not have to set `repository:` in their config.
+          PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # =============================================================================
           # Jekyll Build Configuration
           # =============================================================================
           JEKYLL_SOURCE="${{ inputs.jekyll_source }}"
 
-          # Use versioned config if available, otherwise use input config
-          if [[ -f "${{ inputs.jekyll_source }}/_config_generated.yml" ]]; then
-            JEKYLL_CONFIG="_config_generated.yml"
+          # Use the config list written by the generate step (paths relative to the
+          # repository root, exactly as `jekyll build --config` expects them).
+          if [[ -n "$GENERATED_CONFIG_LIST" ]]; then
+            JEKYLL_CONFIG="$GENERATED_CONFIG_LIST"
           else
-          JEKYLL_CONFIG="${{ inputs.jekyll_config }}"
+            JEKYLL_CONFIG="${{ inputs.jekyll_config }}"
           fi
 
           JEKYLL_DEST="${{ inputs.jekyll_destination }}"
@@ -1561,7 +1678,7 @@ jobs:
           IFS=',' read -ra CONFIG_FILES <<< "$JEKYLL_CONFIG"
           CONFIG_EXISTS=false
           for config_file in "${CONFIG_FILES[@]}"; do
-            if [ -f "$JEKYLL_SOURCE/$config_file" ]; then
+            if [ -f "$config_file" ] || [ -f "$JEKYLL_SOURCE/$config_file" ]; then
               CONFIG_EXISTS=true
               echo "✅ Found config file: $config_file"
             else
@@ -1602,7 +1719,7 @@ jobs:
             - LICENSE
           EOF
             echo "✅ Created minimal _config.yml"
-            JEKYLL_CONFIG="_config.yml"
+            JEKYLL_CONFIG="$JEKYLL_SOURCE/_config.yml"
           fi
 
           # =============================================================================
@@ -1898,37 +2015,75 @@ jobs:
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: docs-html
+          name: ${{ inputs.artifact_name }}
           path: ${{ env.DEPLOY_PATH }}
           retention-days: 7
 
-      - name: Check Pages deployment conditions
+      # =============================================================================
+      # Deployment Gate (PR build path)
+      # =============================================================================
+      # Pull requests always take the PR build path: the full site (Doxygen,
+      # Jekyll, quality checks, link check) is built and uploaded as the
+      # docs-html artifact, and nothing is pushed to the deployment branch,
+      # whatever deploy_pages says. Every deploy step below keys off this one
+      # output, so the decision cannot drift between steps.
+      - name: Decide whether to deploy
+        id: deploy-gate
+        env:
+          DEPLOY_PAGES: ${{ inputs.deploy_pages }}
+          EVENT_NAME: ${{ github.event_name }}
+          GIT_REF: ${{ github.ref }}
+          DEPLOYMENT_BRANCH: ${{ inputs.deployment_branch }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          # Detect default branch for Pages deployment
-          DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+          echo "🔍 Pages deployment decision:"
+          echo "  deploy_pages: $DEPLOY_PAGES"
+          echo "  event_name:   $EVENT_NAME"
+          echo "  ref:          $GIT_REF"
 
-          echo "🔍 Pages deployment conditions check:"
-          echo "  deploy_pages: ${{ inputs.deploy_pages }}"
-          echo "  event_name: ${{ github.event_name }}"
-          echo "  ref: ${{ github.ref }}"
-          echo "  default_branch: $DEFAULT_BRANCH"
-          echo "  is_default_branch: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}"
-          if [ "${{ inputs.deploy_pages }}" == "true" ] && \
-             ( [ "${{ github.event_name }}" == "push" ] || [ "${{ github.event_name }}" == "workflow_dispatch" ] ) && \
-             [ "${{ github.ref }}" == "refs/heads/${{ github.event.repository.default_branch }}" ]; then
-          echo "✅ All conditions met - Pages deployment will proceed"
-          else
-          echo "⚠️  Pages deployment will be skipped because:"
-            if [ "${{ inputs.deploy_pages }}" != "true" ]; then echo "   - deploy_pages is false"; fi
-            if [ "${{ github.event_name }}" != "push" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then echo "   - not a push or workflow_dispatch event (current: ${{ github.event_name }})"; fi
-            if [ "${{ github.ref }}" != "refs/heads/${{ github.event.repository.default_branch }}" ]; then echo "   - not on default branch (current: ${{ github.ref }}, expected: refs/heads/${{ github.event.repository.default_branch }})"; fi
+          case "$EVENT_NAME" in
+            pull_request|pull_request_target|merge_group)
+              DEPLOY=false
+              echo "ℹ️  PR build path: site built and uploaded as the docs-html artifact; deploy skipped for $EVENT_NAME"
+              ;;
+            *)
+              if [ "$DEPLOY_PAGES" = "true" ]; then
+                DEPLOY=true
+                echo "✅ Deploying to the $DEPLOYMENT_BRANCH branch"
+              else
+                DEPLOY=false
+                echo "ℹ️  deploy_pages is false; deploy skipped"
+              fi
+              ;;
+          esac
+
+          # This workflow publishes by pushing to a branch. If the repository's
+          # Pages source is "GitHub Actions" instead, the push succeeds but the
+          # site stays 404. Best effort: the token may not be able to read Pages.
+          if [ "$DEPLOY" = "true" ]; then
+            if PAGES_JSON="$(gh api "repos/$REPO/pages" 2>/dev/null)"; then
+              BUILD_TYPE="$(printf '%s' "$PAGES_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("build_type") or "")')"
+              SOURCE_BRANCH="$(printf '%s' "$PAGES_JSON" | python3 -c 'import json,sys; print((json.load(sys.stdin).get("source") or {}).get("branch") or "")')"
+              echo "  Pages build_type: ${BUILD_TYPE:-unknown}, source branch: ${SOURCE_BRANCH:-unknown}"
+              if [ "$BUILD_TYPE" = "workflow" ]; then
+                echo "::error::GitHub Pages for $REPO is set to build from GitHub Actions, but this workflow publishes to the '$DEPLOYMENT_BRANCH' branch. Set Settings > Pages > Source to 'Deploy from a branch' and pick '$DEPLOYMENT_BRANCH' (/ root), or the site will 404."
+                exit 1
+              elif [ -n "$SOURCE_BRANCH" ] && [ "$SOURCE_BRANCH" != "$DEPLOYMENT_BRANCH" ]; then
+                echo "::warning::GitHub Pages serves branch '$SOURCE_BRANCH' but this workflow deploys to '$DEPLOYMENT_BRANCH'."
+              fi
+            else
+              echo "ℹ️  Could not read the Pages configuration (Pages not enabled yet, or the token cannot read it); skipping the source check"
+            fi
           fi
+
+          echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
 
       # =============================================================================
       # Deploy Jekyll Site to GitHub Pages using peaceiris/actions-gh-pages
       # =============================================================================
       - name: Deploy Jekyll site to GitHub Pages
-        if: ${{ inputs.deploy_pages == true && github.event_name != 'pull_request' }}
+        if: ${{ steps.deploy-gate.outputs.deploy == 'true' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -1950,7 +2105,7 @@ jobs:
       # Deploy Centralized Doxygen Artifacts using peaceiris/actions-gh-pages
       # =============================================================================
       - name: Deploy Doxygen artifacts to GitHub Pages
-        if: ${{ inputs.deploy_pages == true && github.event_name != 'pull_request' && steps.doxygen-check.outputs.doxygen_needed == 'true' }}
+        if: ${{ steps.deploy-gate.outputs.deploy == 'true' && steps.doxygen-check.outputs.doxygen_needed == 'true' }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -1972,7 +2127,7 @@ jobs:
       # Update Root Redirect and Version Selector
       # =============================================================================
       - name: Update root redirect and version selector
-        if: ${{ inputs.deploy_pages == true }}
+        if: ${{ steps.deploy-gate.outputs.deploy == 'true' }}
         run: |
           # =============================================================================
           # Root Redirect and Version Selector Management

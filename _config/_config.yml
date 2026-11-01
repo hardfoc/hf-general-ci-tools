@@ -134,6 +134,7 @@ just_the_docs:
 
 # Exclude files from processing
 exclude:
+  - tests
   - Gemfile
   - Gemfile.lock
   - node_modules
