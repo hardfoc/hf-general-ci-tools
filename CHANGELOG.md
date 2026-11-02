@@ -27,6 +27,8 @@ that heading.
 - `ru-docs-linkcheck.yml`: `exclude_own_site` (default `true`) skips links to the repository's own Pages site on
   pull requests and until its `latest/` answers, so a repository's first MkDocs pull request no longer fails on
   its own `/latest/` links.
+- `ru-mkdocs-publish.yml`: `check_commands` run with `GH_TOKEN` set to the job's read-only token, so a site can
+  generate pages from the GitHub API at build time (the organisation portal's repository catalogue).
 - Theme package unit tests (`packages/hardfoc-mkdocs-theme/tests/`), run by the self-CI.
 
 ### Changed (documentation platform)
