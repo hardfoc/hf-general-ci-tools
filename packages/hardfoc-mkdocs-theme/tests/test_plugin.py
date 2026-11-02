@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import pathlib
 import re
@@ -115,6 +116,63 @@ class RepositoryLinkTest(unittest.TestCase):
 
         with self.assertRaises(Abort):
             self.build_with("[gone](../quickstart.md)")
+
+
+class FigureTest(unittest.TestCase):
+    """Figures are sized before they load (no layout shift); the first one of a page loads at once, later ones lazily."""
+
+    SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="{h}" viewBox="0 0 1200 {h}" role="img"></svg>'
+
+    def build_page(self, body: str) -> str:
+        tmp = tempfile.TemporaryDirectory()
+        root = pathlib.Path(tmp.name)
+        (root / "docs/diagrams").mkdir(parents=True)
+        (root / "mkdocs.yml").write_text((FIXTURES / "repo-site/mkdocs.yml").read_text())
+        figures = {}
+        for fid, h in (("one", 864), ("two", 450)):
+            for suffix in ("", ".dark"):
+                (root / f"docs/diagrams/{fid}{suffix}.svg").write_text(self.SVG.format(h=h))
+            figures[fid] = {"title": fid, "alt": f"{fid} diagram", "width": 1200, "source": f"docs/diagrams/{fid}.py"}
+        (root / "docs/diagrams/figures.json").write_text(json.dumps(figures))
+        (root / "docs/index.md").write_text(f"# Home\n\n{body}\n")
+        cfg = load_config(str(root / "mkdocs.yml"), site_dir=str(root / "site"), strict=True)
+        cfg.plugins.on_startup(command="build", dirty=False)
+        with tmp:
+            build(cfg)
+            return (root / "site/index.html").read_text()
+
+    def test_sized_first_eager_rest_lazy(self):
+        out = self.build_page("<!-- figure: one -->\n<!-- /figure -->\n\nText.\n\n<!-- figure: two -->\n<!-- /figure -->")
+        imgs = re.findall(r"<img [^>]*diagrams/[^>]*>", out)
+        self.assertEqual(len(imgs), 4, imgs)
+        self.assertTrue(all('width="1200"' in i for i in imgs), imgs)
+        self.assertTrue(all('height="864"' in i for i in imgs[:2]), imgs)
+        self.assertTrue(all('height="450"' in i for i in imgs[2:]), imgs)
+        self.assertTrue(all("loading=" not in i for i in imgs[:2]), imgs)
+        self.assertTrue(all('loading="lazy"' in i for i in imgs[2:]), imgs)
+
+
+class MermaidOnDemandTest(unittest.TestCase):
+    """The theme's Mermaid stand-in (partials/mermaid-lazy.html) relies on how Material uses Mermaid; a Material
+    update that changes it must fail here, not silently on the sites."""
+
+    def test_material_bundle_contract(self):
+        import material
+
+        js = pathlib.Path(material.__file__).parent / "templates/assets/javascripts"
+        bundle = "".join(p.read_text() for p in js.glob("bundle.*.min.js"))
+        self.assertIn('typeof mermaid=="undefined"||mermaid instanceof Element', bundle)
+        self.assertIn("mermaid.initialize(", bundle)
+        self.assertIn("mermaid.render(", bundle)
+        self.assertIn('"pre.mermaid"', bundle)
+
+    def test_stand_in_is_on_every_page(self):
+        cfg, site, tmp = built("repo-site", {"HARDFOC_DOCS_VERSIONED": ""})
+        with tmp:
+            out = (site / "index.html").read_text()
+        head = out.split("</head>")[0]
+        self.assertIn("window.mermaid = stub", head)
+        self.assertLess(head.index("window.mermaid = stub"), out.index("bundle."))
 
 
 class Root404Test(unittest.TestCase):

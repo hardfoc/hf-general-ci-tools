@@ -50,6 +50,21 @@ that heading.
 
 ### Fixed (documentation platform)
 
+- Theme: figure-heavy pages (architecture pages: a figkit figure near the top, a Mermaid diagram further down)
+  missed the Lighthouse performance budget on phones (0.63 to 0.77 against 0.8). Three causes, all fixed in the
+  theme, nothing to change in a site:
+  - Figures had a width but no height, so the text below jumped when the SVG arrived (cumulative layout shift
+    0.074 to 0.19). Each figure image now carries `height` (from `figures.json`, else from the SVG), so the
+    browser reserves its box.
+  - Every figure was `loading="lazy"`, including the first one, which is the page's largest element: it was
+    requested only after the page's scripts ran (largest contentful paint 4.0 to 4.8 s). The first figure of a
+    page now loads at once; later figures stay lazy.
+  - Material loaded Mermaid (about 950 KB of script and 250 to 500 ms of main-thread work on a phone) as soon as
+    a page with a diagram opened, wherever the diagram was. A stand-in in the page head now loads Mermaid when
+    a diagram comes within a screen of the viewport (or the page is printed), and Material renders it as before.
+    A unit test fails if a Material update changes the calls the stand-in answers.
+- Theme: on a phone, wide figures now keep a readable size and scroll sideways, as intended in the previous
+  release; the rule was overridden by the general figure rule that came after it.
 - Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter's and
   JetBrains Mono's metrics (`size-adjust`, `ascent-override`, `descent-override`), so the swap to the web font
   keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance
