@@ -123,6 +123,14 @@ jobs:
       - name: Install the theme package from this commit
         run: python -m pip install ./packages/hardfoc-mkdocs-theme
 
+      # Plugin versioning switch, publish-root against a scratch remote, screenshots page selection, the root 404.
+      - name: Unit tests of the theme package
+        working-directory: packages/hardfoc-mkdocs-theme
+        run: |
+          git config --global user.name "ci"
+          git config --global user.email "ci@example.invalid"
+          python -m unittest discover -s tests -v
+
       - name: Template site builds strictly, figures and generated regions current
         working-directory: templates/mkdocs-site
         run: |
@@ -142,10 +150,23 @@ jobs:
           python tools/docs-migrate.py "$RUNNER_TEMP/mig" --check
           cd "$RUNNER_TEMP/mig"
           mkdocs build --strict --site-dir "$RUNNER_TEMP/mig-site"
-          if grep -rqE '^(layout|nav_order|parent):' docs; then
+          if grep -rqE '^(layout|nav_order|parent):' docs README.md; then
             echo "::error::front matter left after migration"
             exit 1
           fi
+          # The home page keeps Material's hide: block, the only front matter the style guide allows.
+          head -4 docs/index.md | grep -qx 'hide:'
+          # Doxyfile: sources only in INPUT, the main page from docs/_doxygen, case-insensitive names, final newline.
+          grep -qx 'INPUT *= inc docs/_doxygen/mainpage.md' Doxyfile
+          grep -qx 'USE_MDFILE_AS_MAINPAGE = docs/_doxygen/mainpage.md' Doxyfile
+          grep -qx 'CASE_SENSE_NAMES *= NO' Doxyfile
+          test -f docs/_doxygen/mainpage.md
+          test "$(tail -c1 Doxyfile | od -An -c | tr -d ' ')" = '\n'
+          if grep -q 'README' Doxyfile; then
+            echo "::error::the migrated Doxyfile still reads the README"
+            exit 1
+          fi
+          grep -qx 'name: 📚 Docs' .github/workflows/ci-docs-publish.yml
 
   # Dogfood the gate: this repository's required check is "CI gate / gate".
   ci-gate:

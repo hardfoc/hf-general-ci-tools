@@ -15,6 +15,39 @@ that heading.
 
 ## [Unreleased]
 
+### Added (unversioned sites, link check)
+
+- `ru-mkdocs-publish.yml`: `versioning` input (default `true`). `false` builds an unversioned site (the
+  organisation portal) and publishes it from the default branch as the whole content of the deployment branch, at
+  its root, in one ordinary commit (`CNAME` kept); tags publish nothing.
+- Theme plugin: `versioned` option (unset: versioned, except `<org>.github.io`), overridden by
+  `HARDFOC_DOCS_VERSIONED`; an unversioned site gets the Pages root as `site_url` and no version selector.
+- `hardfoc-docs publish-root`: the publish step for unversioned sites, with unit tests against a scratch remote.
+- `ru-docs-linkcheck.yml`: `exclude_own_site` (default `true`) skips links to the repository's own Pages site on
+  pull requests and until its `latest/` answers, so a repository's first MkDocs pull request no longer fails on
+  its own `/latest/` links.
+- Theme package unit tests (`packages/hardfoc-mkdocs-theme/tests/`), run by the self-CI.
+
+### Changed (documentation platform)
+
+- Root `404.html` of versioned sites: a branded page (HardFOC mark, theme colours and font, light and dark) that
+  says "Redirecting to the latest documentation" while `versions.json` loads, and shows "Page not found" with links
+  only when no redirect applies, after two seconds, or without JavaScript.
+- Theme: from tablet width up, tables fit the column (cells and code wrap) instead of cutting off the last column;
+  on a phone, figures keep a readable size and scroll sideways instead of shrinking.
+
+### Fixed (documentation platform)
+
+- `hardfoc-docs screenshots` without `--page` crashed (`UnboundLocalError`).
+- Theme plugin: a link from `docs/` to a repository file that does not exist was turned into a GitHub link that
+  404s; it is now a warning, so `mkdocs build --strict` fails (a folder that is empty, a submodule not checked
+  out, is not reported).
+- `tools/docs-migrate.py`: the Doxyfile's `INPUT` and `USE_MDFILE_AS_MAINPAGE` no longer point at the README
+  (sources plus `docs/_doxygen/mainpage.md`, written when missing), `CASE_SENSE_NAMES = NO`, a final newline
+  always; the caller workflow is named `📚 Docs`; Material's `hide:` front matter is kept.
+- `ru-mkdocs-publish.yml`: a Doxyfile without a final newline no longer swallows the stylesheet line the workflow
+  appends.
+
 ### Added (documentation platform)
 
 - `packages/hardfoc-mkdocs-theme`: the HardFOC documentation theme as one pip package: `theme: hardfoc`
