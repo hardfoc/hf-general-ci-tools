@@ -11,7 +11,8 @@ What it does, page by page (``on_page_markdown``):
   the built site (with the API merged) is what checks it.
 * **Figures.** ``<!-- figure: id --> ... <!-- /figure -->`` (filled by ``tools/figkit/build.py`` with a
   ``<picture>`` for GitHub) becomes a light / dark image pair that follows the site's theme toggle, a caption and
-  a collapsible long description with the sources the figure is drawn from.
+  a collapsible long description with the sources the figure is drawn from. The images carry their width and
+  height (no layout shift when they load); the first figure of a page loads at once, later ones lazily.
 * **Raw HTML paths.** ``src`` / ``srcset`` / ``href`` in raw HTML are written relative to the Markdown file, but a
   page is served one directory deeper (``guides/x.md`` becomes ``guides/x/index.html``); they are re-based.
 * **Pipes in table code spans.** GitHub needs ``\\|`` inside a code span in a table; the backslash is removed.
@@ -187,10 +188,19 @@ def _figure(m: re.Match, page_dir: str, page: str) -> str:
         raise PluginError(f"{page}: figure {fid!r} is not in docs/diagrams/figures.json (run tools/figkit/build.py)")
     rel = posixpath.relpath(f"diagrams/{fid}", page_dir or ".")
     alt = html.escape(e["alt"], quote=True)
+    attrs = f'width="{e["width"]}"'
+    height = _figure_height(fid, e)
+    if height:
+        attrs += f' height="{height}"'  # the browser reserves the figure's box before the SVG arrives: no layout shift
+    # The first figure of a page is usually in the first screen and its largest element, so it loads at once (found
+    # by the preload scanner, not after the page's scripts ran). Later figures load lazily.
+    if _state.get("figure_count", 0):
+        attrs += ' loading="lazy"'
+    _state["figure_count"] = _state.get("figure_count", 0) + 1
     out = [
         '<figure class="hf-figure">',
-        f'<img src="{rel}.svg#only-light" alt="{alt}" width="{e["width"]}" loading="lazy">'
-        f'<img src="{rel}.dark.svg#only-dark" alt="{alt}" width="{e["width"]}" loading="lazy">',
+        f'<img src="{rel}.svg#only-light" alt="{alt}" {attrs}>'
+        f'<img src="{rel}.dark.svg#only-dark" alt="{alt}" {attrs}>',
         f'<figcaption>{html.escape(e["title"], quote=False)}</figcaption>',
         "</figure>",
         "",
@@ -210,6 +220,29 @@ def _figure(m: re.Match, page_dir: str, page: str) -> str:
             out += ["Drawn from: " + "; ".join(items) + ".", ""]
         out += ["</details>", ""]
     return "\n".join(out)
+
+
+SVG_TAG = re.compile(r"<svg\b[^>]*>")
+SVG_ATTR = re.compile(r'\s(width|height|viewBox)="([^"]*)"')
+
+
+def _figure_height(fid: str, e: dict) -> int | None:
+    """The figure's height at its ``width``: from figures.json if it has one, else from the size of the built SVG."""
+    if e.get("height"):
+        return int(e["height"])
+    try:
+        head = SVG_TAG.search((_state["root"] / f"docs/diagrams/{fid}.svg").read_text(errors="replace")[:4096])
+    except OSError:
+        return None
+    attrs = dict(SVG_ATTR.findall(head.group(0))) if head else {}
+    try:
+        if "viewBox" in attrs:
+            w, h = (float(v) for v in attrs["viewBox"].replace(",", " ").split()[2:4])
+        else:
+            w, h = float(attrs["width"]), float(attrs["height"])
+    except (KeyError, ValueError):
+        return None
+    return round(h * float(e["width"]) / w) if w > 0 and h > 0 else None
 
 
 FENCE = re.compile(r"^(?P<indent>[ \t]*)(?P<fence>`{3,}|~{3,}).*?^(?P=indent)(?P=fence)[ \t]*$", re.M | re.S)
@@ -242,6 +275,7 @@ def _sub_outside_code(rx: re.Pattern, fn, text: str) -> str:
 def on_page_markdown(markdown: str, page, config, files) -> str:
     _state["files"] = files
     _state["page"] = page.file.src_uri
+    _state["figure_count"] = 0
     page_dir = posixpath.dirname(page.file.src_uri)
     out_dir = posixpath.dirname(page.file.dest_uri)
 
