@@ -17,9 +17,9 @@ This branch contains the versioned documentation for this repository.
 
 ## Current Version
 
-- **Version**: development
-- **Type**: development
-- **Deployed**: 2026-11-02T01:21:01Z
+- **Version**: v1.1.0
+- **Type**: stable
+- **Deployed**: 2026-11-02T01:21:54Z
 - **Commit**: 2d527b70e6992788e44663a6c08feaa4945ab73c
 
 ---
