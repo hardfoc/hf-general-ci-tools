@@ -94,6 +94,22 @@ class RepositoryLinkTest(unittest.TestCase):
         self.assertEqual(out.count("/inc/x.hpp\""), 2)
         self.assertNotIn("../inc/x.hpp", out)
 
+    def test_api_link_from_a_page(self):
+        # The page builds to api-reference/index.html; the API is merged at the site root under api/.
+        tmp = tempfile.TemporaryDirectory()
+        root = pathlib.Path(tmp.name)
+        (root / "docs").mkdir()
+        (root / "mkdocs.yml").write_text((FIXTURES / "repo-site/mkdocs.yml").read_text())
+        (root / "docs/index.md").write_text("# Home\n\n[API](api-reference.md)\n")
+        (root / "docs/api-reference.md").write_text("# API reference\n\n[Open it](api/index.html){ .md-button }\n")
+        cfg = load_config(str(root / "mkdocs.yml"), site_dir=str(root / "site"), strict=True)
+        cfg.plugins.on_startup(command="build", dirty=False)
+        with tmp, mock.patch.dict(os.environ, {"GITHUB_REPOSITORY": "hardfoc/hf-example"}):
+            build(cfg)
+            out = (root / "site/api-reference/index.html").read_text()
+        self.assertIn('<a href="../api/index.html" class="md-button">Open it</a>', out)
+        self.assertNotIn("github.com/hardfoc/hf-example/blob", out.split("md-content")[1].split("md-footer")[0])
+
     def test_missing_file_fails_strict(self):
         from mkdocs.exceptions import Abort
 

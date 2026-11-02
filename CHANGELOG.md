@@ -55,6 +55,10 @@ that heading.
   always; the caller workflow is named `📚 Docs`; Material's `hide:` front matter is kept.
 - Theme plugin: a link or figure marker written as inline code (an example on a page, such as
   ``[`x.hpp`](../inc/x.hpp)``) is left as it is instead of being rewritten or embedded.
+- Theme plugin: a link into the API reference (`[API](api/index.html)`) from a page that builds into a folder was
+  re-based twice and published as a GitHub link to a file that does not exist (the API button of every site); it
+  now points at the merged API reference.
+- Template: `examples/esp32/main/basic.cpp`, the file the template's examples table links.
 - Theme plugin: a link whose text holds brackets (``[`table[]`](../src/x.cpp)``) is rewritten like any other.
 - `hardfoc-docs gen` no longer fills regions in a folder with its own `mkdocs.yml` (a template or fixture inside
   the repository), which belong to that site.
