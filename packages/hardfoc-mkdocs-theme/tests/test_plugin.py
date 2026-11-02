@@ -89,6 +89,11 @@ class RepositoryLinkTest(unittest.TestCase):
         self.assertIn("../inc/missing.hpp", out)
         self.assertIn("https://github.com/hardfoc/hf-example/blob/", out)
 
+    def test_brackets_in_link_text(self):
+        out = self.build_with("[`kTable[]`](../inc/x.hpp) and [a [b] c](../inc/x.hpp)")
+        self.assertEqual(out.count("/inc/x.hpp\""), 2)
+        self.assertNotIn("../inc/x.hpp", out)
+
     def test_missing_file_fails_strict(self):
         from mkdocs.exceptions import Abort
 

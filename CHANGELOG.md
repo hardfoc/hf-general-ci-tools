@@ -31,6 +31,8 @@ that heading.
   generate pages from the GitHub API at build time (the organisation portal's repository catalogue).
 - Theme: a filterable catalogue component (`.hf-filter` search field, `.hf-chipbtn` topic buttons, `.hf-repo`
   cards), used by the organisation portal's repository list.
+- Theme: `navigation.prune` is on by default, so a page carries only the navigation it shows; on a site of about
+  85 pages it halves the HTML of every page and keeps it inside the Lighthouse performance budget.
 - Theme package unit tests (`packages/hardfoc-mkdocs-theme/tests/`), run by the self-CI.
 
 ### Changed (documentation platform)
@@ -42,7 +44,8 @@ that heading.
 - Root `404.html` of versioned sites: a branded page (HardFOC mark, theme colours and font, light and dark) that
   says "Redirecting to the latest documentation" while `versions.json` loads, and shows "Page not found" with links
   only when no redirect applies, after two seconds, or without JavaScript.
-- Theme: from tablet width up, tables fit the column (cells and code wrap) instead of cutting off the last column;
+- Theme: from tablet width up, tables fill the column and their text cells wrap, instead of cutting off the last
+  column (identifiers in code stay whole);
   on a phone, figures keep a readable size and scroll sideways instead of shrinking.
 
 ### Fixed (documentation platform)
@@ -56,6 +59,7 @@ that heading.
   always; the caller workflow is named `📚 Docs`; Material's `hide:` front matter is kept.
 - Theme plugin: a link or figure marker written as inline code (an example on a page, such as
   ``[`x.hpp`](../inc/x.hpp)``) is left as it is instead of being rewritten or embedded.
+- Theme plugin: a link whose text holds brackets (``[`table[]`](../src/x.cpp)``) is rewritten like any other.
 - `hardfoc-docs gen` no longer fills regions in a folder with its own `mkdocs.yml` (a template or fixture inside
   the repository), which belong to that site.
 - `ru-mkdocs-publish.yml`: a Doxyfile without a final newline no longer swallows the stylesheet line the workflow

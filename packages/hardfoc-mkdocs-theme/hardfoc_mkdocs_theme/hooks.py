@@ -40,7 +40,7 @@ log = get_plugin_logger("hardfoc")
 
 
 LINK = re.compile(
-    r"(?P<bang>!?)\[(?P<text>[^\]]*)\]\((?P<target>[^)\s]+)(?P<title>\s+\"[^\"]*\")?\)(?P<attrs>\{[^}\n]*\})?"
+    r"(?P<bang>!?)\[(?P<text>(?:[^\[\]]|\[[^\[\]]*\])*)\]\((?P<target>[^)\s]+)(?P<title>\s+\"[^\"]*\")?\)(?P<attrs>\{[^}\n]*\})?"
 )
 OUTSIDE = object()
 CODE_SPAN = re.compile(r"(`+)(.+?)\1")
