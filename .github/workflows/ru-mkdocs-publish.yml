@@ -271,14 +271,14 @@ jobs:
           git fetch origin "$BRANCH:$BRANCH" || true
           if [ "$CLAIM_LATEST" = true ]; then
             # Take the latest alias only if no release holds it yet.
-            holder=$(python3 -m mike list --config-file "$CONFIG" --branch "$BRANCH" 2>/dev/null \
+            holder=$(mike list --config-file "$CONFIG" --branch "$BRANCH" 2>/dev/null \
               | grep -E "\[.*\b$LATEST\b.*\]" | awk '{print $1}' || true)
             if [ -z "$holder" ] || [ "$holder" = "$VERSION" ]; then
               ALIASES="$LATEST"
             fi
           fi
           # shellcheck disable=SC2086  # ALIASES is empty or one word
-          python3 -m mike deploy --config-file "$CONFIG" --branch "$BRANCH" --update-aliases --alias-type symlink \
+          mike deploy --config-file "$CONFIG" --branch "$BRANCH" --update-aliases --alias-type symlink \
             --message "Publish docs $VERSION from ${GITHUB_SHA::12}" "$VERSION" $ALIASES
           if [ -d "$RUNNER_TEMP/built/$API_DIR" ]; then
             git worktree add "$RUNNER_TEMP/pages" "$BRANCH"
@@ -290,10 +290,10 @@ jobs:
             git -C "$RUNNER_TEMP/pages" commit -q -m "Add API reference to docs $VERSION" || true
             git worktree remove "$RUNNER_TEMP/pages"
           fi
-          python3 -m mike set-default --config-file "$CONFIG" --branch "$BRANCH" "$LATEST"
+          mike set-default --config-file "$CONFIG" --branch "$BRANCH" "$LATEST"
           git push origin "$BRANCH"
           {
             echo "### Published docs \`$VERSION\`"
             echo ""
-            python3 -m mike list --config-file "$CONFIG" --branch "$BRANCH" | sed 's/^/    /'
+            mike list --config-file "$CONFIG" --branch "$BRANCH" | sed 's/^/    /'
           } >> "$GITHUB_STEP_SUMMARY"

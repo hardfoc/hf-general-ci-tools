@@ -24,6 +24,8 @@ that heading.
 - `ru-docs-publish`: set the generated config's `url` to the publishing
   repository's Pages host, so canonical links and the sitemap stop pointing
   at an old owner.
+- `ru-mkdocs-publish`: call the `mike` command; `python3 -m mike` fails because
+  mike has no `__main__`, so every deploy step failed.
 - `ru-docs-publish`: stop appending the version name to the site title; it
   made the sidebar title wrap. The version stays available as `version`.
 
