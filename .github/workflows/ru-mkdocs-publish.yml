@@ -7,6 +7,9 @@
 #   push to main        the same, then publish as version `dev` (also aliased `latest` until the first release)
 #   push of a v* tag    the same, then publish as version `vX.Y.Z` (the tag) and move the `latest` alias to it
 #
+# With `versioning: false` (the organisation portal, hardfoc.github.io) there are no versions: a push to the default
+# branch publishes the built site as the whole content of the deployment branch, at its root, in one ordinary commit.
+#
 # The theme, the plugin, figkit and the toolchain are the hardfoc-mkdocs-theme package in packages/ of this
 # repository, installed at the commit of this workflow (a caller pinned to @v1 gets the theme released with v1), so a
 # site carries no CSS, templates or hooks of its own. docs/MIGRATING-TO-MKDOCS.md says how a repository adopts it,
@@ -97,6 +100,14 @@ on:
         description: "Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact)."
         type: boolean
         default: true
+      versioning:
+        description: >-
+          true: a versioned site, published with mike (default branch -> dev_version, v* tag -> that version, with
+          latest_alias moved to it). false: one unversioned site (the organisation portal), published from the default
+          branch as the whole content of deployment_branch at its root (CNAME kept); tags publish nothing. The build
+          tells the theme plugin which (HARDFOC_DOCS_VERSIONED), so site_url and the version selector match.
+        type: boolean
+        default: true
       deploy:
         description: >-
           Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually
@@ -139,6 +150,8 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+    env:
+      HARDFOC_DOCS_VERSIONED: ${{ inputs.versioning }}
     steps:
       - name: Check out
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
@@ -232,7 +245,7 @@ jobs:
             doxygen "$DOXYFILE"
           else
             css=$(python3 -c 'import hardfoc_mkdocs_theme.theme as t, pathlib; print(pathlib.Path(t.__file__).parent / "assets/hardfoc/hardfoc-doxygen.css")')
-            { cat "$DOXYFILE"; echo "HTML_EXTRA_STYLESHEET = \"$css\""; echo "HTML_COLORSTYLE = AUTO_LIGHT"; } | doxygen -
+            { cat "$DOXYFILE"; echo; echo "HTML_EXTRA_STYLESHEET = \"$css\""; echo "HTML_COLORSTYLE = AUTO_LIGHT"; } | doxygen -
           fi
           if [ -z "$HTML_DIR" ]; then
             out=$(doxygen -x "$DOXYFILE" 2>/dev/null | sed -n 's/^OUTPUT_DIRECTORY *= *//p' | tr -d '"')
@@ -408,7 +421,31 @@ jobs:
           name: docs-site
           path: ${{ runner.temp }}/built
 
+      - name: Publish at the root of the branch (unversioned)
+        if: ${{ !inputs.versioning }}
+        env:
+          BRANCH: ${{ inputs.deployment_branch }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          if [ "$REF_TYPE" != branch ] || [ "$REF_NAME" != "$DEFAULT_BRANCH" ]; then
+            echo "::notice::an unversioned site publishes only from $DEFAULT_BRANCH, not $REF_TYPE $REF_NAME"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          result=$(hardfoc-docs publish-root "$RUNNER_TEMP/built" --branch "$BRANCH" \
+            --message "Publish the site from ${GITHUB_SHA::12}")
+          echo "Site: $result"
+          if [ "$result" = changed ]; then
+            git push origin "$BRANCH"
+          fi
+          echo "### Published the site at the root of \`$BRANCH\` ($result)" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Work out the version
+        if: ${{ inputs.versioning }}
         id: version
         env:
           REF_TYPE: ${{ github.ref_type }}
@@ -435,6 +472,7 @@ jobs:
           fi
 
       - name: Publish with mike
+        if: ${{ inputs.versioning }}
         env:
           CONFIG: ${{ inputs.mkdocs_config }}
           BRANCH: ${{ inputs.deployment_branch }}
