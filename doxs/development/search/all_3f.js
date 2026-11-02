@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['🤝_20contributing_0',['🤝 Contributing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md#autotoc_md71',1,'']]],
-  ['🤝_20for_20external_20users_1',['🤝 For External Users',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md48',1,'']]]
+  ['🛠️_20advanced_20scenarios_0',['🛠️ Advanced Scenarios',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-markdown-lint.md#autotoc_md399',1,'🛠️ Advanced Scenarios'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-release.md#autotoc_md445',1,'🛠️ Advanced Scenarios']]],
+  ['🛠️_20integration_20with_20other_20workflows_1',['🛠️ Integration with Other Workflows',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md258',1,'']]]
 ];

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['✨_20strong_20live_20ci_20example_20strong_0',['✨ strong Live CI Example strong',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md#autotoc_md150',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md#autotoc_md174',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md203',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md257',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md426',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;']]]
+  ['✅_20ci_20gate_20reusable_0',['✅ CI Gate (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-ci-gate.md#autotoc_md173',1,'']]],
+  ['✅_20strong_20do_20this_3a_20strong_1',['✅ &lt;strong&gt;Do This:&lt;/strong&gt;',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md110',1,'']]],
+  ['✅_20why_20this_20architecture_20strong_2',['&lt;strong&gt;✅ Why This Architecture?&lt;/strong&gt;',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md44',1,'']]]
 ];
