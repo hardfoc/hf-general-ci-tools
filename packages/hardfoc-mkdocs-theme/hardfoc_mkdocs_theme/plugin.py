@@ -24,6 +24,7 @@ same Markdown dialect, the same validation and the same versioning without copyi
 from __future__ import annotations
 
 import logging
+import os
 import re
 from pathlib import Path
 
@@ -84,6 +85,18 @@ def _extensions() -> dict[str, dict]:
     }
 
 
+def versioned_setting(option: bool | None, org_site: bool) -> bool:
+    """Whether the site is versioned: the environment wins, then the plugin option, then the kind of repository."""
+    env = os.environ.get("HARDFOC_DOCS_VERSIONED", "").strip().lower()
+    if env in ("true", "1", "yes"):
+        return True
+    if env in ("false", "0", "no"):
+        return False
+    if option is not None:
+        return option
+    return not org_site
+
+
 class HardfocConfig(Config):
     org = c.Type(str, default="hardfoc")
     portal_url = c.Type(str, default="https://hardfoc.github.io/")
@@ -93,6 +106,10 @@ class HardfocConfig(Config):
     forbid_jekyll = c.Type(bool, default=True)
     #: Fail the build on a page without a level-one heading.
     require_h1 = c.Type(bool, default=True)
+    #: Versioned with mike (``/<version>/`` folders, version selector). Unset: versioned, except the organisation
+    #: site ``<org>.github.io``, which is served from the root. ``HARDFOC_DOCS_VERSIONED=true|false`` overrides both
+    #: (ru-mkdocs-publish.yml sets it from its ``versioning`` input).
+    versioned = c.Optional(c.Type(bool))
 
 
 class HardfocPlugin(BasePlugin[HardfocConfig]):
@@ -104,12 +121,16 @@ class HardfocPlugin(BasePlugin[HardfocConfig]):
             log.warning("theme is %r: use `theme: {name: hardfoc}` for the HardFOC look", config.theme.name)
 
         m = re.search(r"github\.com/([^/]+)/([^/#?]+)", config.repo_url or "")
+        org_site = bool(m) and m.group(2).removesuffix(".git").lower() == f"{org}.github.io"
+        versioned = versioned_setting(self.config.versioned, org_site)
+        self.versioned = versioned
         if m:
             owner, name = m.group(1), m.group(2).removesuffix(".git")
-            pages = f"https://{org}.github.io/" if name.lower() == f"{org}.github.io" else f"https://{org}.github.io/{name}/"
+            pages = f"https://{org}.github.io/" if org_site else f"https://{org}.github.io/{name}/"
             if not config.site_url and owner.lower() == org.lower():
-                # Every version is served under /<version>/; the canonical address of a page is its `latest` copy.
-                config.site_url = pages + "latest/"
+                # A versioned site serves every version under /<version>/; the canonical address of a page is its
+                # `latest` copy. An unversioned site is served from its root.
+                config.site_url = pages + "latest/" if versioned else pages
             if owner.lower() == org.lower():
                 config.extra.setdefault("hardfoc", {}).setdefault("site_root", pages)
             if config.repo_name in (None, "", "GitHub"):  # MkDocs' default for a GitHub repo_url
@@ -122,7 +143,10 @@ class HardfocPlugin(BasePlugin[HardfocConfig]):
         extra = config.extra
         extra.setdefault("generator", False)
         extra.setdefault("api_dir", self.config.api_dir)
-        extra.setdefault("version", {"provider": "mike", "default": "latest", "alias": True})
+        if versioned:
+            extra.setdefault("version", {"provider": "mike", "default": "latest", "alias": True})
+        elif extra.get("version"):
+            log.warning("extra.version is set on an unversioned site: remove it (no version selector without mike)")
         extra.setdefault(
             "social",
             [{"icon": "fontawesome/brands/github", "link": f"https://github.com/{org}", "name": "HardFOC on GitHub"}],

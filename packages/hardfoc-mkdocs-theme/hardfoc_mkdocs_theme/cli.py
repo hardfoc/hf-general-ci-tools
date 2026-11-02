@@ -5,6 +5,7 @@
     hardfoc-docs check                     both checks, as CI runs them before the build
     hardfoc-docs screenshots SITE OUT      phone and desktop screenshots, light and dark, of a built site
     hardfoc-docs pages SITE                the pages CI audits: the home page and the first navigation pages
+    hardfoc-docs publish-root SITE         commit SITE as the whole deployment branch (unversioned sites)
 """
 
 from __future__ import annotations
@@ -50,6 +51,10 @@ def main(argv: list[str] | None = None) -> int:
 
         print("\n".join(pages(pathlib.Path(rest[0]))))
         return 0
+    if cmd == "publish-root":
+        from . import publish
+
+        return publish.main(rest)
     if cmd == "screenshots":
         from . import screenshots
 

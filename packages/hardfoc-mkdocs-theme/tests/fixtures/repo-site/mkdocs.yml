@@ -1,0 +1,7 @@
+site_name: Example
+repo_url: https://github.com/hardfoc/hf-example
+theme:
+  name: hardfoc
+plugins:
+  - hardfoc
+  - search
