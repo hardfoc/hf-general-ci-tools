@@ -389,19 +389,19 @@ jobs:
       spell_check_passed: ${{ steps.spell-check.outcome }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0
 
       - name: Setup Node.js for quality tools
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
           node-version: '20'
 
       - name: Cache pip dependencies
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') }}
@@ -591,7 +591,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0  # Full history for version detection
 
@@ -779,7 +779,7 @@ jobs:
       # Repository Setup and Configuration
       # =============================================================================
       - name: Checkout repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           submodules: ${{ inputs.checkout_recursive && 'recursive' || 'false' }}
           fetch-depth: 0
@@ -842,7 +842,7 @@ jobs:
       # =============================================================================
       - name: Install Doxygen (pinned version)
         if: steps.doxygen-check.outputs.doxygen_needed == 'true'
-        uses: ssciwr/doxygen-install@501e53b879da7648ab392ee226f5b90e42148449  # v1.6.4
+        uses: ssciwr/doxygen-install@fa3e94d34131d3990b6b8ba939ab982964aa3758  # v2.0.3
         with:
           version: '1.10.0'
 
@@ -874,7 +874,7 @@ jobs:
 
       - name: Setup Node.js
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true || inputs.jekyll_enabled == true }}
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
         with:
           node-version: '20'
 
@@ -954,7 +954,7 @@ jobs:
       # =============================================================================
       - name: Cache pip dependencies
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') || 'no-deps' }}
@@ -963,7 +963,7 @@ jobs:
 
       - name: Cache Node.js dependencies
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/yarn.lock') || 'no-deps' }}
@@ -972,7 +972,7 @@ jobs:
 
       - name: Cache Jekyll dependencies
         if: ${{ inputs.jekyll_enabled == true }}
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-jekyll-${{ hashFiles('**/Gemfile.lock') }}
@@ -981,7 +981,7 @@ jobs:
 
       - name: Cache Doxygen build artifacts
         if: steps.doxygen-check.outputs.doxygen_needed == 'true'
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: |
             ${{ steps.doxy_out.outputs.html_dir }}
@@ -2029,7 +2029,7 @@ jobs:
       # Artifact Upload and Deployment
       # =============================================================================
       - name: Upload documentation artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
           name: ${{ inputs.artifact_name }}
           path: ${{ env.DEPLOY_PATH }}
