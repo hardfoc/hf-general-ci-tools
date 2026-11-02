@@ -45,6 +45,10 @@ that heading.
 - `tools/docs-migrate.py`: the Doxyfile's `INPUT` and `USE_MDFILE_AS_MAINPAGE` no longer point at the README
   (sources plus `docs/_doxygen/mainpage.md`, written when missing), `CASE_SENSE_NAMES = NO`, a final newline
   always; the caller workflow is named `📚 Docs`; Material's `hide:` front matter is kept.
+- Theme plugin: a link or figure marker written as inline code (an example on a page, such as
+  ``[`x.hpp`](../inc/x.hpp)``) is left as it is instead of being rewritten or embedded.
+- `hardfoc-docs gen` no longer fills regions in a folder with its own `mkdocs.yml` (a template or fixture inside
+  the repository), which belong to that site.
 - `ru-mkdocs-publish.yml`: a Doxyfile without a final newline no longer swallows the stylesheet line the workflow
   appends.
 
