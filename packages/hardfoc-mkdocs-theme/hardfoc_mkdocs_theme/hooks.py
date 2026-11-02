@@ -34,6 +34,9 @@ import subprocess
 from pathlib import Path
 
 from mkdocs.exceptions import PluginError
+from mkdocs.plugins import get_plugin_logger
+
+log = get_plugin_logger("hardfoc")
 
 
 LINK = re.compile(
@@ -101,9 +104,24 @@ def _rewrite(target: str, page_dir: str):
             return None
     if not _state["repo"]:
         return OUTSIDE
+    if not _exists_in_repo(resolved):
+        # A warning, so `mkdocs build --strict` fails: the GitHub link would be a 404.
+        log.warning("%s: links to %s, which is not a file or folder of the repository", _state.get("page", "?"),
+                    resolved)
     kind = "tree" if (_state['root'] / resolved).is_dir() else "blob"
     url = f"https://github.com/{_state['repo']}/{kind}/{_state['ref']}/{resolved}"
     return f"{url}#{frag}" if frag else url
+
+
+def _exists_in_repo(resolved: str) -> bool:
+    """True when the path exists, or lies in a folder that is empty here (a submodule that is not checked out)."""
+    p = _state["root"] / resolved
+    if p.exists():
+        return True
+    for parent in p.parents:
+        if parent.exists():
+            return parent != _state["root"] and parent.is_dir() and not any(parent.iterdir())
+    return False
 
 
 def _in_site(src_uri: str) -> bool:
@@ -210,6 +228,7 @@ def outside_fences(text: str, fn) -> str:
 
 def on_page_markdown(markdown: str, page, config, files) -> str:
     _state["files"] = files
+    _state["page"] = page.file.src_uri
     page_dir = posixpath.dirname(page.file.src_uri)
     out_dir = posixpath.dirname(page.file.dest_uri)
 

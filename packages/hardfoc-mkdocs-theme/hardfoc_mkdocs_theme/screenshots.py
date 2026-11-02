@@ -58,7 +58,7 @@ def main(argv=None) -> int:
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_address[1]}/"
-    pages = args.page or pages(site)
+    targets = args.page or pages(site)
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch()
@@ -68,7 +68,7 @@ def main(argv=None) -> int:
                                               device_scale_factor=2 if name == "phone" else 1,
                                               is_mobile=name == "phone", has_touch=name == "phone")
                     page = ctx.new_page()
-                    for path in pages:
+                    for path in targets:
                         page.goto(base + path, wait_until="networkidle")
                         page.wait_for_timeout(300)
                         slug = path.removesuffix("index.html").strip("/").replace("/", "-") or "home"
