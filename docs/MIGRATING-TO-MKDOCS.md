@@ -45,7 +45,7 @@ tools/docs/generators/*.py          repository-specific generated regions (optio
 ```
 
 Everything Jekyll is gone: `_config/_config.yml`, `_config/_includes/`, `_config/_layouts/`, `_config/assets/`,
-`_config/404.html`, `Gemfile*`, `docs/version_selector*`, `{% raw %}` tags and the `doxygen-awesome-css` submodule.
+`_config/404.html`, `Gemfile*`, `docs/version_selector*`, Liquid `raw` / `endraw` tags and the `doxygen-awesome-css` submodule.
 `_config/` keeps the lint configurations (`.markdownlint.json`, `.yamllint`, `.clang-*`, `lychee.toml`).
 
 ## Steps
