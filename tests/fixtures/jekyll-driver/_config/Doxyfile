@@ -1,7 +1,10 @@
 PROJECT_NAME = "Fixture"
-INPUT = inc
+INPUT = README.md \
+    inc
+USE_MDFILE_AS_MAINPAGE = README.md
 OUTPUT_DIRECTORY = docs/doxygen
 HTML_OUTPUT = html
+CASE_SENSE_NAMES = YES
 HTML_EXTRA_STYLESHEET = _config/doxygen-extensions/doxygen-awesome-css/doxygen-awesome.css \
     _config/doxygen-extensions/doxygen-awesome-css/extra.css
 GENERATE_TREEVIEW = YES

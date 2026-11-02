@@ -107,6 +107,9 @@ def markdown_files() -> list[pathlib.Path]:
         rel = p.relative_to(ROOT).parts
         if any(part in SKIP_DIRS or part.startswith(".") for part in rel[:-1]):
             continue
+        # A folder with its own mkdocs.yml (a template, a fixture) is another site with its own regions.
+        if any((ROOT.joinpath(*rel[:i]) / "mkdocs.yml").is_file() for i in range(1, len(rel))):
+            continue
         out.append(p)
     return out
 

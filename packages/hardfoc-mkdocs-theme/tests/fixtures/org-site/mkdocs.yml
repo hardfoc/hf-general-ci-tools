@@ -1,0 +1,7 @@
+site_name: HardFOC
+repo_url: https://github.com/hardfoc/hardfoc.github.io
+theme:
+  name: hardfoc
+plugins:
+  - hardfoc
+  - search

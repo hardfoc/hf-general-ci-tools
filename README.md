@@ -285,7 +285,7 @@ jobs:
 | `mkdocs_config` | string | no | `mkdocs.yml` | Path of mkdocs.yml. |
 | `submodules` | string | no | `false` | Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'. |
 | `submodule_paths` | string | no | `""` | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules. |
-| `check_commands` | string | no | `if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] && [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi` | Shell lines run before the build; any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them. |
+| `check_commands` | string | no | `if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] && [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi` | Shell lines run before the build, with GH_TOKEN set to the job's read-only token (for commands that read the GitHub API); any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them. |
 | `doxygen_config` | string | no | `""` | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. |
 | `doxygen_working_directory` | string | no | `.` | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. |
 | `doxygen_html_dir` | string | no | `""` | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. |
@@ -295,6 +295,7 @@ jobs:
 | `lighthouse` | boolean | no | `true` | Run Lighthouse on the built site (home page and the first navigation pages) against the budgets. |
 | `lighthouse_budgets` | string | no | `performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9` | Minimum Lighthouse category scores (0-1, median of three runs, mobile emulation), space-separated category=score pairs. A score below its minimum fails the job. |
 | `screenshots` | boolean | no | `true` | Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact). |
+| `versioning` | boolean | no | `true` | true: a versioned site, published with mike (default branch -> dev_version, v* tag -> that version, with latest_alias moved to it). false: one unversioned site (the organisation portal), published from the default branch as the whole content of deployment_branch at its root (a custom domain only from a CNAME file in the site); tags publish nothing. The build tells the theme plugin which (HARDFOC_DOCS_VERSIONED), so site_url and the version selector match. |
 | `deploy` | boolean | no | `false` | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. |
 | `deployment_branch` | string | no | `gh-pages` | Branch GitHub Pages serves from. |
 | `dev_version` | string | no | `dev` | mike version name a push to the default branch publishes to. |
@@ -395,6 +396,7 @@ jobs:
 | `exclude_mail` | boolean | no | `true` | Exclude mailto links |
 | `verbose` | boolean | no | `false` | Enable verbose output |
 | `config_file` | string | no | `""` | Path to lychee.toml config file (optional) |
+| `exclude_own_site` | boolean | no | `true` | Skip links to this repository's own GitHub Pages site (https://<owner>.github.io/<repo>/) on pull requests, where the pages a change links to are not published yet, and on other events while the site's latest/ version (the root, for <owner>.github.io) does not answer yet, as before a repository's first MkDocs publish. |
 <!-- inputs:ru-docs-linkcheck.yml:end -->
 
 ### ru-markdown-lint

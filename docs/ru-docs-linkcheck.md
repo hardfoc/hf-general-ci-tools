@@ -133,6 +133,7 @@ Then customize it for your needs. The TOML file allows you to:
 | `exclude_private` | `boolean` | `true` | Exclude private/internal links |
 | `exclude_mail` | `boolean` | `true` | Exclude mailto links |
 | `config_file` | `string` | `""` | Path to lychee.toml config file (optional) |
+| `exclude_own_site` | `boolean` | `true` | Skip links to the repository's own Pages site (`https://<owner>.github.io/<repo>/`) on pull requests, and on other events while its `latest/` (the root, for `<owner>.github.io`) does not answer yet |
 
 ### 📊 Output Control
 

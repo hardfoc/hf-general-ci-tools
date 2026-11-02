@@ -9,7 +9,7 @@ The example applications, what each one shows and how to build it.
 <!-- generated: examples -->
 | App | What it shows | Source | CI |
 | --- | --- | --- | --- |
-| `basic` :material-star:{ title="featured" } | Smallest example: initialise, read, print | [`basic.cpp`](../examples/esp32/basic.cpp) | yes |
+| `basic` :material-star:{ title="featured" } | Smallest example: initialise, read, print | [`basic.cpp`](../examples/esp32/main/basic.cpp) | yes |
 
 Build and flash one (from `examples/esp32`, ESP-IDF environment loaded):
 

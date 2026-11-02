@@ -34,10 +34,13 @@ import subprocess
 from pathlib import Path
 
 from mkdocs.exceptions import PluginError
+from mkdocs.plugins import get_plugin_logger
+
+log = get_plugin_logger("hardfoc")
 
 
 LINK = re.compile(
-    r"(?P<bang>!?)\[(?P<text>[^\]]*)\]\((?P<target>[^)\s]+)(?P<title>\s+\"[^\"]*\")?\)(?P<attrs>\{[^}\n]*\})?"
+    r"(?P<bang>!?)\[(?P<text>(?:[^\[\]]|\[[^\[\]]*\])*)\]\((?P<target>[^)\s]+)(?P<title>\s+\"[^\"]*\")?\)(?P<attrs>\{[^}\n]*\})?"
 )
 OUTSIDE = object()
 CODE_SPAN = re.compile(r"(`+)(.+?)\1")
@@ -101,9 +104,24 @@ def _rewrite(target: str, page_dir: str):
             return None
     if not _state["repo"]:
         return OUTSIDE
+    if not _exists_in_repo(resolved):
+        # A warning, so `mkdocs build --strict` fails: the GitHub link would be a 404.
+        log.warning("%s: links to %s, which is not a file or folder of the repository", _state.get("page", "?"),
+                    resolved)
     kind = "tree" if (_state['root'] / resolved).is_dir() else "blob"
     url = f"https://github.com/{_state['repo']}/{kind}/{_state['ref']}/{resolved}"
     return f"{url}#{frag}" if frag else url
+
+
+def _exists_in_repo(resolved: str) -> bool:
+    """True when the path exists, or lies in a folder that is empty here (a submodule that is not checked out)."""
+    p = _state["root"] / resolved
+    if p.exists():
+        return True
+    for parent in p.parents:
+        if parent.exists():
+            return parent != _state["root"] and parent.is_dir() and not any(parent.iterdir())
+    return False
 
 
 def _in_site(src_uri: str) -> bool:
@@ -208,12 +226,28 @@ def outside_fences(text: str, fn) -> str:
     return "".join(out)
 
 
+def _sub_outside_code(rx: re.Pattern, fn, text: str) -> str:
+    """``rx.sub(fn, text)``, except for matches that start inside inline code (a link or marker shown as code is an
+    example). A match may contain code (``[`name`](path)``)."""
+    spans = [m.span() for m in CODE_SPAN.finditer(text)]
+
+    def guarded(m: re.Match) -> str:
+        if any(a <= m.start() < b for a, b in spans):
+            return m.group(0)
+        return fn(m)
+
+    return rx.sub(guarded, text)
+
+
 def on_page_markdown(markdown: str, page, config, files) -> str:
     _state["files"] = files
+    _state["page"] = page.file.src_uri
     page_dir = posixpath.dirname(page.file.src_uri)
     out_dir = posixpath.dirname(page.file.dest_uri)
 
-    markdown = outside_fences(markdown, lambda t: FIGURE.sub(lambda m: _figure(m, page_dir, page.file.src_uri), t))
+    # A marker shown as code (`<!-- figure: id -->` in running text) is an example, not a figure.
+    markdown = outside_fences(markdown, lambda t: _sub_outside_code(
+        FIGURE, lambda m: _figure(m, page_dir, page.file.src_uri), t))
 
     def sub(m: re.Match) -> str:
         target = m.group("target")
@@ -237,11 +271,13 @@ def on_page_markdown(markdown: str, page, config, files) -> str:
         if line.lstrip().startswith(("```", "~~~")):
             in_fence = not in_fence
         if not in_fence:
-            line = LINK.sub(sub, line)
-            if line.lstrip().startswith("|"):
-                line = CODE_SPAN.sub(unescape_pipes, line)
+            # Raw HTML written on the page first; the links rewritten below are already relative to the built page
+            # (an API link becomes an <a> with a re-based href) and must not be re-based a second time.
             if "<" in line and page_dir != out_dir:
                 line = _rebase_html(line, page_dir, out_dir)
+            line = _sub_outside_code(LINK, sub, line)
+            if line.lstrip().startswith("|"):
+                line = CODE_SPAN.sub(unescape_pipes, line)
         out.append(line)
     return "\n".join(out)
 
