@@ -22,7 +22,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # Screenshots of the built site at phone and desktop widths (CI quality job, or locally).
-screenshots = ["playwright==1.63.0"]
+screenshots = ["playwright==1.64.1"]
 
 [project.scripts]
 hardfoc-docs = "hardfoc_mkdocs_theme.cli:main"
