@@ -52,7 +52,8 @@ on:
         default: ""
       check_commands:
         description: >-
-          Shell lines run before the build; any failure fails the job. The default runs the figure drift check and
+          Shell lines run before the build, with GH_TOKEN set to the job's read-only token (for commands that read the
+          GitHub API); any failure fails the job. The default runs the figure drift check and
           the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py
           when it still carries them.
         type: string
@@ -212,6 +213,8 @@ jobs:
         if: ${{ inputs.check_commands != '' }}
         env:
           CHECKS: ${{ inputs.check_commands }}
+          # The job's read-only token, for commands that read the GitHub API (the portal's repository catalogue).
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           bash -euo pipefail -c "$CHECKS"
