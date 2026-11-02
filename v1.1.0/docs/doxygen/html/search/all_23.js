@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['✨_20strong_20live_20ci_20example_20strong_0',['✨ strong Live CI Example strong',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md#autotoc_md140',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md#autotoc_md164',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md193',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md247',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md408',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;']]]
+];
