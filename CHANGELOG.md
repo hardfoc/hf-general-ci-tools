@@ -29,6 +29,8 @@ that heading.
   its own `/latest/` links.
 - `ru-mkdocs-publish.yml`: `check_commands` run with `GH_TOKEN` set to the job's read-only token, so a site can
   generate pages from the GitHub API at build time (the organisation portal's repository catalogue).
+- Theme: a filterable catalogue component (`.hf-filter` search field, `.hf-chipbtn` topic buttons, `.hf-repo`
+  cards), used by the organisation portal's repository list.
 - Theme package unit tests (`packages/hardfoc-mkdocs-theme/tests/`), run by the self-CI.
 
 ### Changed (documentation platform)
