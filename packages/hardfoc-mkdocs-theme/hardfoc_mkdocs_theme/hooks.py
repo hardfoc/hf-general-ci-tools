@@ -226,13 +226,28 @@ def outside_fences(text: str, fn) -> str:
     return "".join(out)
 
 
+def _sub_outside_code(rx: re.Pattern, fn, text: str) -> str:
+    """``rx.sub(fn, text)``, except for matches that start inside inline code (a link or marker shown as code is an
+    example). A match may contain code (``[`name`](path)``)."""
+    spans = [m.span() for m in CODE_SPAN.finditer(text)]
+
+    def guarded(m: re.Match) -> str:
+        if any(a <= m.start() < b for a, b in spans):
+            return m.group(0)
+        return fn(m)
+
+    return rx.sub(guarded, text)
+
+
 def on_page_markdown(markdown: str, page, config, files) -> str:
     _state["files"] = files
     _state["page"] = page.file.src_uri
     page_dir = posixpath.dirname(page.file.src_uri)
     out_dir = posixpath.dirname(page.file.dest_uri)
 
-    markdown = outside_fences(markdown, lambda t: FIGURE.sub(lambda m: _figure(m, page_dir, page.file.src_uri), t))
+    # A marker shown as code (`<!-- figure: id -->` in running text) is an example, not a figure.
+    markdown = outside_fences(markdown, lambda t: _sub_outside_code(
+        FIGURE, lambda m: _figure(m, page_dir, page.file.src_uri), t))
 
     def sub(m: re.Match) -> str:
         target = m.group("target")
@@ -256,7 +271,7 @@ def on_page_markdown(markdown: str, page, config, files) -> str:
         if line.lstrip().startswith(("```", "~~~")):
             in_fence = not in_fence
         if not in_fence:
-            line = LINK.sub(sub, line)
+            line = _sub_outside_code(LINK, sub, line)
             if line.lstrip().startswith("|"):
                 line = CODE_SPAN.sub(unescape_pipes, line)
             if "<" in line and page_dir != out_dir:

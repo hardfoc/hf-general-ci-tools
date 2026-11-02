@@ -83,6 +83,12 @@ class RepositoryLinkTest(unittest.TestCase):
         out = self.build_with("[x](../inc/x.hpp) and [sub](../lib/sub/README.md)")
         self.assertIn("https://github.com/hardfoc/hf-example/blob/", out)
 
+    def test_examples_in_code_are_left_alone(self):
+        out = self.build_with("Write ``[`x.hpp`](../inc/missing.hpp)`` and `<!-- figure: id -->`; "
+                              "[`x.hpp`](../inc/x.hpp) is a link.")
+        self.assertIn("../inc/missing.hpp", out)
+        self.assertIn("https://github.com/hardfoc/hf-example/blob/", out)
+
     def test_missing_file_fails_strict(self):
         from mkdocs.exceptions import Abort
 
