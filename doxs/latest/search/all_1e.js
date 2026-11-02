@@ -1,15 +1,15 @@
 var searchData=
 [
   ['yaml_20lint_0',['ru-yaml-lint',['../index.html#autotoc_md17',1,'']]],
-  ['yaml_20lint_20ru_20yaml_20lint_1',['@page md_docs_2ru-yaml-lint ru-yaml-lint',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md403',1,'']]],
+  ['yaml_20lint_20ru_20yaml_20lint_1',['@page md_docs_2ru-yaml-lint ru-yaml-lint',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md420',1,'']]],
   ['yaml_20lint_20testing_2',['&lt;strong&gt;📝 ci-yaml-lint.yml&lt;/strong&gt; - YAML Lint Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md39',1,'']]],
   ['yaml_20lint_20yml_20strong_20yaml_20lint_20testing_3',['&lt;strong&gt;📝 ci-yaml-lint.yml&lt;/strong&gt; - YAML Lint Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md39',1,'']]],
   ['yaml_20lint_20yml_20strong_20yaml_20linting_20tools_4',['&lt;strong&gt;📝 ru-yaml-lint.yml&lt;/strong&gt; - YAML Linting Tools',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md32',1,'']]],
   ['yaml_20linting_20tools_5',['&lt;strong&gt;📝 ru-yaml-lint.yml&lt;/strong&gt; - YAML Linting Tools',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md32',1,'']]],
-  ['yaml_20linting_20tools_20reusable_6',['📝 YAML Linting Tools (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md405',1,'']]],
+  ['yaml_20linting_20tools_20reusable_6',['📝 YAML Linting Tools (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md422',1,'']]],
   ['yaml_20syntax_20errors_7',['YAML Syntax Errors',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md121',1,'']]],
-  ['yaml_20validation_20issues_20strong_8',['&lt;strong&gt;YAML Validation Issues&lt;/strong&gt;',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md314',1,'']]],
-  ['yamllint_20tt_20configuration_9',['&lt;tt&gt;_config/.yamllint&lt;/tt&gt; Configuration',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md421',1,'']]],
+  ['yaml_20validation_20issues_20strong_8',['&lt;strong&gt;YAML Validation Issues&lt;/strong&gt;',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md323',1,'']]],
+  ['yamllint_20tt_20configuration_9',['&lt;tt&gt;_config/.yamllint&lt;/tt&gt; Configuration',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md438',1,'']]],
   ['yml_20strong_20c_20analysis_20testing_10',['&lt;strong&gt;🔍 ci-cpp-analysis.yml&lt;/strong&gt; - C++ Analysis Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md36',1,'']]],
   ['yml_20strong_20c_20lint_20testing_11',['&lt;strong&gt;🔧 ci-cpp-lint.yml&lt;/strong&gt; - C++ Lint Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md35',1,'']]],
   ['yml_20strong_20c_20linting_20tools_12',['&lt;strong&gt;🔧 ru-cpp-lint.yml&lt;/strong&gt; - C++ Linting Tools',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md28',1,'']]],
@@ -22,5 +22,5 @@ var searchData=
   ['yml_20strong_20yaml_20linting_20tools_19',['&lt;strong&gt;📝 ru-yaml-lint.yml&lt;/strong&gt; - YAML Linting Tools',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md32',1,'']]],
   ['yml_20tt_20',['Base Configuration (&lt;tt&gt;_config.yml&lt;/tt&gt;)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md101',1,'']]],
   ['your_20reusable_20workflow_21',['1. Choose Your Reusable Workflow',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md#autotoc_md59',1,'']]],
-  ['your_20workflow_22',['Your Workflow',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md#autotoc_md434',1,'1. Enable Versioning in Your Workflow'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md#autotoc_md60',1,'2. Configure Your Workflow']]]
+  ['your_20workflow_22',['Your Workflow',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md#autotoc_md451',1,'1. Enable Versioning in Your Workflow'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md#autotoc_md60',1,'2. Configure Your Workflow']]]
 ];
