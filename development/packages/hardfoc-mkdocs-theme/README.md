@@ -26,9 +26,14 @@ plugins:
   - awesome-nav
 ```
 
-The plugin fills in `site_url` (`https://hardfoc.github.io/<repo>/latest/`), `repo_name`, `edit_uri`, copyright,
+The plugin fills in `site_url` (`https://hardfoc.github.io/<repo>/latest/`; the root for an unversioned site), `repo_name`, `edit_uri`, copyright,
 mike versioning, the Markdown extensions (admonitions, tabs, snippets from the repository root, Mermaid,
 GitHub-style anchors, ...) and strict validation.
+
+A site is versioned with mike unless it is the organisation site (`hardfoc.github.io`), or sets
+`plugins: [{hardfoc: {versioned: false}}]`; `HARDFOC_DOCS_VERSIONED=true|false` overrides both (the publish
+workflow sets it from its `versioning` input). An unversioned site has no version selector and its `site_url` is
+the Pages root.
 
 ## What is in it
 
@@ -40,6 +45,8 @@ GitHub-style anchors, ...) and strict validation.
 | `hardfoc_mkdocs_theme/figkit/` | Code-sourced SVG figures, light and dark from one layout, contrast-checked |
 | `hardfoc_mkdocs_theme/gen.py`, `generators/` | `<!-- generated: name -->` regions; built in: `examples` (from `examples/*/app_config.yml`) |
 | `hardfoc_mkdocs_theme/screenshots.py` | Phone / desktop, light / dark screenshots of a built site |
+| `hardfoc_mkdocs_theme/publish.py` | `publish-root`: an unversioned site as the whole deployment branch |
+| `tests/` | Unit tests (`python -m unittest discover -s tests`), run by the self-CI |
 
 ## Commands
 
@@ -49,6 +56,7 @@ hardfoc-docs gen [--check|--list]      fill (or check) generated regions (built-
 hardfoc-docs check                     both checks, as CI runs them
 hardfoc-docs screenshots SITE OUT      needs the [screenshots] extra and `playwright install chromium`
 hardfoc-docs pages SITE                the pages CI audits
+hardfoc-docs publish-root SITE         commit SITE as the whole deployment branch (unversioned sites)
 ```
 
 ## Brand

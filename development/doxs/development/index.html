@@ -384,7 +384,7 @@ ru-mkdocs-publish inputs</h4>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>submodule_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>check_commands</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] &amp;&amp; [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi</code>   </td><td class="markdownTableBodyNone">Shell lines run before the build; any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them.    </td></tr>
+<td class="markdownTableBodyNone"><code>check_commands</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] &amp;&amp; [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi</code>   </td><td class="markdownTableBodyNone">Shell lines run before the build, with GH_TOKEN set to the job's read-only token (for commands that read the GitHub API); any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>doxygen_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API.    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -404,16 +404,18 @@ ru-mkdocs-publish inputs</h4>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>screenshots</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact).    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>versioning</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">true: a versioned site, published with mike (default branch -&gt; dev_version, v* tag -&gt; that version, with latest_alias moved to it). false: one unversioned site (the organisation portal), published from the default branch as the whole content of deployment_branch at its root (a custom domain only from a CNAME file in the site); tags publish nothing. The build tells the theme plugin which (HARDFOC_DOCS_VERSIONED), so site_url and the version selector match.    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>deploy</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here.    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>deployment_branch</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>gh-pages</code>   </td><td class="markdownTableBodyNone">Branch GitHub Pages serves from.    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>dev_version</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>dev</code>   </td><td class="markdownTableBodyNone">mike version name a push to the default branch publishes to.    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>latest_alias</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>latest</code>   </td><td class="markdownTableBodyNone">mike alias moved to each release (v* tag).    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>release_version</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>tag</code>   </td><td class="markdownTableBodyNone">Version name a v* tag publishes: 'tag' (the tag itself, vX.Y.Z) or 'minor' (X.Y, a patch release replaces the docs of its minor release).    </td></tr>
+<td class="markdownTableBodyNone"><code>latest_alias</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>latest</code>   </td><td class="markdownTableBodyNone">mike alias moved to each release (v* tag).    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>release_version</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>tag</code>   </td><td class="markdownTableBodyNone">Version name a v* tag publishes: 'tag' (the tag itself, vX.Y.Z) or 'minor' (X.Y, a patch release replaces the docs of its minor release).    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>prune_legacy</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">On publish, remove every top-level entry of the deployment branch that is not a mike version or alias (the old Jekyll / Doxygen site: development/, doxs/, html/, version_selector.html, ...), in the publish commit. Kept: versions.json, index.html, 404.html, .nojekyll, CNAME, robots.txt.   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md15"></a>
@@ -545,7 +547,9 @@ ru-docs-linkcheck</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>verbose</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable verbose output    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>config_file</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to lychee.toml config file (optional)   </td></tr>
+<td class="markdownTableBodyNone"><code>config_file</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to lychee.toml config file (optional)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>exclude_own_site</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Skip links to this repository's own GitHub Pages site (<a href="https://">https://</a>&lt;owner&gt;.github.io/&lt;repo&gt;/) on pull requests, where the pages a change links to are not published yet, and on other events while the site's latest/ version (the root, for &lt;owner&gt;.github.io) does not answer yet, as before a repository's first MkDocs publish.   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md18"></a>
 ru-markdown-lint</h3>
@@ -636,7 +640,7 @@ How this repository tests itself</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Nov 2 2026 10:45:41 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+    <li class="footer">Generated on Mon Nov 2 2026 11:14:39 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
   </ul>
 </div>
 </body>

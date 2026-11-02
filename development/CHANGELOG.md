@@ -15,12 +15,59 @@ that heading.
 
 ## [Unreleased]
 
+### Added (unversioned sites, link check)
+
+- `ru-mkdocs-publish.yml`: `versioning` input (default `true`). `false` builds an unversioned site (the
+  organisation portal) and publishes it from the default branch as the whole content of the deployment branch, at
+  its root, in one ordinary commit; tags publish nothing. The custom domain comes from a `CNAME` file in the
+  site (`docs/CNAME`), never from what the branch held before, so a stale `CNAME` cannot take the site over.
+- Theme plugin: `versioned` option (unset: versioned, except `<org>.github.io`), overridden by
+  `HARDFOC_DOCS_VERSIONED`; an unversioned site gets the Pages root as `site_url` and no version selector.
+- `hardfoc-docs publish-root`: the publish step for unversioned sites, with unit tests against a scratch remote.
+- `ru-docs-linkcheck.yml`: `exclude_own_site` (default `true`) skips links to the repository's own Pages site on
+  pull requests and until its `latest/` answers, so a repository's first MkDocs pull request no longer fails on
+  its own `/latest/` links.
+- `ru-mkdocs-publish.yml`: `check_commands` run with `GH_TOKEN` set to the job's read-only token, so a site can
+  generate pages from the GitHub API at build time (the organisation portal's repository catalogue).
+- Theme: a filterable catalogue component (`.hf-filter` search field, `.hf-chipbtn` topic buttons, `.hf-repo`
+  cards), used by the organisation portal's repository list.
+- Theme: `navigation.prune` is on by default, so a page carries only the navigation it shows; on a site of about
+  85 pages it halves the HTML of every page and keeps it inside the Lighthouse performance budget.
+- Theme package unit tests (`packages/hardfoc-mkdocs-theme/tests/`), run by the self-CI.
+
+### Changed (documentation platform)
+
+- Root `404.html` of versioned sites: a branded page (HardFOC mark, theme colours and font, light and dark) that
+  says "Redirecting to the latest documentation" while `versions.json` loads, and shows "Page not found" with links
+  only when no redirect applies, after two seconds, or without JavaScript.
+- Theme: from tablet width up, tables fill the column and their text cells wrap, instead of cutting off the last
+  column (identifiers in code stay whole);
+  on a phone, figures keep a readable size and scroll sideways instead of shrinking.
+
 ### Fixed (documentation platform)
 
 - Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter's and
   JetBrains Mono's metrics (`size-adjust`, `ascent-override`, `descent-override`), so the swap to the web font
   keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance
   budget on cumulative layout shift.
+- `hardfoc-docs screenshots` without `--page` crashed (`UnboundLocalError`).
+- Theme plugin: a link from `docs/` to a repository file that does not exist was turned into a GitHub link that
+  404s; it is now a warning, so `mkdocs build --strict` fails (a folder that is empty, a submodule not checked
+  out, is not reported).
+- `tools/docs-migrate.py`: the Doxyfile's `INPUT` and `USE_MDFILE_AS_MAINPAGE` no longer point at the README
+  (sources plus `docs/_doxygen/mainpage.md`, written when missing), `CASE_SENSE_NAMES = NO`, a final newline
+  always; the caller workflow is named `📚 Docs`; Material's `hide:` front matter is kept.
+- Theme plugin: a link or figure marker written as inline code (an example on a page, such as
+  ``[`x.hpp`](../inc/x.hpp)``) is left as it is instead of being rewritten or embedded.
+- Theme plugin: a link into the API reference (`[API](api/index.html)`) from a page that builds into a folder was
+  re-based twice and published as a GitHub link to a file that does not exist (the API button of every site); it
+  now points at the merged API reference.
+- Template: `examples/esp32/main/basic.cpp`, the file the template's examples table links.
+- Theme plugin: a link whose text holds brackets (``[`table[]`](../src/x.cpp)``) is rewritten like any other.
+- `hardfoc-docs gen` no longer fills regions in a folder with its own `mkdocs.yml` (a template or fixture inside
+  the repository), which belong to that site.
+- `ru-mkdocs-publish.yml`: a Doxyfile without a final newline no longer swallows the stylesheet line the workflow
+  appends.
 
 ### Added (documentation platform)
 

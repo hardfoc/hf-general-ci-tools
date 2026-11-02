@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -99,7 +100,7 @@ WORKFLOW_YML = """\
 # Documentation: strict MkDocs build, figure / generated-region checks, Doxygen under /api/, offline link check,
 # Lighthouse budget and screenshots on pull requests; publish to gh-pages with mike (main -> dev, vX.Y.Z tag ->
 # that version + latest). Inputs: docs/ru-mkdocs-publish.md in hardfoc/hf-general-ci-tools.
-name: Docs
+name: 📚 Docs
 
 on:
   push:
@@ -243,6 +244,9 @@ def migrate_pages(plan: Plan) -> dict[str, dict]:
         rel = p.relative_to(root).as_posix()
         if rel.startswith("docs/"):
             meta[rel[len("docs/"):]] = {**fm, "title": title}
+        if isinstance(fm.get("hide"), list):
+            # Material's `hide:` is the one front-matter key the style guide keeps (the home page).
+            text = "---\n" + yaml.safe_dump({"hide": fm["hide"]}, sort_keys=False) + "---\n\n" + text
         anchor_maps[p] = amap
         texts[p] = text
 
@@ -328,20 +332,55 @@ def migrate_doxyfile(plan: Plan) -> str | None:
         return None
     text = (plan.root / src).read_text()
     # A dropped key's backslash-continued lines go with it.
-    cleaned, skipping = [], False
+    # Join backslash continuations first, so a key and all its values are one logical line.
+    logical, buf = [], ""
     for line in text.splitlines():
-        stripped = line.strip()
-        if skipping:
-            skipping = stripped.endswith("\\")
+        if line.rstrip().endswith("\\"):
+            buf += line.rstrip()[:-1] + " "
             continue
+        logical.append(buf + line)
+        buf = ""
+    if buf:
+        logical.append(buf)
+    mainpage = "docs/_doxygen/mainpage.md"
+    cleaned, wants_mainpage = [], False
+    for line in logical:
+        stripped = line.strip()
         if DOXY_DROP.match(stripped):
-            skipping = stripped.endswith("\\")
             continue
         if re.match(r"^\s*OUTPUT_DIRECTORY\s*=", line):
             line = "OUTPUT_DIRECTORY       = build/doxygen"
         elif re.match(r"^\s*HTML_OUTPUT\s*=", line):
             line = "HTML_OUTPUT            = html"
+        elif re.match(r"^\s*CASE_SENSE_NAMES\s*=", line):
+            line = "CASE_SENSE_NAMES       = NO"
+        elif re.match(r"^\s*USE_MDFILE_AS_MAINPAGE\s*=", line):
+            value = line.split("=", 1)[1].strip().strip('"')
+            if not value or Path(value).name.lower() == "readme.md":
+                line = f"USE_MDFILE_AS_MAINPAGE = {mainpage}"
+                wants_mainpage = True
+        elif re.match(r"^\s*INPUT\s*=", line):
+            # The README (badges, pictures, links to the site) breaks inside Doxygen: the main page is
+            # docs/_doxygen/mainpage.md and INPUT lists the sources only.
+            items = shlex.split(line.split("=", 1)[1])
+            kept = [i for i in items if Path(i).name.lower() != "readme.md"]
+            if len(kept) != len(items):
+                wants_mainpage = True
+            line = "INPUT                  = " + " ".join(kept)
         cleaned.append(line)
+    if wants_mainpage:
+        # INPUT must carry the main page too; add it when INPUT was written before USE_MDFILE_AS_MAINPAGE.
+        for i, line in enumerate(cleaned):
+            if re.match(r"^\s*INPUT\s*=", line) and mainpage not in line.split():
+                cleaned[i] = line.rstrip() + " " + mainpage
+        if not any(re.match(r"^\s*USE_MDFILE_AS_MAINPAGE\s*=", line) for line in cleaned):
+            cleaned.append(f"USE_MDFILE_AS_MAINPAGE = {mainpage}")
+        if not (plan.root / mainpage).exists():
+            project = next((l.split("=", 1)[1].strip().strip('"') for l in cleaned
+                            if re.match(r"^\s*PROJECT_NAME\s*=", l)), plan.root.name)
+            plan.write(mainpage, f"# {project} API reference\n\nClasses, functions and files of {project}. The "
+                                 "guides are on the documentation site.\n")
+    # Always end with a newline: the publish workflow appends settings to the file.
     new = "\n".join(cleaned).rstrip() + "\n"
     if src != "Doxyfile":
         plan.move(src, "Doxyfile")

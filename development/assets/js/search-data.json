@@ -330,7 +330,7 @@
   },"47": {
     "doc": "🚀 hf-general-ci-tools",
     "title": "ru-mkdocs-publish",
-    "content": "The documentation platform. A repository keeps mkdocs.yml, docs/, docs/.nav.yml and a Doxyfile; the theme, plugin, figkit and toolchain come from packages/hardfoc-mkdocs-theme, installed at the same commit as the workflow. Pull requests build, check and audit; pushes to main publish dev; vX.Y.Z tags publish that version and move latest. | 1 2 3 4 5 6 7 8 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1 permissions: contents: write with: doxygen_config: Doxyfile deploy: true . | . ru-mkdocs-publish inputs . | Input | Type | Required | Default | Description | — | — | — | — | — | python_version | string | no | 3.12 | Python used to build the site. | requirements | string | no | requirements-docs.txt | Optional pip requirements file installed after the theme package (extra MkDocs plugins). Skipped when the file does not exist; the theme package already pins mkdocs, mkdocs-material, awesome-nav, pymdown and mike. | theme_ref | string | no | \"\" | Ref of hardfoc/hf-general-ci-tools to install the theme package from. Empty: the commit this workflow runs from, so the theme always matches the workflow. | mkdocs_config | string | no | mkdocs.yml | Path of mkdocs.yml. | submodules | string | no | false | Submodules to check out with the repository: ‘false’, ‘true’ (top level) or ‘recursive’. | submodule_paths | string | no | \"\" | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. ‘lib/core/drivers/internal/pincfg’. Use it instead of ‘recursive’ when the checks need a few nested submodules. | check_commands | string | no | if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] &amp;&amp; [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi | Shell lines run before the build; any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository’s own tools/figkit and tools/docs/gen.py when it still carries them. | doxygen_config | string | no | \"\" | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. | doxygen_working_directory | string | no | . | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. | doxygen_html_dir | string | no | \"\" | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. | api_dir | string | no | api | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). | link_check | boolean | no | true | Run lychee offline on the built site (internal links, anchors and images, API included). | link_check_args | string | no | \"\" | Extra lychee arguments, for example –exclude-path patterns. | lighthouse | boolean | no | true | Run Lighthouse on the built site (home page and the first navigation pages) against the budgets. | lighthouse_budgets | string | no | performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9 | Minimum Lighthouse category scores (0-1, median of three runs, mobile emulation), space-separated category=score pairs. A score below its minimum fails the job. | screenshots | boolean | no | true | Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact). | deploy | boolean | no | false | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. | deployment_branch | string | no | gh-pages | Branch GitHub Pages serves from. | dev_version | string | no | dev | mike version name a push to the default branch publishes to. | latest_alias | string | no | latest | mike alias moved to each release (v* tag). | release_version | string | no | tag | Version name a v* tag publishes: ‘tag’ (the tag itself, vX.Y.Z) or ‘minor’ (X.Y, a patch release replaces the docs of its minor release). | prune_legacy | boolean | no | true | On publish, remove every top-level entry of the deployment branch that is not a mike version or alias (the old Jekyll / Doxygen site: development/, doxs/, html/, version_selector.html, …), in the publish commit. Kept: versions.json, index.html, 404.html, .nojekyll, CNAME, robots.txt. | . ",
+    "content": "The documentation platform. A repository keeps mkdocs.yml, docs/, docs/.nav.yml and a Doxyfile; the theme, plugin, figkit and toolchain come from packages/hardfoc-mkdocs-theme, installed at the same commit as the workflow. Pull requests build, check and audit; pushes to main publish dev; vX.Y.Z tags publish that version and move latest. | 1 2 3 4 5 6 7 8 . | jobs: docs: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1 permissions: contents: write with: doxygen_config: Doxyfile deploy: true . | . ru-mkdocs-publish inputs . | Input | Type | Required | Default | Description | — | — | — | — | — | python_version | string | no | 3.12 | Python used to build the site. | requirements | string | no | requirements-docs.txt | Optional pip requirements file installed after the theme package (extra MkDocs plugins). Skipped when the file does not exist; the theme package already pins mkdocs, mkdocs-material, awesome-nav, pymdown and mike. | theme_ref | string | no | \"\" | Ref of hardfoc/hf-general-ci-tools to install the theme package from. Empty: the commit this workflow runs from, so the theme always matches the workflow. | mkdocs_config | string | no | mkdocs.yml | Path of mkdocs.yml. | submodules | string | no | false | Submodules to check out with the repository: ‘false’, ‘true’ (top level) or ‘recursive’. | submodule_paths | string | no | \"\" | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. ‘lib/core/drivers/internal/pincfg’. Use it instead of ‘recursive’ when the checks need a few nested submodules. | check_commands | string | no | if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] &amp;&amp; [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi | Shell lines run before the build, with GH_TOKEN set to the job’s read-only token (for commands that read the GitHub API); any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository’s own tools/figkit and tools/docs/gen.py when it still carries them. | doxygen_config | string | no | \"\" | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. | doxygen_working_directory | string | no | . | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. | doxygen_html_dir | string | no | \"\" | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. | api_dir | string | no | api | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). | link_check | boolean | no | true | Run lychee offline on the built site (internal links, anchors and images, API included). | link_check_args | string | no | \"\" | Extra lychee arguments, for example –exclude-path patterns. | lighthouse | boolean | no | true | Run Lighthouse on the built site (home page and the first navigation pages) against the budgets. | lighthouse_budgets | string | no | performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9 | Minimum Lighthouse category scores (0-1, median of three runs, mobile emulation), space-separated category=score pairs. A score below its minimum fails the job. | screenshots | boolean | no | true | Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact). | versioning | boolean | no | true | true: a versioned site, published with mike (default branch -&gt; dev_version, v* tag -&gt; that version, with latest_alias moved to it). false: one unversioned site (the organisation portal), published from the default branch as the whole content of deployment_branch at its root (a custom domain only from a CNAME file in the site); tags publish nothing. The build tells the theme plugin which (HARDFOC_DOCS_VERSIONED), so site_url and the version selector match. | deploy | boolean | no | false | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. | deployment_branch | string | no | gh-pages | Branch GitHub Pages serves from. | dev_version | string | no | dev | mike version name a push to the default branch publishes to. | latest_alias | string | no | latest | mike alias moved to each release (v* tag). | release_version | string | no | tag | Version name a v* tag publishes: ‘tag’ (the tag itself, vX.Y.Z) or ‘minor’ (X.Y, a patch release replaces the docs of its minor release). | prune_legacy | boolean | no | true | On publish, remove every top-level entry of the deployment branch that is not a mike version or alias (the old Jekyll / Doxygen site: development/, doxs/, html/, version_selector.html, …), in the publish commit. Kept: versions.json, index.html, 404.html, .nojekyll, CNAME, robots.txt. | . ",
     "url": "/hf-general-ci-tools/development/#ru-mkdocs-publish",
     
     "relUrl": "/#ru-mkdocs-publish"
@@ -344,7 +344,7 @@
   },"49": {
     "doc": "🚀 hf-general-ci-tools",
     "title": "ru-docs-linkcheck",
-    "content": "| 1 2 3 4 5 6 7 . | jobs: links: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 permissions: contents: read with: paths: \"docs/**/*.md *.md\" . | . | Input | Type | Required | Default | Description | — | — | — | — | — | checkout_recursive | boolean | no | false | Checkout submodules recursively (useful for projects with documentation in submodules) | paths | string | no | docs/** *.md **/docs/** | Space-separated paths to check for broken links | fail_on_errors | boolean | no | true | Fail the workflow if broken links are found | timeout | string | no | 10 | Timeout in seconds for each link check | max_retries | string | no | 3 | Maximum number of retries per request | retry_wait_time | string | no | 1 | Minimum wait time in seconds between retries | exclude_private | boolean | no | true | Exclude private/internal links | exclude_mail | boolean | no | true | Exclude mailto links | verbose | boolean | no | false | Enable verbose output | config_file | string | no | \"\" | Path to lychee.toml config file (optional) | . ",
+    "content": "| 1 2 3 4 5 6 7 . | jobs: links: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1 permissions: contents: read with: paths: \"docs/**/*.md *.md\" . | . | Input | Type | Required | Default | Description | — | — | — | — | — | checkout_recursive | boolean | no | false | Checkout submodules recursively (useful for projects with documentation in submodules) | paths | string | no | docs/** *.md **/docs/** | Space-separated paths to check for broken links | fail_on_errors | boolean | no | true | Fail the workflow if broken links are found | timeout | string | no | 10 | Timeout in seconds for each link check | max_retries | string | no | 3 | Maximum number of retries per request | retry_wait_time | string | no | 1 | Minimum wait time in seconds between retries | exclude_private | boolean | no | true | Exclude private/internal links | exclude_mail | boolean | no | true | Exclude mailto links | verbose | boolean | no | false | Enable verbose output | config_file | string | no | \"\" | Path to lychee.toml config file (optional) | exclude_own_site | boolean | no | true | Skip links to this repository’s own GitHub Pages site (https://.github.io//) on pull requests, where the pages a change links to are not published yet, and on other events while the site's latest/ version (the root, for .github.io) does not answer yet, as before a repository's first MkDocs publish. | . ",
     "url": "/hf-general-ci-tools/development/#ru-docs-linkcheck",
     
     "relUrl": "/#ru-docs-linkcheck"
@@ -1408,7 +1408,7 @@
   },"201": {
     "doc": "🔗 Documentation Link Check (Reusable)",
     "title": "⚙️ Link Checking Configuration",
-    "content": "| Parameter | Type | Default | Description | . | timeout | string | \"10\" | Timeout in seconds for each link check | . | max_retries | string | \"3\" | Maximum number of retries per request | . | retry_wait_time | string | \"1\" | Minimum wait time in seconds between retries | . | exclude_private | boolean | true | Exclude private/internal links | . | exclude_mail | boolean | true | Exclude mailto links | . | config_file | string | \"\" | Path to lychee.toml config file (optional) | . ",
+    "content": "| Parameter | Type | Default | Description | . | timeout | string | \"10\" | Timeout in seconds for each link check | . | max_retries | string | \"3\" | Maximum number of retries per request | . | retry_wait_time | string | \"1\" | Minimum wait time in seconds between retries | . | exclude_private | boolean | true | Exclude private/internal links | . | exclude_mail | boolean | true | Exclude mailto links | . | config_file | string | \"\" | Path to lychee.toml config file (optional) | . | exclude_own_site | boolean | true | Skip links to the repository’s own Pages site (https://&lt;owner&gt;.github.io/&lt;repo&gt;/) on pull requests, and on other events while its latest/ (the root, for &lt;owner&gt;.github.io) does not answer yet | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-docs-linkcheck.html#%EF%B8%8F-link-checking-configuration",
     
     "relUrl": "/docs/ru-docs-linkcheck.html#️-link-checking-configuration"
@@ -2241,14 +2241,14 @@
   },"320": {
     "doc": "MkDocs Publisher (Reusable)",
     "title": "What runs when",
-    "content": "| Event | Build + checks | Lighthouse + screenshots | Publish | . | Pull request | Yes | Yes | Never, whatever deploy says | . | Push to the default branch | Yes | Yes | Version dev (when deploy is true); dev also holds latest until the first release | . | Push of a vX.Y.Z tag | Yes | Yes | Version vX.Y.Z (release_version: minor: X.Y), and latest moves to it | . The site root redirects to latest. Aliases are symlinks, so the API reference added to a version folder is reachable through them too. Material’s version selector in the header lists every version. ",
+    "content": "| Event | Build + checks | Lighthouse + screenshots | Publish | . | Pull request | Yes | Yes | Never, whatever deploy says | . | Push to the default branch | Yes | Yes | Version dev (when deploy is true); dev also holds latest until the first release | . | Push of a vX.Y.Z tag | Yes | Yes | Version vX.Y.Z (release_version: minor: X.Y), and latest moves to it | . With versioning: false (the organisation portal) there are no versions: see Unversioned sites. The site root redirects to latest. Aliases are symlinks, so the API reference added to a version folder is reachable through them too. Material’s version selector in the header lists every version. ",
     "url": "/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html#what-runs-when",
     
     "relUrl": "/docs/ru-mkdocs-publish.html#what-runs-when"
   },"321": {
     "doc": "MkDocs Publisher (Reusable)",
     "title": "Jobs and permissions",
-    "content": "The caller must grant contents: write for the publish job; a caller that never publishes can grant contents: read. | Job | Permissions | Steps | . | build | contents: read | Check out (plus submodule_paths), install the theme, run check_commands (hardfoc-docs check), mkdocs build --strict, Doxygen into api/ (with the HardFOC API stylesheet when the Doxyfile has none), lychee --offline --include-fragments on the merged site, upload docs-site | . | quality | contents: read | Lighthouse CI (median of 3 runs, mobile emulation) on the home page and the first navigation pages against lighthouse_budgets, upload lighthouse-report; Playwright screenshots at 375 and 1280 px, light and dark, upload docs-screenshots | . | deploy | contents: write | Prune the pre-MkDocs site from gh-pages (prune_legacy), mike deploy, add the API reference to the version folder, mike set-default latest, root 404.html, push (never force) | . Every action is pinned to a commit SHA with its version in a comment. ",
+    "content": "The caller must grant contents: write for the publish job; a caller that never publishes can grant contents: read. | Job | Permissions | Steps | . | build | contents: read | Check out (plus submodule_paths), install the theme, run check_commands (hardfoc-docs check), mkdocs build --strict, Doxygen into api/ (with the HardFOC API stylesheet when the Doxyfile has none), lychee --offline --include-fragments on the merged site, upload docs-site | . | quality | contents: read | Lighthouse CI (median of 3 runs, mobile emulation) on the home page and the first navigation pages against lighthouse_budgets, upload lighthouse-report; Playwright screenshots at 375 and 1280 px, light and dark, upload docs-screenshots | . | deploy | contents: write | Versioned: prune the pre-MkDocs site from gh-pages (prune_legacy), mike deploy, add the API reference to the version folder, mike set-default latest, root 404.html, push (never force). Unversioned: hardfoc-docs publish-root commits the built site as the whole branch, push (never force) | . Every action is pinned to a commit SHA with its version in a comment. ",
     "url": "/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html#jobs-and-permissions",
     
     "relUrl": "/docs/ru-mkdocs-publish.html#jobs-and-permissions"
@@ -2262,7 +2262,7 @@
   },"323": {
     "doc": "MkDocs Publisher (Reusable)",
     "title": "Inputs",
-    "content": "| Input | Type | Default | Description | . | python_version | string | 3.12 | Python used to build the site | . | requirements | string | requirements-docs.txt | Optional extra pip requirements, installed after the theme when the file exists | . | theme_ref | string | empty | Ref of this repository to install the theme from; empty: the workflow’s own commit | . | mkdocs_config | string | mkdocs.yml | Path of mkdocs.yml | . | submodules | string | false | false, true or recursive | . | submodule_paths | string | empty | Space-separated submodule paths initialised (shallow) after checkout, nested ones included | . | check_commands | string | hardfoc-docs check | Shell lines run before the build (a repository’s own tools/figkit / tools/docs/gen.py when present) | . | doxygen_config | string | empty | Doxyfile of the API reference; empty builds no API | . | doxygen_working_directory | string | . | Directory Doxygen runs in | . | doxygen_html_dir | string | empty | Generated HTML directory; empty reads OUTPUT_DIRECTORY / HTML_OUTPUT | . | api_dir | string | api | Site folder for the Doxygen HTML | . | link_check | boolean | true | lychee offline on the merged site | . | link_check_args | string | empty | Extra lychee arguments | . | lighthouse | boolean | true | Run the Lighthouse budget | . | lighthouse_budgets | string | performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9 | Minimum category scores (median of 3 runs) | . | screenshots | boolean | true | Capture phone and desktop screenshots, light and dark | . | deploy | boolean | false | Publish; ignored on pull requests | . | deployment_branch | string | gh-pages | Branch GitHub Pages serves | . | dev_version | string | dev | Version a push to the default branch publishes | . | latest_alias | string | latest | Alias moved to each release | . | release_version | string | tag | tag publishes vX.Y.Z; minor publishes X.Y | . | prune_legacy | boolean | true | Remove the pre-MkDocs site from the deployment branch on publish | . ",
+    "content": "| Input | Type | Default | Description | . | python_version | string | 3.12 | Python used to build the site | . | requirements | string | requirements-docs.txt | Optional extra pip requirements, installed after the theme when the file exists | . | theme_ref | string | empty | Ref of this repository to install the theme from; empty: the workflow’s own commit | . | mkdocs_config | string | mkdocs.yml | Path of mkdocs.yml | . | submodules | string | false | false, true or recursive | . | submodule_paths | string | empty | Space-separated submodule paths initialised (shallow) after checkout, nested ones included | . | check_commands | string | hardfoc-docs check | Shell lines run before the build (a repository’s own tools/figkit / tools/docs/gen.py when present) | . | doxygen_config | string | empty | Doxyfile of the API reference; empty builds no API | . | doxygen_working_directory | string | . | Directory Doxygen runs in | . | doxygen_html_dir | string | empty | Generated HTML directory; empty reads OUTPUT_DIRECTORY / HTML_OUTPUT | . | api_dir | string | api | Site folder for the Doxygen HTML | . | link_check | boolean | true | lychee offline on the merged site | . | link_check_args | string | empty | Extra lychee arguments | . | lighthouse | boolean | true | Run the Lighthouse budget | . | lighthouse_budgets | string | performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9 | Minimum category scores (median of 3 runs) | . | screenshots | boolean | true | Capture phone and desktop screenshots, light and dark | . | versioning | boolean | true | true: versioned with mike. false: one site, published from the default branch at the root of deployment_branch | . | deploy | boolean | false | Publish; ignored on pull requests | . | deployment_branch | string | gh-pages | Branch GitHub Pages serves | . | dev_version | string | dev | Version a push to the default branch publishes | . | latest_alias | string | latest | Alias moved to each release | . | release_version | string | tag | tag publishes vX.Y.Z; minor publishes X.Y | . | prune_legacy | boolean | true | Remove the pre-MkDocs site from the deployment branch on publish | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html#inputs",
     
     "relUrl": "/docs/ru-mkdocs-publish.html#inputs"
@@ -2275,799 +2275,820 @@
     "relUrl": "/docs/ru-mkdocs-publish.html#example"
   },"325": {
     "doc": "MkDocs Publisher (Reusable)",
+    "title": "Unversioned sites",
+    "content": "The organisation portal (hardfoc.github.io) has one current site, not versions. With versioning: false: . | Piece | Versioned (default) | Unversioned | . | site_url | https://hardfoc.github.io/&lt;repo&gt;/latest/ | https://hardfoc.github.io/ (or /&lt;repo&gt;/) | . | Version selector, older-version banner | Yes | No | . | Push to the default branch | Publishes dev | Replaces the whole deployment branch with the built site, in one ordinary commit (.nojekyll written; a CNAME only when the site has one, docs/CNAME; no commit when nothing changed) | . | Push of a v* tag | Publishes vX.Y.Z | Nothing (a notice) | . | Pull request | Build, checks, Lighthouse, screenshots | The same | . The build job tells the theme plugin through HARDFOC_DOCS_VERSIONED, so the input decides both the build and the publish. A local build of the portal needs nothing: the plugin treats &lt;org&gt;.github.io as unversioned on its own, and plugins: [{hardfoc: {versioned: false}}] does the same for any other site. | 1 2 3 4 5 6 7 8 . | jobs: site: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1 permissions: contents: write with: versioning: false deploy: true . | . Pages must serve the gh-pages branch from / once the first publish has run; until then, leave the Pages source as it is, so the current site stays up. ",
+    "url": "/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html#unversioned-sites",
+    
+    "relUrl": "/docs/ru-mkdocs-publish.html#unversioned-sites"
+  },"326": {
+    "doc": "MkDocs Publisher (Reusable)",
     "title": "After the first publish",
     "content": "GitHub Pages must serve the gh-pages branch from / (Settings &gt; Pages &gt; Build and deployment: source Deploy from a branch, branch gh-pages, folder /). The workflow never changes repository settings. ",
     "url": "/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html#after-the-first-publish",
     
     "relUrl": "/docs/ru-mkdocs-publish.html#after-the-first-publish"
-  },"326": {
+  },"327": {
     "doc": "MkDocs Publisher (Reusable)",
     "title": "MkDocs Publisher (Reusable)",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html",
     
     "relUrl": "/docs/ru-mkdocs-publish.html"
-  },"327": {
+  },"328": {
     "doc": "📦 Release Management",
     "title": "📦 Release Management",
     "content": "Automated GitHub release creation with ru-release.yml reusable workflow . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html",
     
     "relUrl": "/docs/ru-release.html"
-  },"328": {
+  },"329": {
     "doc": "📦 Release Management",
     "title": "🎯 Overview",
     "content": "The ru-release.yml workflow provides automated GitHub release creation with: . | ✅ Auto-generated release notes from GitHub’s built-in feature | ✅ Tag-based releases with automatic source code archives | ✅ Draft and prerelease support for controlled releases | ✅ Minimal configuration - just tag and release | ✅ Professional release notes generated from PR and commit history | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-overview",
     
     "relUrl": "/docs/ru-release.html#-overview"
-  },"329": {
+  },"330": {
     "doc": "📦 Release Management",
     "title": "🚀 Quick Start",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-quick-start",
     
     "relUrl": "/docs/ru-release.html#-quick-start"
-  },"330": {
+  },"331": {
     "doc": "📦 Release Management",
     "title": "Basic Release Workflow",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | # .github/workflows/release.yml name: 📦 Release on: push: tags: ['v*'] jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#basic-release-workflow",
     
     "relUrl": "/docs/ru-release.html#basic-release-workflow"
-  },"331": {
+  },"332": {
     "doc": "📦 Release Management",
     "title": "Advanced Configuration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 . | # .github/workflows/release.yml name: 📦 Release on: push: tags: ['v*'] jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: $ prerelease: $ permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#advanced-configuration",
     
     "relUrl": "/docs/ru-release.html#advanced-configuration"
-  },"332": {
+  },"333": {
     "doc": "📦 Release Management",
     "title": "⚙️ Configuration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#%EF%B8%8F-configuration",
     
     "relUrl": "/docs/ru-release.html#️-configuration"
-  },"333": {
+  },"334": {
     "doc": "📦 Release Management",
     "title": "Inputs",
     "content": "| Parameter | Type | Default | Description | . | draft | boolean | false | Create as draft release (not publicly visible) | . | prerelease | boolean | false | Mark as pre-release (shown with warning) | . | tag_name | string | github.ref_name | Custom tag name (usually automatic) | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#inputs",
     
     "relUrl": "/docs/ru-release.html#inputs"
-  },"334": {
+  },"335": {
     "doc": "📦 Release Management",
     "title": "Permissions Required",
     "content": "| 1 2 . | permissions: contents: write # Required for creating releases . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#permissions-required",
     
     "relUrl": "/docs/ru-release.html#permissions-required"
-  },"335": {
+  },"336": {
     "doc": "📦 Release Management",
     "title": "📋 Usage Patterns",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-usage-patterns",
     
     "relUrl": "/docs/ru-release.html#-usage-patterns"
-  },"336": {
+  },"337": {
     "doc": "📦 Release Management",
     "title": "1. Production Releases",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 . | name: Production Release on: push: tags: ['v[0-9]+.[0-9]+.[0-9]+'] # v1.0.0, v2.1.3, etc. jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: false prerelease: false permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#1-production-releases",
     
     "relUrl": "/docs/ru-release.html#1-production-releases"
-  },"337": {
+  },"338": {
     "doc": "📦 Release Management",
     "title": "2. Beta/RC Releases",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 . | name: Pre-Release on: push: tags: ['v*-beta*', 'v*-rc*'] # v1.0.0-beta1, v2.0.0-rc1 jobs: prerelease: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: prerelease: true permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#2-betarc-releases",
     
     "relUrl": "/docs/ru-release.html#2-betarc-releases"
-  },"338": {
+  },"339": {
     "doc": "📦 Release Management",
     "title": "3. Draft Reviews",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | name: Draft Release on: workflow_dispatch: # Manual trigger inputs: tag: description: 'Release tag' required: true type: string jobs: draft: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: true tag_name: $ permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#3-draft-reviews",
     
     "relUrl": "/docs/ru-release.html#3-draft-reviews"
-  },"339": {
+  },"340": {
     "doc": "📦 Release Management",
     "title": "4. Combined CI + Release",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 . | name: CI and Release on: push: branches: [main] tags: ['v*'] pull_request: branches: [main] jobs: # Run tests first test: if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/') uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1 with: source_dirs: \"src/\" # Only release on tags release: if: startsWith(github.ref, 'refs/tags/') needs: [test] uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#4-combined-ci--release",
     
     "relUrl": "/docs/ru-release.html#4-combined-ci--release"
-  },"340": {
+  },"341": {
     "doc": "📦 Release Management",
     "title": "🔄 Release Process",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-release-process",
     
     "relUrl": "/docs/ru-release.html#-release-process"
-  },"341": {
+  },"342": {
     "doc": "📦 Release Management",
     "title": "What Happens",
     "content": ". | Checkout: Repository code is checked out with full history | Release Creation: GitHub release is created with: . | Tag: From inputs.tag_name or the git tag that triggered the workflow | Title: Auto-generated from tag name | Notes: Auto-generated from PRs and commits since last release | Assets: Source code archives (.zip and .tar.gz) automatically included | . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#what-happens",
     
     "relUrl": "/docs/ru-release.html#what-happens"
-  },"342": {
+  },"343": {
     "doc": "📦 Release Management",
     "title": "Auto-Generated Release Notes",
     "content": "GitHub automatically generates release notes including: . | Pull Requests merged since the last release | New Contributors with their first contributions | Commit History formatted professionally | Comparison Links to view changes | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#auto-generated-release-notes",
     
     "relUrl": "/docs/ru-release.html#auto-generated-release-notes"
-  },"343": {
+  },"344": {
     "doc": "📦 Release Management",
     "title": "🛠️ Advanced Scenarios",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#%EF%B8%8F-advanced-scenarios",
     
     "relUrl": "/docs/ru-release.html#️-advanced-scenarios"
-  },"344": {
+  },"345": {
     "doc": "📦 Release Management",
     "title": "Custom Tag Naming",
     "content": "| 1 2 3 4 5 6 7 . | jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: tag_name: \"release-$\" permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#custom-tag-naming",
     
     "relUrl": "/docs/ru-release.html#custom-tag-naming"
-  },"345": {
+  },"346": {
     "doc": "📦 Release Management",
     "title": "Conditional Release Types",
     "content": "| 1 2 3 4 5 6 7 8 . | jobs: release: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1 with: draft: $ prerelease: $ permissions: contents: write . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#conditional-release-types",
     
     "relUrl": "/docs/ru-release.html#conditional-release-types"
-  },"346": {
+  },"347": {
     "doc": "📦 Release Management",
     "title": "🔗 Related Workflows",
     "content": ". | ESP32 Releases - Use ru-release-with-artifacts.yml for firmware releases | Documentation - Often combined with release workflows | C/C++ Linting - Quality checks before releases | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-related-workflows",
     
     "relUrl": "/docs/ru-release.html#-related-workflows"
-  },"347": {
+  },"348": {
     "doc": "📦 Release Management",
     "title": "📚 Examples in Production",
     "content": "This workflow is used by: . | HardFOC Driver Libraries - Automated releases on version tags | ESP32 Projects - Combined with build artifacts for firmware releases | Documentation Sites - Release coordination with documentation updates | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-examples-in-production",
     
     "relUrl": "/docs/ru-release.html#-examples-in-production"
-  },"348": {
+  },"349": {
     "doc": "📦 Release Management",
     "title": "🐛 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#-troubleshooting",
     
     "relUrl": "/docs/ru-release.html#-troubleshooting"
-  },"349": {
+  },"350": {
     "doc": "📦 Release Management",
     "title": "Common Issues",
     "content": "| Issue | Solution | . | Permission denied | Add permissions: contents: write to calling workflow | . | Tag not found | Ensure workflow triggers on correct tag patterns | . | Empty release notes | Check that PRs use proper titles and descriptions | . | Duplicate releases | Verify tag uniqueness and workflow triggers | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#common-issues",
     
     "relUrl": "/docs/ru-release.html#common-issues"
-  },"350": {
+  },"351": {
     "doc": "📦 Release Management",
     "title": "Debug Tips",
     "content": ". | Check permissions in the calling repository’s workflow | Verify tag format matches your trigger patterns | Review repository settings for release permissions | Test with draft releases first | . 📖 ← Back to Documentation Index . ",
     "url": "/hf-general-ci-tools/development/docs/ru-release.html#debug-tips",
     
     "relUrl": "/docs/ru-release.html#debug-tips"
-  },"351": {
+  },"352": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📝 YAML Linting Tools (Reusable)",
     "content": "Workflow: ru-yaml-lint.yml → 📝 [RU] YAML Linting Tools . A comprehensive reusable workflow for YAML file validation and formatting using yamllint. Ensures proper syntax, formatting, and adherence to best practices across all YAML files in your repository. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html",
     
     "relUrl": "/docs/ru-yaml-lint.html"
-  },"352": {
+  },"353": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📋 Overview",
     "content": "This reusable workflow (ru-yaml-lint.yml) validates YAML files in your repository using yamllint to ensure proper formatting and syntax. It’s designed for maximum configurability and can be easily integrated into any project with YAML files. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-overview",
     
     "relUrl": "/docs/ru-yaml-lint.html#-overview"
-  },"353": {
+  },"354": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "✨ Live CI Example",
     "content": "👀 See our comprehensive testing workflow: ci-yaml-lint.yml which demonstrates all features of this reusable workflow by testing it against this repository’s YAML files with comprehensive configuration options. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-live-ci-example",
     
     "relUrl": "/docs/ru-yaml-lint.html#-live-ci-example"
-  },"354": {
+  },"355": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📋 Table of Contents",
     "content": ". | Overview | Inputs | Outputs | Usage Examples | Configuration | Troubleshooting | Related Workflows | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-table-of-contents",
     
     "relUrl": "/docs/ru-yaml-lint.html#-table-of-contents"
-  },"355": {
+  },"356": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🎯 Overview",
     "content": "Purpose: YAML file validation and formatting Key Features: . | yamllint integration | Configurable rules | Flexible path specification | Exclude patterns support | Strict mode option | Detailed reporting | . Use Case: YAML file quality and consistency enforcement . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-overview-1",
     
     "relUrl": "/docs/ru-yaml-lint.html#-overview-1"
-  },"356": {
+  },"357": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "⚙️ Inputs",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#%EF%B8%8F-inputs",
     
     "relUrl": "/docs/ru-yaml-lint.html#️-inputs"
-  },"357": {
+  },"358": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📁 File Selection",
     "content": "| Input | Description | Required | Default | Type | . | paths | Comma-separated list of paths to check | No | **/*.yml,**/*.yaml | string | . | exclude_patterns | Comma-separated patterns to exclude | No | .git/**,node_modules/**,venv/**,.venv/** | string | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-file-selection",
     
     "relUrl": "/docs/ru-yaml-lint.html#-file-selection"
-  },"358": {
+  },"359": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "⚙️ Configuration",
     "content": "| Input | Description | Required | Default | Type | . | config_file | Path to yamllint configuration file | No | _config/.yamllint | string | . | strict_mode | Enable strict mode (fail on warnings) | No | false | boolean | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#%EF%B8%8F-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#️-configuration"
-  },"359": {
+  },"360": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📤 Outputs",
     "content": "| Output | Description | . | result | YAML lint result (success/failure) | . | files_checked | Number of files checked | . | issues_found | Number of issues found | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-outputs",
     
     "relUrl": "/docs/ru-yaml-lint.html#-outputs"
-  },"360": {
+  },"361": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🚀 Usage Examples",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-usage-examples",
     
     "relUrl": "/docs/ru-yaml-lint.html#-usage-examples"
-  },"361": {
+  },"362": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Basic Usage",
     "content": "| 1 2 3 4 5 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#basic-usage",
     
     "relUrl": "/docs/ru-yaml-lint.html#basic-usage"
-  },"362": {
+  },"363": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Advanced Usage",
     "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,_site/**' . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#advanced-usage",
     
     "relUrl": "/docs/ru-yaml-lint.html#advanced-usage"
-  },"363": {
+  },"364": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Workflow-Only Checking",
     "content": "| 1 2 3 4 5 6 7 8 . | name: Workflow YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml' strict_mode: true . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#workflow-only-checking",
     
     "relUrl": "/docs/ru-yaml-lint.html#workflow-only-checking"
-  },"364": {
+  },"365": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Comprehensive Configuration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 . | name: Complete YAML Lint on: [push, pull_request] jobs: yamllint: uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1 with: paths: '.github/workflows/*.yml,docs/*.yml,**/*.yaml' config_file: '_config/.yamllint' strict_mode: true exclude_patterns: '.git/**,node_modules/**,venv/**,.venv/**,_site/**' . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#comprehensive-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#comprehensive-configuration"
-  },"365": {
+  },"366": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "⚙️ Configuration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#%EF%B8%8F-configuration-1",
     
     "relUrl": "/docs/ru-yaml-lint.html#️-configuration-1"
-  },"366": {
+  },"367": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "_config/.yamllint Configuration",
     "content": "Create a _config/.yamllint file in your project (relative to the repository root): . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | extends: default rules: line-length: max: 120 level: warning indentation: spaces: 2 comments: min-spaces-from-content: 1 document-start: present: true truthy: allowed-values: ['true', 'false', 'on', 'off'] . | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#_configyamllint-configuration",
     
     "relUrl": "/docs/ru-yaml-lint.html#_configyamllint-configuration"
-  },"367": {
+  },"368": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Default Rules",
     "content": "The workflow uses yamllint with these default settings: . | Line length: 120 characters (warning) | Indentation: 2 spaces | Document start: Required | Comments: Proper spacing | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#default-rules",
     
     "relUrl": "/docs/ru-yaml-lint.html#default-rules"
-  },"368": {
+  },"369": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🔧 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-troubleshooting",
     
     "relUrl": "/docs/ru-yaml-lint.html#-troubleshooting"
-  },"369": {
+  },"370": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Common Issues",
     "content": "YAML Syntax Errors . | Check for proper indentation (2 spaces) | Verify YAML syntax is valid | Ensure proper document structure | . Line Length Issues . | Adjust line length in _config/.yamllint configuration | Break long lines appropriately | Use YAML’s line continuation features | . Indentation Problems . | Use consistent 2-space indentation | Avoid mixing tabs and spaces | Check for proper nesting | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#common-issues",
     
     "relUrl": "/docs/ru-yaml-lint.html#common-issues"
-  },"370": {
+  },"371": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "Debug Mode",
     "content": "Enable debug output by checking the workflow logs in GitHub Actions. ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#debug-mode",
     
     "relUrl": "/docs/ru-yaml-lint.html#debug-mode"
-  },"371": {
+  },"372": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "📚 Related Workflows",
     "content": ". | C/C++ Lint - Code quality checks | Static Analysis - Security analysis | Documentation - Documentation generation | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-related-workflows",
     
     "relUrl": "/docs/ru-yaml-lint.html#-related-workflows"
-  },"372": {
+  },"373": {
     "doc": "📝 YAML Linting Tools (Reusable)",
     "title": "🔗 Related Resources",
     "content": ". | yamllint Documentation | YAML Specification | GitHub Actions YAML Reference | . ← Previous: Link Check Workflow . | 📚 All Documentation | 🏠 Main README | . ",
     "url": "/hf-general-ci-tools/development/docs/ru-yaml-lint.html#-related-resources",
     
     "relUrl": "/docs/ru-yaml-lint.html#-related-resources"
-  },"373": {
+  },"374": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🔀 Documentation Versioning Guide",
     "content": "Complete guide to implementing versioned documentation with automatic Doxygen and Jekyll integration using the enhanced ru-docs-publish.yml workflow. ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html",
     
     "relUrl": "/docs/versioning-guide.html"
-  },"374": {
+  },"375": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "📋 Table of Contents",
     "content": ". | Quick Start | Versioning Strategies | Configuration Options | Doxygen Integration | Jekyll Integration | Deployment Strategies | Workflow Examples | Best Practices | Troubleshooting | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-table-of-contents",
     
     "relUrl": "/docs/versioning-guide.html#-table-of-contents"
-  },"375": {
+  },"376": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🚀 Quick Start",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-quick-start",
     
     "relUrl": "/docs/versioning-guide.html#-quick-start"
-  },"376": {
+  },"377": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "1. Enable Versioning in Your Workflow",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 . | name: '📚 Publish Versioned Documentation' on: push: branches: ['main', 'release/*'] pull_request: branches: ['main'] workflow_dispatch: permissions: contents: 'read' pages: 'write' id-token: 'write' jobs: ci-docs-publish: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning is now enabled by default deployment_branch: 'gh-pages' # Required for versioned documentation # Doxygen versioning doxygen_version_strategy: 'auto' doxygen_config: '_config/Doxyfile' # Jekyll configuration jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Versioned deployment deployment_branch: 'gh-pages' # Quality checks run_link_check: 'true' run_markdown_lint: 'true' deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#1-enable-versioning-in-your-workflow",
     
     "relUrl": "/docs/versioning-guide.html#1-enable-versioning-in-your-workflow"
-  },"377": {
+  },"378": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "2. Version Configuration (Automatic)",
     "content": "No separate config files needed! The workflow automatically handles versioning by: . | Using your main _config.yml as the base | Dynamically injecting version information during build | Updating title and baseurl for versioned documentation | Adding version metadata automatically | . Example: Your main _config.yml: . | 1 2 3 4 5 6 7 8 9 . | title: \"My Project\" description: \"Documentation for My Project\" baseurl: \"/myproject\" url: \"https://myusername.github.io\" # All your existing configuration... markdown: kramdown highlighter: rouge theme: minima . | . Automatically becomes for versioned docs: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 . | title: \"My Project - v1.2.3\" description: \"Documentation for My Project\" baseurl: \"/myproject/v1.2.3\" url: \"https://myusername.github.io\" # All your existing configuration... markdown: kramdown highlighter: rouge theme: minima # Version information (auto-generated) version: \"v1.2.3\" version_type: \"stable\" . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#2-version-configuration-automatic",
     
     "relUrl": "/docs/versioning-guide.html#2-version-configuration-automatic"
-  },"378": {
+  },"379": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "3. Dynamic Configuration (Automatic)",
     "content": "The workflow automatically modifies your main _config.yml to inject version-specific information: . | Title: Appends version name to the title | Base URL: Updates to include version path | Version Info: Adds version and version_type variables | Comment-safe processing: Safely handles inline comments in configuration files | Clean generation: Creates _config_generated.yml without syntax errors | . No custom templates are needed - the workflow handles everything automatically with robust configuration processing. Navigation for Versioned Docs: . Just the Docs uses front matter navigation (not _data/navigation.yml), so versioned navigation is handled automatically through page front matter: . | 1 2 3 4 5 . | --- nav_order: 1 parent: \"Getting Started\" has_children: true --- . | . The workflow automatically generates the navigation menu based on the front matter in your markdown files. | Page front matter - nav_order, parent, has_children work the same way | Folder structure - Pages are organized in directories as usual | Version-specific content - You can add version info to page titles in front matter | No separate navigation files needed - Just the Docs handles this automatically | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#3-dynamic-configuration-automatic",
     
     "relUrl": "/docs/versioning-guide.html#3-dynamic-configuration-automatic"
-  },"379": {
+  },"380": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🎯 Versioning vs Deployment: Understanding the Difference",
     "content": "Important: Versioning and deployment are separate concerns that can be combined in different ways: . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-versioning-vs-deployment-understanding-the-difference",
     
     "relUrl": "/docs/versioning-guide.html#-versioning-vs-deployment-understanding-the-difference"
-  },"380": {
+  },"381": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Architectural Design Decisions",
     "content": "The following features are automatically enabled with versioned documentation: . | Version preservation - All existing version directories are preserved | Root redirect - Creates redirect from root to latest stable version | Version selector - Adds version selector component for navigation | . Why these are automatic: . | Root redirect is essential - Without it, the root URL would be broken | Keeping existing versions is required - Otherwise versions get deleted on each deployment | Version selector is necessary UX - Users need a way to navigate between versions | . This architectural decision ensures: . | ✅ Consistent behavior - Versioned deployment always works correctly | ✅ Simplified configuration - Users don’t need to understand internal dependencies | ✅ Professional results - All versioned deployments have proper UX features | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#architectural-design-decisions",
     
     "relUrl": "/docs/versioning-guide.html#architectural-design-decisions"
-  },"381": {
+  },"382": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Automatic Base URL Extraction",
     "content": "The version_base_url input has been deprecated in favor of automatic extraction from your Jekyll configuration: . | 1 2 3 4 5 . | # In your _config.yml baseurl: \"/myproject\" # This is automatically used as the base URL # In your workflow - no need to specify version_base_url # The base URL \"/myproject\" is automatically extracted and used . | . Benefits: . | ✅ Single source of truth - Base URL defined once in _config.yml | ✅ No duplication - Eliminates potential inconsistencies | ✅ Simpler configuration - One less input to manage | ✅ Automatic consistency - Versioned URLs always match your main site structure | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#automatic-base-url-extraction",
     
     "relUrl": "/docs/versioning-guide.html#automatic-base-url-extraction"
-  },"382": {
+  },"383": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioning Without Deployment",
     "content": "Purpose: Generate versioned documentation artifacts for internal use, testing, or future deployment. What happens: . | Doxygen gets versioned PROJECT_NUMBER (e.g., v1.0.0, v1.1.0-dev) | Jekyll generates versioned configurations | Documentation is built with version information | But NOT deployed to GitHub Pages | . Use cases: . | Development builds for testing | Pre-release validation | CI/CD artifact generation | Internal documentation review | . Configuration: . | 1 2 . | deploy_pages: 'false' # No deployment # Versioning is always enabled by default . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioning-without-deployment",
     
     "relUrl": "/docs/versioning-guide.html#versioning-without-deployment"
-  },"383": {
+  },"384": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioning With Deployment",
     "content": "Purpose: Publish versioned documentation to GitHub Pages for end users. What happens: . | Everything from versioning without deployment, PLUS | Deploy to versioned directories in gh-pages branch | Create version selector and redirects | Make documentation accessible to users | . Use cases: . | Production releases | Multi-version user access | Release management | . Configuration: . | 1 2 . | deploy_pages: 'true' # Deploy to GitHub Pages # Versioning and versioned deployment are always enabled by default . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioning-with-deployment",
     
     "relUrl": "/docs/versioning-guide.html#versioning-with-deployment"
-  },"384": {
+  },"385": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioning Strategies",
     "content": "Auto Detection (Recommended) . The workflow automatically detects versions from: . | Branch/Tag Pattern | Version Type | Deployment Path | Example | . | main | Development | development/ | Latest features | . | release/v1.0.0 | Stable | v1.0.0/ | Production release | . | release/v1.1.0-rc1 | Pre-release | v1.1.0-rc1/ | Release candidate | . | release/v2.0.0-beta1 | Pre-release | v2.0.0-beta1/ | Beta release | . | v1.2.0 (tag) | Stable | v1.2.0/ | Tagged release | . Disabled Versioning . For versioned documentation (now the default): . | 1 2 3 4 5 . | deployment_branch: 'gh-pages' # Required for versioned documentation deploy_pages: 'true' # Deploy to GitHub Pages # Versioning is always enabled by default # Automatically uses your main _config.yml as base # No separate config files needed! . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioning-strategies",
     
     "relUrl": "/docs/versioning-guide.html#versioning-strategies"
-  },"385": {
+  },"386": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "⚙️ Configuration Matrix",
     "content": "Understanding how deployment settings work with versioning (always enabled): . | deploy_pages | Result | . | false | Versioned docs built as artifacts (no deployment) | . | true | Versioned docs deployed to versioned directories | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#%EF%B8%8F-configuration-matrix",
     
     "relUrl": "/docs/versioning-guide.html#️-configuration-matrix"
-  },"386": {
+  },"387": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Common Use Cases",
     "content": "Development/Testing (Build only): . | 1 2 . | deploy_pages: 'false' # Result: Versioned docs built as artifacts . | . Production (All versions): . | 1 2 . | deploy_pages: 'true' # Result: Versioned docs deployed to versioned directories . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#common-use-cases",
     
     "relUrl": "/docs/versioning-guide.html#common-use-cases"
-  },"387": {
+  },"388": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "⚙️ Configuration Options",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#%EF%B8%8F-configuration-options",
     
     "relUrl": "/docs/versioning-guide.html#️-configuration-options"
-  },"388": {
+  },"389": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Core Versioning Settings",
     "content": "| Input | Type | Default | Description | . | deployment_branch | string | 'gh-pages' | Branch for versioned documentation deployment (required) | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#core-versioning-settings",
     
     "relUrl": "/docs/versioning-guide.html#core-versioning-settings"
-  },"389": {
+  },"390": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Doxygen Versioning",
     "content": "Note: Doxygen versioning is automatically synchronized with git-based versioning. No separate configuration needed. Automatic Version Generation: . | Git Context | Version Type | Generated Doxygen Version | Example | . | main branch | development | {latest_tag}-dev or 0.1.0-dev | v1.2.0-dev | . | release/v1.0.0 branch | stable | {version_name} | v1.0.0 | . | v1.1.0-rc1 tag | prerelease | {version_name} | v1.1.0-rc1 | . | Other branches | preview | {latest_tag}-preview or 0.1.0-preview | v1.2.0-preview | . Benefits: . | ✅ Consistent formatting - All projects follow the same pattern | ✅ No configuration errors - Can’t accidentally create malformed versions | ✅ Semantic versioning compliance - Follows industry standards | ✅ Git context awareness - Versions reflect actual git state | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#doxygen-versioning",
     
     "relUrl": "/docs/versioning-guide.html#doxygen-versioning"
-  },"390": {
+  },"391": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Centralized Doxygen Architecture",
     "content": "Doxygen artifacts are centrally managed for optimal access: . Root-Level Doxygen Organization: . | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 . | gh-pages branch: ├── doxs/ # Centralized Doxygen artifacts │ ├── v1.0.0/ # Doxygen docs for v1.0.0 │ ├── v1.1.0/ # Doxygen docs for v1.1.0 │ ├── v2.0.0-rc1/ # Doxygen docs for v2.0.0-rc1 │ ├── development/ # Doxygen docs for main branch │ ├── latest -&gt; v1.1.0/ # Symlink to latest stable │ ├── version_selector.js # Centralized version selector │ └── versions.json # Centralized version metadata ├── v1.0.0/ # Jekyll site for v1.0.0 │ ├── api -&gt; ../../doxs/v1.0.0/ # Symlink to centralized API │ ├── guides/ # Jekyll content │ └── ... └── development/ # Jekyll site for development ├── api -&gt; ../../doxs/development/ # Symlink to centralized API ├── guides/ └── ... | . Benefits of Centralized Architecture: . | ✅ Single source of truth - All API versions in one location | ✅ Easy discovery - Users know exactly where to find API docs | ✅ Efficient storage - No duplication of Doxygen artifacts | ✅ Flexible access - Works with or without Jekyll | ✅ Version selector - Centralized navigation between API versions | ✅ Symlink integration - Jekyll sites link to centralized API docs | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#centralized-doxygen-architecture",
     
     "relUrl": "/docs/versioning-guide.html#centralized-doxygen-architecture"
-  },"391": {
+  },"392": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Deployment Settings",
     "content": "| Input | Type | Default | Description | . | deployment_branch | string | gh-pages | Branch for deployment | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#deployment-settings",
     
     "relUrl": "/docs/versioning-guide.html#deployment-settings"
-  },"392": {
+  },"393": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🔧 Doxygen Integration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-doxygen-integration",
     
     "relUrl": "/docs/versioning-guide.html#-doxygen-integration"
-  },"393": {
+  },"394": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Automatic Version Detection",
     "content": "The workflow automatically sets Doxygen’s PROJECT_NUMBER based on: . | Git Tags: Uses the latest tag for stable releases | Branch Names: Extracts version from release/v* branches | Development: Uses latest tag + “-dev” suffix | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#automatic-version-detection",
     
     "relUrl": "/docs/versioning-guide.html#automatic-version-detection"
-  },"394": {
+  },"395": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Version Examples",
     "content": "| Source | Doxygen PROJECT_NUMBER | Description | . | release/v1.0.0 | v1.0.0 | Stable release | . | release/v1.1.0-rc1 | v1.1.0-rc1 | Release candidate | . | main (with v1.0.0 tag) | v1.0.0-dev | Development build | . | main (no tags) | 0.1.0-dev | Initial development | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#version-examples",
     
     "relUrl": "/docs/versioning-guide.html#version-examples"
-  },"395": {
+  },"396": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🎨 Jekyll Integration",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-jekyll-integration",
     
     "relUrl": "/docs/versioning-guide.html#-jekyll-integration"
-  },"396": {
+  },"397": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Template System",
     "content": "Use placeholders in your Jekyll templates: . | Placeholder | Replaced With | Example | . | {VERSION} | Version name | v1.0.0 | . | {VERSION_TYPE} | Version type | stable | . | {BASE_URL} | Full base URL | /myproject/v1.0.0 | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#template-system",
     
     "relUrl": "/docs/versioning-guide.html#template-system"
-  },"397": {
+  },"398": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Generated Files",
     "content": "The workflow generates: . | _config_generated.yml - Versioned Jekyll configuration | version_info.json - Version metadata | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#generated-files",
     
     "relUrl": "/docs/versioning-guide.html#generated-files"
-  },"398": {
+  },"399": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Version Metadata",
     "content": "Each version includes metadata: . | 1 2 3 4 5 6 7 8 . | { \"version\": \"v1.0.0\", \"type\": \"stable\", \"deployed_at\": \"2024-01-15T10:30:00Z\", \"commit\": \"abc123...\", \"ref\": \"refs/heads/release/v1.0.0\", \"doxygen_version\": \"v1.0.0\" } . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#version-metadata",
     
     "relUrl": "/docs/versioning-guide.html#version-metadata"
-  },"399": {
+  },"400": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🚀 Deployment Strategies",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-deployment-strategies",
     
     "relUrl": "/docs/versioning-guide.html#-deployment-strategies"
-  },"400": {
+  },"401": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Versioned Deployment Structure",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 . | gh-pages branch: ├── index.html # Redirects to latest stable ├── v1.0.0/ # Stable release │ ├── api/ # Doxygen docs │ ├── guides/ # Jekyll content │ ├── index.html │ └── version_info.json ├── v1.1.0/ # Another stable release │ ├── api/ │ ├── guides/ │ └── ... ├── v2.0.0-rc1/ # Pre-release │ ├── api/ │ ├── guides/ │ └── ... └── development/ # Development (main branch) ├── api/ ├── guides/ └── ... | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#versioned-deployment-structure",
     
     "relUrl": "/docs/versioning-guide.html#versioned-deployment-structure"
-  },"401": {
+  },"402": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "URL Structure",
     "content": "| Version | URL | Description | . | Latest Stable | / | Redirects to latest stable | . | v1.0.0 | /v1.0.0/ | Specific stable version | . | v2.0.0-rc1 | /v2.0.0-rc1/ | Pre-release version | . | Development | /development/ | Latest development | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#url-structure",
     
     "relUrl": "/docs/versioning-guide.html#url-structure"
-  },"402": {
+  },"403": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Custom Deployment Branch",
     "content": "| 1 . | deployment_branch: 'docs-deploy' # Use custom branch . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#custom-deployment-branch",
     
     "relUrl": "/docs/versioning-guide.html#custom-deployment-branch"
-  },"403": {
+  },"404": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "📝 Workflow Examples",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-workflow-examples",
     
     "relUrl": "/docs/versioning-guide.html#-workflow-examples"
-  },"404": {
+  },"405": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Basic Versioning",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 . | name: 'Documentation with Versioning' on: push: branches: ['main', 'release/*'] jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' doxygen_config: '_config/Doxyfile' jekyll_enabled: 'true' deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#basic-versioning",
     
     "relUrl": "/docs/versioning-guide.html#basic-versioning"
-  },"405": {
+  },"406": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Advanced Configuration",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 . | name: 'Advanced Versioned Documentation' on: push: branches: ['main', 'release/*', 'feature/*'] pull_request: branches: ['main'] jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: # Versioning (always enabled) deployment_branch: 'gh-pages' # Doxygen (auto-synchronized with git versioning) doxygen_config: 'docs/Doxyfile' # Jekyll jekyll_enabled: 'true' jekyll_source: 'docs' jekyll_destination: '_site' # Deployment deployment_branch: 'gh-pages' # Optional: defaults to 'gh-pages' # Quality run_link_check: 'true' run_markdown_lint: 'true' run_spell_check: 'true' verbose: 'true' # Standard deployment deploy_pages: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#advanced-configuration",
     
     "relUrl": "/docs/versioning-guide.html#advanced-configuration"
-  },"406": {
+  },"407": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Manual Versioning",
     "content": "| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 . | name: 'Manual Version Control' on: workflow_dispatch: inputs: version: description: 'Version to deploy' required: true type: string jobs: docs: uses: 'hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@main' with: deployment_branch: 'gh-pages' # Required for versioned documentation deploy_pages: 'true' # Deploy to GitHub Pages . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#manual-versioning",
     
     "relUrl": "/docs/versioning-guide.html#manual-versioning"
-  },"407": {
+  },"408": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🎯 Best Practices",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-best-practices",
     
     "relUrl": "/docs/versioning-guide.html#-best-practices"
-  },"408": {
+  },"409": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "1. Git-Based Versioning (Enforced)",
     "content": "Always use git-based versioning for security and consistency: . | ✅ Tags: v1.0.0, v1.1.0-rc1, v2.0.0-beta1 | ✅ Release branches: release/v1.0.0, release/v1.1.0-rc1 | ❌ Manual input: Never allow manual version names (security risk) | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#1-git-based-versioning-enforced",
     
     "relUrl": "/docs/versioning-guide.html#1-git-based-versioning-enforced"
-  },"409": {
+  },"410": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "2. Branch Naming Convention",
     "content": "Follow semantic versioning for branches: . | 1 2 3 4 5 6 7 8 9 10 11 12 . | # Stable releases release/v1.0.0 release/v1.1.0 release/v2.0.0 # Pre-releases release/v1.1.0-rc1 release/v2.0.0-beta1 release/v1.2.0-alpha1 # Development main . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#2-branch-naming-convention",
     
     "relUrl": "/docs/versioning-guide.html#2-branch-naming-convention"
-  },"410": {
+  },"411": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "3. Configuration Management",
     "content": "The workflow automatically handles configuration without requiring templates: . | Uses your main _config.yml as the base | Dynamically injects version information | No template files needed | . | 1 2 3 4 5 6 7 8 . | ### 4. Version Selector Integration The version selector is automatically included in your documentation: ```html &lt;!-- Version selector is automatically generated and injected --&gt; &lt;!-- No manual inclusion needed - it's handled by the workflow --&gt; . | . The workflow automatically creates version selector JavaScript for easy navigation between versions. ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#3-configuration-management",
     
     "relUrl": "/docs/versioning-guide.html#3-configuration-management"
-  },"411": {
+  },"412": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "5. Quality Assurance",
     "content": "Enable all quality checks: . | 1 2 3 4 . | run_link_check: 'true' run_markdown_lint: 'true' run_spell_check: 'true' verbose: 'true' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#5-quality-assurance",
     
     "relUrl": "/docs/versioning-guide.html#5-quality-assurance"
-  },"412": {
+  },"413": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "6. Deployment Strategy",
     "content": "Choose the right deployment strategy: . | Versioned Deployment: For projects with multiple versions | Standard Deployment: For simple single-version docs | Custom Branch: For specialized deployment needs | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#6-deployment-strategy",
     
     "relUrl": "/docs/versioning-guide.html#6-deployment-strategy"
-  },"413": {
+  },"414": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "🔧 Troubleshooting",
     "content": " ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-troubleshooting",
     
     "relUrl": "/docs/versioning-guide.html#-troubleshooting"
-  },"414": {
+  },"415": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Common Issues",
     "content": "1. Version Not Detected . Problem: Version detection fails or returns empty values. Solution: Check branch naming convention and ensure deployment branch is specified: . | 1 . | deployment_branch: 'gh-pages' # Required for versioned documentation . | . 2. Doxygen Version Not Set . Problem: Doxygen PROJECT_NUMBER is not updated. Solution: Ensure Doxygen versioning is enabled: . | 1 2 . | doxygen_version_strategy: 'auto' # or 'manual' doxygen_config: '_config/Doxyfile' # Ensure Doxyfile exists . | . 3. Jekyll Build Fails . Problem: Jekyll build fails with versioned configuration. Solution: Check Jekyll configuration: . | 1 2 3 4 5 . | # Check if main config exists ls _config.yml # Verify Jekyll configuration jekyll doctor . | . 4. Deployment Issues . Problem: Versioned deployment fails. Solution: Check deployment branch and permissions: . | 1 2 3 4 5 6 . | deployment_branch: 'gh-pages' # Ensure branch exists # Check repository permissions permissions: contents: 'read' pages: 'write' id-token: 'write' . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#common-issues",
     
     "relUrl": "/docs/versioning-guide.html#common-issues"
-  },"415": {
+  },"416": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Debug Commands",
     "content": "| 1 2 3 4 5 6 7 8 9 10 . | # Check version detection echo \"Version: $\" echo \"Type: $\" echo \"Doxygen: $\" # Check generated files ls -la docs/_config_generated.yml # Check deployment structure ls -la gh-pages-deploy/ . | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#debug-commands",
     
     "relUrl": "/docs/versioning-guide.html#debug-commands"
-  },"416": {
+  },"417": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "Getting Help",
     "content": ". | Check Workflow Logs: Review the GitHub Actions logs for detailed error messages | Validate Configuration: Ensure all required inputs are provided | Test Locally: Run Doxygen and Jekyll locally to verify configuration | Check Permissions: Ensure the workflow has necessary repository permissions | . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#getting-help",
     
     "relUrl": "/docs/versioning-guide.html#getting-help"
-  },"417": {
+  },"418": {
     "doc": "🔀 Documentation Versioning Guide",
     "title": "📚 Further Reading",
     "content": ". | HardFOC Versioning Policy - Organization versioning strategy and guidelines | Jekyll Guide - Jekyll configuration details | Doxygen Documentation - Doxygen reference | Semantic Versioning - Version numbering standard | GitHub Pages Documentation - GitHub Pages reference | . Built for the HardFOC ecosystem - Enabling seamless multi-version documentation with proper Semantic Versioning . ",
     "url": "/hf-general-ci-tools/development/docs/versioning-guide.html#-further-reading",
     
     "relUrl": "/docs/versioning-guide.html#-further-reading"
-  },"418": {
+  },"419": {
     "doc": "🔄 Reusable Workflows",
     "title": "Reusable Workflows",
     "content": "This section contains all the reusable GitHub Actions workflows available in this repository. ",
     "url": "/hf-general-ci-tools/development/workflows/#reusable-workflows",
     
     "relUrl": "/workflows/#reusable-workflows"
-  },"419": {
+  },"420": {
     "doc": "🔄 Reusable Workflows",
     "title": "Available Workflows",
     "content": ". | 🔧 C++ Linting Tools - Clang-format and clang-tidy for any C++ project | 🔍 C++ Static Analysis - Cppcheck security analysis with flexible configuration | 📚 Documentation Publisher - Complete docs pipeline with Doxygen, Jekyll, and GitHub Pages | 🔗 Documentation Link Check - Comprehensive link validation using Lychee | 📝 YAML Linting Tools - Flexible YAML validation and formatting | . ",
     "url": "/hf-general-ci-tools/development/workflows/#available-workflows",
     
     "relUrl": "/workflows/#available-workflows"
-  },"420": {
+  },"421": {
     "doc": "🔄 Reusable Workflows",
     "title": "🚀 Testing &amp; Validation",
     "content": "Each reusable workflow (ru-*.yml) has a corresponding comprehensive CI test workflow (ci-*.yml) that demonstrates all its features and validates its functionality. See CI Workflows &amp; Design Philosophy for details on our testing approach. ",
     "url": "/hf-general-ci-tools/development/workflows/#-testing--validation",
     
     "relUrl": "/workflows/#-testing--validation"
-  },"421": {
+  },"422": {
     "doc": "🔄 Reusable Workflows",
     "title": "Usage",
     "content": "Each workflow is designed to be reusable and can be called from other repositories. See the individual workflow documentation for detailed usage instructions and parameters. | ← Previous: Documentation | Next: CI Workflows &amp; Design → | . | 📚 All Documentation | 🏠 Main README | . ",
     "url": "/hf-general-ci-tools/development/workflows/#usage",
     
     "relUrl": "/workflows/#usage"
-  },"422": {
+  },"423": {
     "doc": "🔄 Reusable Workflows",
     "title": "🔄 Reusable Workflows",
     "content": " ",
     "url": "/hf-general-ci-tools/development/workflows/",
     
     "relUrl": "/workflows/"
-  },"423": {
+  },"424": {
     "doc": "Changelog",
     "title": "Changelog",
-    "content": "# Changelog All notable changes to the reusable workflows in this repository are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as described in [docs/VERSIONING.md](/hf-general-ci-tools/development/docs/VERSIONING/). A change that breaks callers pinned to the current major goes under a `### Breaking` heading in **Unreleased**, and the next release must then be a major bump. Breaking means: a workflow or input removed, an input's type changed, an input or secret made required, an output removed, or a job needing a permission it did not need before. The self-CI (`check_contract.py`) fails a pull request that makes such a change without that heading. ## [Unreleased] ### Fixed (documentation platform) - Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter's and JetBrains Mono's metrics (`size-adjust`, `ascent-override`, `descent-override`), so the swap to the web font keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance budget on cumulative layout shift. ### Added (documentation platform) - `packages/hardfoc-mkdocs-theme`: the HardFOC documentation theme as one pip package: `theme: hardfoc` (brand, header with the organisation crumb, footer, admonition / code / table / figure styles, hero, cards, chip and board card, Mermaid theming, light and dark), `plugins: [hardfoc]` (shared configuration, Markdown dialect with snippets, strict validation, the link / figure hooks, page checks for Jekyll leftovers and missing headings), figkit, `hardfoc-docs` (figures, generated regions, screenshots) and the pinned toolchain. - `ru-mkdocs-publish.yml`: installs the theme from the workflow's own commit (`theme_ref` to override); a `quality` job with a Lighthouse budget (`lighthouse`, `lighthouse_budgets`) and phone / desktop screenshots (`screenshots`) as artifacts; `release_version` (tags publish `vX.Y.Z` by default); `prune_legacy` removes the pre-MkDocs site from `gh-pages` in the first publish commit; a root `404.html` that redirects old addresses; the HardFOC Doxygen stylesheet when a Doxyfile has none; Doxygen's output folder is created first. - `tools/docs-migrate.py`: mechanical Jekyll-to-MkDocs migration of a repository, with `--check`. - `docs/MIGRATING-TO-MKDOCS.md` and `docs/DOCS-STYLE-GUIDE.md`. - Automatic patch release on every push to `main` (`release.yml`), unless Unreleased has a `### Breaking` section. ### Changed (documentation platform) - `templates/mkdocs-site` is a driver skeleton on the theme package; it no longer copies CSS, overrides, hooks or figkit into a repository. - `ru-mkdocs-publish.yml`: a `vX.Y.Z` tag publishes version `vX.Y.Z` (was `X.Y`; `release_version: minor` keeps the old behaviour). `requirements` is optional. ### Fixed - `ru-docs-publish`: copy static assets kept next to the Jekyll config (for example `_config/assets/css/custom.css`) into the site source before the build. Jekyll skips underscore folders, so driver sites never received their custom CSS and JavaScript. - `ru-docs-publish`: set the generated config's `url` to the publishing repository's Pages host, so canonical links and the sitemap stop pointing at an old owner. - `ru-mkdocs-publish`: call the `mike` command; `python3 -m mike` fails because mike has no `__main__`, so every deploy step failed. - `ru-docs-publish`: stop appending the version name to the site title; it made the sidebar title wrap. The version stays available as `version`. ## [1.1.0] - 2026-11-02 First release callers pin as `@v1` (v1.0.0 was cut before the platform work below had landed). No input has been removed and no workflow needs more permissions than before. ### Added - `ru-ci-gate.yml`: one required check (`CI gate / gate`) that passes only if every needed job succeeded or is an allowed skip. It also verifies that the calling workflow lists every job in `needs` and runs the gate with `if: always()`. - `ru-host-ci.yml`: host CMake configure (preset or `-S/-B`), build, ctest, and clang-tidy 18 and cppcheck on one file set selected from `compile_commands.json`. - `ru-docs-publish.yml`: optional input `artifact_name`. - `ru-docs-publish.yml`: pre-flight checks. just-the-docs `callouts` must be mappings with a `color`, and a Pages source set to \"GitHub Actions\" fails the deploy instead of leaving the site at 404. - Self-CI (`ci-self.yml`): pinned actionlint and shellcheck, a check for `run:` blocks ending in a bare `cond && cmd`, the permissions contract check, the breaking-change check, and unit tests for these checks. - Self-tests: `ci-docs-publish.yml` builds a site whose Jekyll source is a subdirectory, and `ci-host-ci.yml` runs the host workflow on a fixture. - README permissions table: exactly what each caller must grant. - `release.yml`: on a `vX.Y.Z` tag, creates a GitHub Release with generated notes and moves the `vX` major tag. - Dependabot for GitHub Actions (weekly). ### Changed - Every third-party action is pinned to a full commit SHA with a version comment. `softprops/action-gh-release` moves from v1 to v3.0.3, since the node16 runtime of v1 is no longer supported. - Every reusable workflow declares minimal permissions per job, with no top-level `permissions`. In `ru-docs-publish.yml`, only the `build` job keeps `contents: write`. ### Fixed - `ru-docs-publish.yml`: sites whose `jekyll_source` is a subdirectory failed with \"No such file or directory - _config_generated.yml\". - `ru-docs-publish.yml`: the root-redirect step pushed to `gh-pages` from pull requests when `deploy_pages` was true. Pull requests now always take the build-only path. - `ru-docs-publish.yml`: Doxygen failed when `OUTPUT_DIRECTORY` had a missing parent. The directory is now created first. - `ru-docs-publish.yml`: `PAGES_REPO_NWO` and `JEKYLL_GITHUB_TOKEN` are set for jekyll-github-metadata (\"No repo name found\"). - `ru-docs-linkcheck.yml`: `fail_on_errors: false` still failed on broken links, and `verbose` never took effect. Both inputs were compared with the string `'true'`. - `ru-markdown-lint.yml` (Docker path): the docker command was built as a string with literal quotes. ",
+    "content": "# Changelog All notable changes to the reusable workflows in this repository are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and releases follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as described in [docs/VERSIONING.md](/hf-general-ci-tools/development/docs/VERSIONING/). A change that breaks callers pinned to the current major goes under a `### Breaking` heading in **Unreleased**, and the next release must then be a major bump. Breaking means: a workflow or input removed, an input's type changed, an input or secret made required, an output removed, or a job needing a permission it did not need before. The self-CI (`check_contract.py`) fails a pull request that makes such a change without that heading. ## [Unreleased] ### Added (unversioned sites, link check) - `ru-mkdocs-publish.yml`: `versioning` input (default `true`). `false` builds an unversioned site (the organisation portal) and publishes it from the default branch as the whole content of the deployment branch, at its root, in one ordinary commit; tags publish nothing. The custom domain comes from a `CNAME` file in the site (`docs/CNAME`), never from what the branch held before, so a stale `CNAME` cannot take the site over. - Theme plugin: `versioned` option (unset: versioned, except `.github.io`), overridden by `HARDFOC_DOCS_VERSIONED`; an unversioned site gets the Pages root as `site_url` and no version selector. - `hardfoc-docs publish-root`: the publish step for unversioned sites, with unit tests against a scratch remote. - `ru-docs-linkcheck.yml`: `exclude_own_site` (default `true`) skips links to the repository's own Pages site on pull requests and until its `latest/` answers, so a repository's first MkDocs pull request no longer fails on its own `/latest/` links. - `ru-mkdocs-publish.yml`: `check_commands` run with `GH_TOKEN` set to the job's read-only token, so a site can generate pages from the GitHub API at build time (the organisation portal's repository catalogue). - Theme: a filterable catalogue component (`.hf-filter` search field, `.hf-chipbtn` topic buttons, `.hf-repo` cards), used by the organisation portal's repository list. - Theme: `navigation.prune` is on by default, so a page carries only the navigation it shows; on a site of about 85 pages it halves the HTML of every page and keeps it inside the Lighthouse performance budget. - Theme package unit tests (`packages/hardfoc-mkdocs-theme/tests/`), run by the self-CI. ### Changed (documentation platform) - Root `404.html` of versioned sites: a branded page (HardFOC mark, theme colours and font, light and dark) that says \"Redirecting to the latest documentation\" while `versions.json` loads, and shows \"Page not found\" with links only when no redirect applies, after two seconds, or without JavaScript. - Theme: from tablet width up, tables fill the column and their text cells wrap, instead of cutting off the last column (identifiers in code stay whole); on a phone, figures keep a readable size and scroll sideways instead of shrinking. ### Fixed (documentation platform) - Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter's and JetBrains Mono's metrics (`size-adjust`, `ascent-override`, `descent-override`), so the swap to the web font keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance budget on cumulative layout shift. - `hardfoc-docs screenshots` without `--page` crashed (`UnboundLocalError`). - Theme plugin: a link from `docs/` to a repository file that does not exist was turned into a GitHub link that 404s; it is now a warning, so `mkdocs build --strict` fails (a folder that is empty, a submodule not checked out, is not reported). - `tools/docs-migrate.py`: the Doxyfile's `INPUT` and `USE_MDFILE_AS_MAINPAGE` no longer point at the README (sources plus `docs/_doxygen/mainpage.md`, written when missing), `CASE_SENSE_NAMES = NO`, a final newline always; the caller workflow is named `📚 Docs`; Material's `hide:` front matter is kept. - Theme plugin: a link or figure marker written as inline code (an example on a page, such as ``[`x.hpp`](../inc/x.hpp)``) is left as it is instead of being rewritten or embedded. - Theme plugin: a link into the API reference (`[API](/hf-general-ci-tools/development/api/index.html)`) from a page that builds into a folder was re-based twice and published as a GitHub link to a file that does not exist (the API button of every site); it now points at the merged API reference. - Template: `examples/esp32/main/basic.cpp`, the file the template's examples table links. - Theme plugin: a link whose text holds brackets (``[`table[]`](../src/x.cpp)``) is rewritten like any other. - `hardfoc-docs gen` no longer fills regions in a folder with its own `mkdocs.yml` (a template or fixture inside the repository), which belong to that site. - `ru-mkdocs-publish.yml`: a Doxyfile without a final newline no longer swallows the stylesheet line the workflow appends. ### Added (documentation platform) - `packages/hardfoc-mkdocs-theme`: the HardFOC documentation theme as one pip package: `theme: hardfoc` (brand, header with the organisation crumb, footer, admonition / code / table / figure styles, hero, cards, chip and board card, Mermaid theming, light and dark), `plugins: [hardfoc]` (shared configuration, Markdown dialect with snippets, strict validation, the link / figure hooks, page checks for Jekyll leftovers and missing headings), figkit, `hardfoc-docs` (figures, generated regions, screenshots) and the pinned toolchain. - `ru-mkdocs-publish.yml`: installs the theme from the workflow's own commit (`theme_ref` to override); a `quality` job with a Lighthouse budget (`lighthouse`, `lighthouse_budgets`) and phone / desktop screenshots (`screenshots`) as artifacts; `release_version` (tags publish `vX.Y.Z` by default); `prune_legacy` removes the pre-MkDocs site from `gh-pages` in the first publish commit; a root `404.html` that redirects old addresses; the HardFOC Doxygen stylesheet when a Doxyfile has none; Doxygen's output folder is created first. - `tools/docs-migrate.py`: mechanical Jekyll-to-MkDocs migration of a repository, with `--check`. - `docs/MIGRATING-TO-MKDOCS.md` and `docs/DOCS-STYLE-GUIDE.md`. - Automatic patch release on every push to `main` (`release.yml`), unless Unreleased has a `### Breaking` section. ### Changed (documentation platform) - `templates/mkdocs-site` is a driver skeleton on the theme package; it no longer copies CSS, overrides, hooks or figkit into a repository. - `ru-mkdocs-publish.yml`: a `vX.Y.Z` tag publishes version `vX.Y.Z` (was `X.Y`; `release_version: minor` keeps the old behaviour). `requirements` is optional. ### Fixed - `ru-docs-publish`: copy static assets kept next to the Jekyll config (for example `_config/assets/css/custom.css`) into the site source before the build. Jekyll skips underscore folders, so driver sites never received their custom CSS and JavaScript. - `ru-docs-publish`: set the generated config's `url` to the publishing repository's Pages host, so canonical links and the sitemap stop pointing at an old owner. - `ru-mkdocs-publish`: call the `mike` command; `python3 -m mike` fails because mike has no `__main__`, so every deploy step failed. - `ru-docs-publish`: stop appending the version name to the site title; it made the sidebar title wrap. The version stays available as `version`. ## [1.1.0] - 2026-11-02 First release callers pin as `@v1` (v1.0.0 was cut before the platform work below had landed). No input has been removed and no workflow needs more permissions than before. ### Added - `ru-ci-gate.yml`: one required check (`CI gate / gate`) that passes only if every needed job succeeded or is an allowed skip. It also verifies that the calling workflow lists every job in `needs` and runs the gate with `if: always()`. - `ru-host-ci.yml`: host CMake configure (preset or `-S/-B`), build, ctest, and clang-tidy 18 and cppcheck on one file set selected from `compile_commands.json`. - `ru-docs-publish.yml`: optional input `artifact_name`. - `ru-docs-publish.yml`: pre-flight checks. just-the-docs `callouts` must be mappings with a `color`, and a Pages source set to \"GitHub Actions\" fails the deploy instead of leaving the site at 404. - Self-CI (`ci-self.yml`): pinned actionlint and shellcheck, a check for `run:` blocks ending in a bare `cond && cmd`, the permissions contract check, the breaking-change check, and unit tests for these checks. - Self-tests: `ci-docs-publish.yml` builds a site whose Jekyll source is a subdirectory, and `ci-host-ci.yml` runs the host workflow on a fixture. - README permissions table: exactly what each caller must grant. - `release.yml`: on a `vX.Y.Z` tag, creates a GitHub Release with generated notes and moves the `vX` major tag. - Dependabot for GitHub Actions (weekly). ### Changed - Every third-party action is pinned to a full commit SHA with a version comment. `softprops/action-gh-release` moves from v1 to v3.0.3, since the node16 runtime of v1 is no longer supported. - Every reusable workflow declares minimal permissions per job, with no top-level `permissions`. In `ru-docs-publish.yml`, only the `build` job keeps `contents: write`. ### Fixed - `ru-docs-publish.yml`: sites whose `jekyll_source` is a subdirectory failed with \"No such file or directory - _config_generated.yml\". - `ru-docs-publish.yml`: the root-redirect step pushed to `gh-pages` from pull requests when `deploy_pages` was true. Pull requests now always take the build-only path. - `ru-docs-publish.yml`: Doxygen failed when `OUTPUT_DIRECTORY` had a missing parent. The directory is now created first. - `ru-docs-publish.yml`: `PAGES_REPO_NWO` and `JEKYLL_GITHUB_TOKEN` are set for jekyll-github-metadata (\"No repo name found\"). - `ru-docs-linkcheck.yml`: `fail_on_errors: false` still failed on broken links, and `verbose` never took effect. Both inputs were compared with the string `'true'`. - `ru-markdown-lint.yml` (Docker path): the docker command was built as a string with literal quotes. ",
     "url": "/hf-general-ci-tools/development/CHANGELOG.html",
     
     "relUrl": "/CHANGELOG.html"
-  },"424": {
+  },"425": {
+    "doc": "Home",
+    "title": "Home",
+    "content": "# Home The organisation site, served from the root. ",
+    "url": "/hf-general-ci-tools/development/packages/hardfoc-mkdocs-theme/tests/fixtures/org-site/docs/",
+    
+    "relUrl": "/packages/hardfoc-mkdocs-theme/tests/fixtures/org-site/docs/"
+  },"426": {
+    "doc": "Home",
+    "title": "Home",
+    "content": "# Home A repository site, versioned. ",
+    "url": "/hf-general-ci-tools/development/packages/hardfoc-mkdocs-theme/tests/fixtures/repo-site/docs/",
+    
+    "relUrl": "/packages/hardfoc-mkdocs-theme/tests/fixtures/repo-site/docs/"
+  },"427": {
     "doc": "Changelog",
     "title": "Changelog",
     "content": "# Changelog ## Unreleased - First release. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/CHANGELOG.html",
     
     "relUrl": "/templates/mkdocs-site/CHANGELOG.html"
-  },"425": {
+  },"428": {
     "doc": "API guide",
     "title": "API guide",
     "content": "# API guide How to configure the chip, read and write it, and handle errors, task by task. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/api-guide.html",
     
     "relUrl": "/templates/mkdocs-site/docs/api-guide.html"
-  },"426": {
+  },"429": {
     "doc": "API reference",
     "title": "API reference",
     "content": "# API reference Every class and member, generated from the headers by Doxygen. [Open the API reference](api/index.html){ .md-button .md-button--primary } ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/api-reference.html",
     
     "relUrl": "/templates/mkdocs-site/docs/api-reference.html"
-  },"427": {
+  },"430": {
     "doc": "Architecture",
     "title": "Architecture",
     "content": "# Architecture How the driver is built: hardware-agnostic core, communication interface, platform port. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/architecture.html",
     
     "relUrl": "/templates/mkdocs-site/docs/architecture.html"
-  },"428": {
+  },"431": {
     "doc": "Changelog",
     "title": "Changelog",
     "content": "# Changelog What changed in each release. --8<-- \"CHANGELOG.md:3\" ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/changelog.html",
     
     "relUrl": "/templates/mkdocs-site/docs/changelog.html"
-  },"429": {
+  },"432": {
     "doc": "Figures",
     "title": "Figures",
     "content": "# Figures Every figure on this site is drawn by a Python module from facts extracted from the code, so it is rebuilt, not redrawn, when the code changes. CI runs `hardfoc-docs figures --check` and fails when a committed figure no longer matches the code. Each figure below lists the files it is drawn from. ## Three layers, one of them yours . Figure module: [`docs/diagrams/figures/driver-layers.py`](/hf-general-ci-tools/development/templates/mkdocs-site/docs/diagrams/figures/driver-layers.py) ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/diagrams/",
     
     "relUrl": "/templates/mkdocs-site/docs/diagrams/"
-  },"430": {
+  },"433": {
     "doc": "Examples",
     "title": "Examples",
-    "content": "# Examples The example applications, what each one shows and how to build it. ## The apps | App | What it shows | Source | CI | --- | --- | --- | --- | `basic` :material-star:{ title=\"featured\" } | Smallest example: initialise, read, print | [`basic.cpp`](../examples/esp32/basic.cpp) | yes | Build and flash one (from `examples/esp32`, ESP-IDF environment loaded): ```bash ./scripts/build_app.sh basic Release ./scripts/flash_app.sh flash_monitor basic Release ``` Source of this table: [`examples/esp32/app_config.yml`](/hf-general-ci-tools/development/templates/mkdocs-site/examples/esp32/app_config.yml). ",
+    "content": "# Examples The example applications, what each one shows and how to build it. ## The apps | App | What it shows | Source | CI | --- | --- | --- | --- | `basic` :material-star:{ title=\"featured\" } | Smallest example: initialise, read, print | [`basic.cpp`](/hf-general-ci-tools/development/templates/mkdocs-site/examples/esp32/main/basic.cpp) | yes | Build and flash one (from `examples/esp32`, ESP-IDF environment loaded): ```bash ./scripts/build_app.sh basic Release ./scripts/flash_app.sh flash_monitor basic Release ``` Source of this table: [`examples/esp32/app_config.yml`](/hf-general-ci-tools/development/templates/mkdocs-site/examples/esp32/app_config.yml). ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/examples.html",
     
     "relUrl": "/templates/mkdocs-site/docs/examples.html"
-  },"431": {
+  },"434": {
     "doc": "Hardware",
     "title": "Hardware",
     "content": "# Hardware What to connect, with which bus settings and timing, and the board-level traps. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/hardware.html",
     
     "relUrl": "/templates/mkdocs-site/docs/hardware.html"
-  },"432": {
+  },"435": {
     "doc": "Installation",
     "title": "Installation",
     "content": "# Installation Add the driver to a CMake or ESP-IDF project. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/installation.html",
     
     "relUrl": "/templates/mkdocs-site/docs/installation.html"
-  },"433": {
+  },"436": {
     "doc": "Porting",
     "title": "Porting",
     "content": "# Porting Run the driver on a new MCU by implementing the communication interface. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/porting.html",
     
     "relUrl": "/templates/mkdocs-site/docs/porting.html"
-  },"434": {
+  },"437": {
     "doc": "Quickstart",
     "title": "Quickstart",
     "content": "# Quickstart Wire the chip, write the port and run the smallest useful program. ```cpp --8<-- \"tests/docs/quickstart.cpp:quickstart\" ``` ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/quickstart.html",
     
     "relUrl": "/templates/mkdocs-site/docs/quickstart.html"
-  },"435": {
+  },"438": {
     "doc": "Testing and CI",
     "title": "Testing and CI",
     "content": "# Testing and CI How the driver is checked: host tests, compiled snippets, example builds, CI. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/testing.html",
     
     "relUrl": "/templates/mkdocs-site/docs/testing.html"
-  },"436": {
+  },"439": {
     "doc": "Troubleshooting",
     "title": "Troubleshooting",
     "content": "# Troubleshooting Symptoms, their causes and the fix for each. ",
     "url": "/hf-general-ci-tools/development/templates/mkdocs-site/docs/troubleshooting.html",
     
     "relUrl": "/templates/mkdocs-site/docs/troubleshooting.html"
-  },"437": {
+  },"440": {
     "doc": "C/C++ Sample Sources for CI Experiments",
     "title": "C/C++ Sample Sources for CI Experiments",
     "content": "# C/C++ Sample Sources for CI Experiments This directory contains small, well-documented C and C++ translation units that exercise the C/C++ related tooling showcased in this repository: - `include/geometry.h` and `src/geometry.c` provide a handful of geometry helper functions written in C. - `include/greeter.hpp` and `src/greeter.cpp` deliver a simple C++ class used to model basic object-oriented behaviour. The files include Doxygen comments and are referenced by `_config/Doxyfile`, which means they are automatically published when you run ``` doxygen _config/Doxyfile ``` The generated documentation lands under `docs/doxygen/html`. This location is compatible with the Jekyll + GitHub Pages setup used by the Publish Docs workflows, so you can push the rendered artefacts alongside the rest of the documentation if desired. ",
     "url": "/hf-general-ci-tools/development/cpp-ci-test/",
     
     "relUrl": "/cpp-ci-test/"
-  },"438": {
+  },"441": {
     "doc": "hardfoc-mkdocs-theme",
     "title": "hardfoc-mkdocs-theme",
-    "content": "# hardfoc-mkdocs-theme The HardFOC documentation theme for MkDocs, as one package: the `hardfoc` theme, the `hardfoc` plugin, figkit, the `hardfoc-docs` command and the pinned toolchain (mkdocs, mkdocs-material, mkdocs-awesome-nav, pymdown-extensions, mike). Every HardFOC documentation site builds with it; no site carries CSS, templates or hooks of its own. ```bash pip install \"git+https://github.com/hardfoc/hf-general-ci-tools@v1#subdirectory=packages/hardfoc-mkdocs-theme\" ``` `ru-mkdocs-publish.yml` installs it from the same commit as the workflow, so `@v1` callers get the matching theme. ## A site ```yaml site_name: TMC9660 Driver site_description: One sentence. repo_url: https://github.com/hardfoc/hf-tmc9660-driver theme: name: hardfoc plugins: - hardfoc - search - awesome-nav ``` The plugin fills in `site_url` (`https://hardfoc.github.io//latest/`), `repo_name`, `edit_uri`, copyright, mike versioning, the Markdown extensions (admonitions, tabs, snippets from the repository root, Mermaid, GitHub-style anchors, ...) and strict validation. ## What is in it | Path | What | --- | --- | `hardfoc_mkdocs_theme/theme/` | Theme (`extends: material`): `main.html`, header with the org crumb, footer, inline mark, `assets/hardfoc/hardfoc.css` (tokens for light and dark, typography, admonitions, code, tables, hero, cards, chip card, figures, Mermaid, focus), the Doxygen stylesheet, the root `404.html` | `hardfoc_mkdocs_theme/plugin.py` | Defaults, Markdown extensions, validation, build-input exclusion, page checks | `hardfoc_mkdocs_theme/hooks.py` | Repository links to GitHub, API links, figure embeds, raw-HTML rebase, image and alt-text gate | `hardfoc_mkdocs_theme/figkit/` | Code-sourced SVG figures, light and dark from one layout, contrast-checked | `hardfoc_mkdocs_theme/gen.py`, `generators/` | `` regions; built in: `examples` (from `examples/*/app_config.yml`) | `hardfoc_mkdocs_theme/screenshots.py` | Phone / desktop, light / dark screenshots of a built site | ## Commands ```text hardfoc-docs figures [--check] [ids] build (or check) docs/diagrams/figures/*.py hardfoc-docs gen [--check|--list] fill (or check) generated regions (built-in + tools/docs/generators/) hardfoc-docs check both checks, as CI runs them hardfoc-docs screenshots SITE OUT needs the [screenshots] extra and `playwright install chromium` hardfoc-docs pages SITE the pages CI audits ``` ## Brand Indigo `#3B38C4` (primary), teal `#5EEAD4` / `#0B7A72` (accent), ink `#17202C`; dark surface `#0D1220`. Inter for text and JetBrains Mono for code, from Google Fonts, loaded without blocking the first paint. The mark is a stator ring of three phase arcs with a field vector (`theme/assets/hardfoc/mark.svg`, `wordmark.svg`, `favicon.svg`). Every text colour is at least 4.5:1 on its background in both schemes; the ratios are noted in `hardfoc.css`. ",
+    "content": "# hardfoc-mkdocs-theme The HardFOC documentation theme for MkDocs, as one package: the `hardfoc` theme, the `hardfoc` plugin, figkit, the `hardfoc-docs` command and the pinned toolchain (mkdocs, mkdocs-material, mkdocs-awesome-nav, pymdown-extensions, mike). Every HardFOC documentation site builds with it; no site carries CSS, templates or hooks of its own. ```bash pip install \"git+https://github.com/hardfoc/hf-general-ci-tools@v1#subdirectory=packages/hardfoc-mkdocs-theme\" ``` `ru-mkdocs-publish.yml` installs it from the same commit as the workflow, so `@v1` callers get the matching theme. ## A site ```yaml site_name: TMC9660 Driver site_description: One sentence. repo_url: https://github.com/hardfoc/hf-tmc9660-driver theme: name: hardfoc plugins: - hardfoc - search - awesome-nav ``` The plugin fills in `site_url` (`https://hardfoc.github.io//latest/`; the root for an unversioned site), `repo_name`, `edit_uri`, copyright, mike versioning, the Markdown extensions (admonitions, tabs, snippets from the repository root, Mermaid, GitHub-style anchors, ...) and strict validation. A site is versioned with mike unless it is the organisation site (`hardfoc.github.io`), or sets `plugins: [{hardfoc: {versioned: false}}]`; `HARDFOC_DOCS_VERSIONED=true|false` overrides both (the publish workflow sets it from its `versioning` input). An unversioned site has no version selector and its `site_url` is the Pages root. ## What is in it | Path | What | --- | --- | `hardfoc_mkdocs_theme/theme/` | Theme (`extends: material`): `main.html`, header with the org crumb, footer, inline mark, `assets/hardfoc/hardfoc.css` (tokens for light and dark, typography, admonitions, code, tables, hero, cards, chip card, figures, Mermaid, focus), the Doxygen stylesheet, the root `404.html` | `hardfoc_mkdocs_theme/plugin.py` | Defaults, Markdown extensions, validation, build-input exclusion, page checks | `hardfoc_mkdocs_theme/hooks.py` | Repository links to GitHub, API links, figure embeds, raw-HTML rebase, image and alt-text gate | `hardfoc_mkdocs_theme/figkit/` | Code-sourced SVG figures, light and dark from one layout, contrast-checked | `hardfoc_mkdocs_theme/gen.py`, `generators/` | `` regions; built in: `examples` (from `examples/*/app_config.yml`) | `hardfoc_mkdocs_theme/screenshots.py` | Phone / desktop, light / dark screenshots of a built site | `hardfoc_mkdocs_theme/publish.py` | `publish-root`: an unversioned site as the whole deployment branch | `tests/` | Unit tests (`python -m unittest discover -s tests`), run by the self-CI | ## Commands ```text hardfoc-docs figures [--check] [ids] build (or check) docs/diagrams/figures/*.py hardfoc-docs gen [--check|--list] fill (or check) generated regions (built-in + tools/docs/generators/) hardfoc-docs check both checks, as CI runs them hardfoc-docs screenshots SITE OUT needs the [screenshots] extra and `playwright install chromium` hardfoc-docs pages SITE the pages CI audits hardfoc-docs publish-root SITE commit SITE as the whole deployment branch (unversioned sites) ``` ## Brand Indigo `#3B38C4` (primary), teal `#5EEAD4` / `#0B7A72` (accent), ink `#17202C`; dark surface `#0D1220`. Inter for text and JetBrains Mono for code, from Google Fonts, loaded without blocking the first paint. The mark is a stator ring of three phase arcs with a field vector (`theme/assets/hardfoc/mark.svg`, `wordmark.svg`, `favicon.svg`). Every text colour is at least 4.5:1 on its background in both schemes; the ratios are noted in `hardfoc.css`. ",
     "url": "/hf-general-ci-tools/development/packages/hardfoc-mkdocs-theme/",
     
     "relUrl": "/packages/hardfoc-mkdocs-theme/"
