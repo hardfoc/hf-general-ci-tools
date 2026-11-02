@@ -15,6 +15,30 @@ that heading.
 
 ## [Unreleased]
 
+### Added (documentation platform)
+
+- `packages/hardfoc-mkdocs-theme`: the HardFOC documentation theme as one pip package: `theme: hardfoc`
+  (brand, header with the organisation crumb, footer, admonition / code / table / figure styles, hero, cards,
+  chip and board card, Mermaid theming, light and dark), `plugins: [hardfoc]` (shared configuration, Markdown
+  dialect with snippets, strict validation, the link / figure hooks, page checks for Jekyll leftovers and
+  missing headings), figkit, `hardfoc-docs` (figures, generated regions, screenshots) and the pinned toolchain.
+- `ru-mkdocs-publish.yml`: installs the theme from the workflow's own commit (`theme_ref` to override); a
+  `quality` job with a Lighthouse budget (`lighthouse`, `lighthouse_budgets`) and phone / desktop screenshots
+  (`screenshots`) as artifacts; `release_version` (tags publish `vX.Y.Z` by default); `prune_legacy` removes the
+  pre-MkDocs site from `gh-pages` in the first publish commit; a root `404.html` that redirects old addresses;
+  the HardFOC Doxygen stylesheet when a Doxyfile has none; Doxygen's output folder is created first.
+- `tools/docs-migrate.py`: mechanical Jekyll-to-MkDocs migration of a repository, with `--check`.
+- `docs/MIGRATING-TO-MKDOCS.md` and `docs/DOCS-STYLE-GUIDE.md`.
+- Automatic patch release on every push to `main` (`release.yml`), unless Unreleased has a `### Breaking` section.
+
+### Changed (documentation platform)
+
+- `templates/mkdocs-site` is a driver skeleton on the theme package; it no longer copies CSS, overrides, hooks or
+  figkit into a repository.
+- `ru-mkdocs-publish.yml`: a `vX.Y.Z` tag publishes version `vX.Y.Z` (was `X.Y`; `release_version: minor` keeps
+  the old behaviour). The publish step calls `mike` directly. `requirements` is optional.
+
+
 Everything below becomes **v1.0.0**, the first tagged release. Until callers
 move from `@main` to `@v1`, `@main` stays compatible with them: no input has
 been removed and no workflow needs more permissions than before.

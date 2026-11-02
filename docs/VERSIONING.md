@@ -63,6 +63,15 @@ To retire an input within a major:
 4. List it under `### Deprecated` in the changelog.
 5. Remove it in the next major, and list the removal under `### Breaking`.
 
+## Automatic patch releases
+
+Every push to `main` is released: `release.yml` tags the commit `vX.Y.(Z+1)` after the highest release, creates
+the GitHub Release and moves `vX`. Callers pinned to `@v1` therefore get each merged fix without anyone cutting a
+release. Nothing is tagged when the commit is already released, or when `CHANGELOG.md`'s Unreleased section has a
+`### Breaking` heading: the self-CI contract check forces that heading on any breaking change, and a breaking
+change needs a new major, cut by hand as below. Minor releases (new features worth a line in the notes) are also
+cut by hand.
+
 ## Cutting a release (maintainers)
 
 1. Move the Unreleased entries in `CHANGELOG.md` under a new
