@@ -54,6 +54,14 @@ on:
         required: false
         type: string
         default: ''
+      exclude_own_site:
+        description: >-
+          Skip links to this repository's own GitHub Pages site (https://<owner>.github.io/<repo>/) on pull requests,
+          where the pages a change links to are not published yet, and on other events while the site's latest/
+          version (the root, for <owner>.github.io) does not answer yet, as before a repository's first MkDocs publish.
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   link-check:
@@ -66,6 +74,40 @@ jobs:
         with:
           submodules: ${{ inputs.checkout_recursive && 'recursive' || 'false' }}
           fetch-depth: 0
+
+      - name: Own documentation site
+        id: own_site
+        if: ${{ inputs.exclude_own_site }}
+        env:
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          owner=$(printf '%s' "$OWNER" | tr '[:upper:]' '[:lower:]')
+          repo=$(printf '%s' "$REPO" | tr '[:upper:]' '[:lower:]')
+          if [ "$repo" = "$owner.github.io" ]; then
+            site="https://$owner.github.io/"
+            probe="$site"
+          else
+            site="https://$owner.github.io/$repo/"
+            probe="${site}latest/"
+          fi
+          pattern="^$(printf '%s' "$site" | sed 's/\./\\./g')"
+          if [ "$EVENT" = pull_request ]; then
+            reason="a pull request: its pages are not published yet"
+          elif ! curl -fsS -o /dev/null --max-time 20 "$probe"; then
+            reason="$probe does not answer yet"
+          else
+            reason=""
+          fi
+          if [ -n "$reason" ]; then
+            echo "Not checking links to $site ($reason)"
+            echo "args=--exclude $pattern" >> "$GITHUB_OUTPUT"
+          else
+            echo "Checking links to $site"
+            echo "args=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Link check with Lychee
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8  # v2.9.0
@@ -83,4 +125,5 @@ jobs:
             --retry-wait-time ${{ inputs.retry_wait_time }}
             ${{ inputs.exclude_private && '--exclude-all-private' || '' }}
             ${{ !inputs.exclude_mail && '--include-mail' || '' }}
+            ${{ steps.own_site.outputs.args }}
             ${{ inputs.paths }}

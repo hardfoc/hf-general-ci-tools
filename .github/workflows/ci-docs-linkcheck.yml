@@ -39,3 +39,14 @@ jobs:
       exclude_mail: true  # Exclude mailto links from validation
       verbose: true  # Enable verbose output for detailed CI testing
       config_file: ""  # Use default lychee configuration (no custom config)
+
+  # Self-test of exclude_own_site: the fixture links to this repository's own site under latest/, which a pull
+  # request (and every run before the first MkDocs publish) must not check. fail_on_errors is on, so a link that
+  # is checked and broken fails this job.
+  selftest-own-site:
+    name: Self-test own-site exclusion
+    uses: ./.github/workflows/ru-docs-linkcheck.yml
+    with:
+      paths: "tests/fixtures/linkcheck-own-site/*.md"
+      fail_on_errors: true
+      exclude_own_site: true
