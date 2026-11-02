@@ -141,7 +141,8 @@ def catalogue(index: dict) -> str:
             for s in e["sources"]:
                 path = s.split(":", 1)[0]
                 rest = s[len(path) :]
-                lines.append(f"- [`{path}`](../../{path}){f' `{rest[1:]}`' if rest else ''}")
+                # Symbol first: the link is one long unbreakable token, so it goes last (Markdown line-length lint).
+                lines.append(f"- {f'`{rest[1:]}` in ' if rest else ''}[`{path}`](../../{path})")
             lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 

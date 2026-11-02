@@ -108,7 +108,8 @@ def main() -> int:
                 bad.append(f"{p.relative_to(ROOT)}: no generator for region {name!r}")
                 return m.group(0)
             fn = fns[name]
-            takes_page = len(inspect.signature(fn).parameters) == 1
+            required = [q for q in inspect.signature(fn).parameters.values() if q.default is q.empty]
+            takes_page = len(required) == 1
             key = (name, str(p)) if takes_page else (name, "")
             if key not in cache:
                 cache[key] = (fn(Page(p)) if takes_page else fn()).rstrip("\n") + "\n"

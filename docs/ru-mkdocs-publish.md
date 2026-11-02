@@ -22,11 +22,12 @@ Driver repositories that publish a Jekyll site keep using [`ru-docs-publish.yml`
 | Event | Build + checks | Publish |
 | --- | --- | --- |
 | Pull request | Yes | Never, whatever `deploy` says |
-| Push to the default branch | Yes | As version `dev` (when `deploy` is true) |
+| Push to the default branch | Yes | As version `dev` (when `deploy` is true); `dev` also holds the `latest` alias until the first release |
 | Push of a `vX.Y[.Z]` tag | Yes | As version `X.Y`, and the `latest` alias moves to it (when `deploy` is true) |
 
-The site's root redirects to `latest` once a release has been published, and to `dev` until then. Material's
-version selector lists every published version.
+The site's root redirects to `latest`, so links to `/latest/...` always work: before the first release `latest` is
+an alias of `dev`, afterwards it follows the newest release. Aliases are symlinks, so the API reference added to a
+version folder is reachable through them too. Material's version selector lists every published version.
 
 ## Jobs and permissions
 
@@ -35,7 +36,7 @@ The workflow declares `permissions: {}` and grants each job only what it needs. 
 
 | Job | Permissions | Steps |
 | --- | --- | --- |
-| `build` | `contents: read` | Check out (plus `submodule_paths`), install the pinned toolchain, run `check_commands`, `mkdocs build --strict`, Doxygen into `api/`, lychee `--offline` on the built site, upload the site as the `docs-site` artifact |
+| `build` | `contents: read` | Check out (plus `submodule_paths`), install the pinned toolchain, run `check_commands`, `mkdocs build --strict`, Doxygen into `api/`, lychee `--offline --include-fragments --index-files index.html` on the built site, upload the site as the `docs-site` artifact |
 | `deploy` | `contents: write` | `mike deploy` to `deployment_branch`, add the API reference from the artifact to the version folder, `mike set-default`, push (never force) |
 
 Every action is pinned to a commit SHA with its version in a comment.

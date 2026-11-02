@@ -3,7 +3,7 @@
 # Doxygen API reference merged under api/.
 #
 #   pull request        strict build + figure / generated-table drift checks + offline link check; no deploy
-#   push to main        the same, then publish as version `dev`
+#   push to main        the same, then publish as version `dev` (also aliased `latest` until the first release)
 #   push of a v* tag    the same, then publish as version `X.Y` and move the `latest` alias to it
 #
 # The site, its hooks and figkit come from templates/mkdocs-site in this repository; docs/MKDOCS.md says how a
@@ -186,7 +186,7 @@ jobs:
         with:
           fail: true
           args: >-
-            --offline --no-progress --include-fragments
+            --offline --no-progress --include-fragments --index-files index.html
             --root-dir ${{ runner.temp }}/site
             --exclude-path '404\.html$'
             ${{ inputs.link_check_args }}
@@ -245,11 +245,10 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$REF_TYPE" = tag ] && [[ "$REF_NAME" =~ ^v([0-9]+)\.([0-9]+) ]]; then
-            echo "version=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}" >> "$GITHUB_OUTPUT"
-            echo "aliases=$LATEST" >> "$GITHUB_OUTPUT"
+            { echo "version=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}"; echo "aliases=$LATEST"; } >> "$GITHUB_OUTPUT"
           elif [ "$REF_TYPE" = branch ] && [ "$REF_NAME" = "$DEFAULT_BRANCH" ]; then
-            echo "version=$DEV" >> "$GITHUB_OUTPUT"
-            echo "aliases=" >> "$GITHUB_OUTPUT"
+            # Until the first release, `latest` points at the dev version, so /latest/ links always work.
+            { echo "version=$DEV"; echo "aliases="; echo "claim_latest=true"; } >> "$GITHUB_OUTPUT"
           else
             echo "::error::publishes only from $DEFAULT_BRANCH or a vX.Y[.Z] tag, not $REF_TYPE $REF_NAME"
             exit 1
@@ -261,16 +260,24 @@ jobs:
           BRANCH: ${{ inputs.deployment_branch }}
           VERSION: ${{ steps.version.outputs.version }}
           ALIASES: ${{ steps.version.outputs.aliases }}
+          CLAIM_LATEST: ${{ steps.version.outputs.claim_latest }}
           LATEST: ${{ inputs.latest_alias }}
-          DEV: ${{ inputs.dev_version }}
           API_DIR: ${{ inputs.api_dir }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin "$BRANCH:$BRANCH" || true
+          if [ "$CLAIM_LATEST" = true ]; then
+            # Take the latest alias only if no release holds it yet.
+            holder=$(python3 -m mike list --config-file "$CONFIG" --branch "$BRANCH" 2>/dev/null \
+              | grep -E "\[.*\b$LATEST\b.*\]" | awk '{print $1}' || true)
+            if [ -z "$holder" ] || [ "$holder" = "$VERSION" ]; then
+              ALIASES="$LATEST"
+            fi
+          fi
           # shellcheck disable=SC2086  # ALIASES is empty or one word
-          python3 -m mike deploy --config-file "$CONFIG" --branch "$BRANCH" --update-aliases \
+          python3 -m mike deploy --config-file "$CONFIG" --branch "$BRANCH" --update-aliases --alias-type symlink \
             --message "Publish docs $VERSION from ${GITHUB_SHA::12}" "$VERSION" $ALIASES
           if [ -d "$RUNNER_TEMP/built/$API_DIR" ]; then
             git worktree add "$RUNNER_TEMP/pages" "$BRANCH"
@@ -282,12 +289,7 @@ jobs:
             git -C "$RUNNER_TEMP/pages" commit -q -m "Add API reference to docs $VERSION" || true
             git worktree remove "$RUNNER_TEMP/pages"
           fi
-          if python3 -m mike list --config-file "$CONFIG" --branch "$BRANCH" | grep -qE "\[.*\b$LATEST\b.*\]"; then
-            default="$LATEST"
-          else
-            default="$DEV"
-          fi
-          python3 -m mike set-default --config-file "$CONFIG" --branch "$BRANCH" "$default"
+          python3 -m mike set-default --config-file "$CONFIG" --branch "$BRANCH" "$LATEST"
           git push origin "$BRANCH"
           {
             echo "### Published docs \`$VERSION\`"
