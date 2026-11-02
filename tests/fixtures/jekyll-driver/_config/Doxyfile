@@ -1,0 +1,7 @@
+PROJECT_NAME = "Fixture"
+INPUT = inc
+OUTPUT_DIRECTORY = docs/doxygen
+HTML_OUTPUT = html
+HTML_EXTRA_STYLESHEET = _config/doxygen-extensions/doxygen-awesome-css/doxygen-awesome.css \
+    _config/doxygen-extensions/doxygen-awesome-css/extra.css
+GENERATE_TREEVIEW = YES
