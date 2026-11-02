@@ -448,22 +448,13 @@
   white-space: nowrap;   /* identifiers stay whole; the table scrolls on a phone instead */
 }
 
-/* From a tablet up, a table fits the column: cells wrap, and a long identifier breaks rather than pushing the last
-   column (often the most useful one, "Fix", "Description") out of view. */
+/* From a tablet up, a table fills the column, so its text cells wrap and the last column (often the most useful
+   one, "Fix", "Description") stays in view. Identifiers in code stay whole; a table whose code alone is wider than
+   the column scrolls sideways, as on a phone. */
 @media screen and (min-width: 45em) {
   .md-typeset table:not([class]) {
     display: table;
     width: 100%;
-  }
-
-  .md-typeset table:not([class]) td code {
-    white-space: normal;
-    overflow-wrap: break-word;  /* not "anywhere": a column stays as wide as its longest identifier when it can */
-  }
-
-  /* The first column names things (a workflow, a pin, a register): it stays on one line. */
-  .md-typeset table:not([class]) td:first-child code {
-    white-space: nowrap;
   }
 }
 
