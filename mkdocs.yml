@@ -1,0 +1,22 @@
+# Documentation site of hf-general-ci-tools, built with the theme package in packages/ of this repository (the
+# platform documents itself on itself). Preview locally:
+#
+#   pip install ./packages/hardfoc-mkdocs-theme
+#   mkdocs serve                      http://127.0.0.1:8000
+#   mkdocs build --strict             what CI runs
+#   hardfoc-docs gen                  refresh the tables read from the workflows (tools/docs/generators/)
+#
+# Pages: docs/, order: docs/.nav.yml, rules: docs/DOCS-STYLE-GUIDE.md.
+site_name: General CI Tools
+site_description: >-
+  Reusable GitHub Actions workflows for the HardFOC organisation: C/C++ lint and analysis, host builds, the
+  documentation platform, link and lint checks, releases and a single required CI gate.
+repo_url: https://github.com/hardfoc/hf-general-ci-tools
+
+theme:
+  name: hardfoc
+
+plugins:
+  - hardfoc
+  - search
+  - awesome-nav

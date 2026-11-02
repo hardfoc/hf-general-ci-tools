@@ -1,0 +1,26 @@
+# Site navigation (mkdocs-awesome-nav): the tabs and their pages, in reading order.
+nav:
+  - Home: index.md
+  - Get started:
+      - Quickstart: quickstart.md
+      - Versioning: VERSIONING.md
+      - Permissions contract: permissions.md
+  - Workflows:
+      - Catalogue: workflows.md
+      - ru-ci-gate (CI gate): ru-ci-gate.md
+      - ru-host-ci: ru-host-ci.md
+      - ru-cpp-lint: ru-cpp-lint.md
+      - ru-cpp-analysis: ru-cpp-analysis.md
+      - ru-mkdocs-publish: ru-mkdocs-publish.md
+      - ru-docs-linkcheck: ru-docs-linkcheck.md
+      - ru-markdown-lint: ru-markdown-lint.md
+      - ru-yaml-lint: ru-yaml-lint.md
+      - ru-release: ru-release.md
+      - ru-docs-publish (legacy): ru-docs-publish.md
+  - Docs platform:
+      - Platform guide: docs-platform.md
+      - Migrating to MkDocs: MIGRATING-TO-MKDOCS.md
+      - Style guide: DOCS-STYLE-GUIDE.md
+  - Reference:
+      - How this repository tests itself: self-ci.md
+      - Changelog: changelog.md
