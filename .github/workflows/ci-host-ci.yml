@@ -1,0 +1,57 @@
+---
+name: 🖥️ Host CI Self-Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-host-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Preset path, clean code: must pass with fail_on_findings: true.
+  preset-clean:
+    uses: ./.github/workflows/ru-host-ci.yml
+    with:
+      preset: host
+      source_dir: tests/fixtures/host-ci
+      build_dir: tests/fixtures/host-ci/build/host
+      tidy_paths: "^tests/fixtures/host-ci/"  # third_party/ inside it is dropped by the default exclude_paths
+      clang_tidy_config: tests/fixtures/host-ci/.clang-tidy
+      cppcheck_suppressions: tests/fixtures/host-ci/cppcheck-suppressions.txt
+      fail_on_findings: true
+      artifact_name: host-ci-preset-clean
+
+  # -S/-B path with seeded defects: findings must be detected.
+  sb-seeded:
+    uses: ./.github/workflows/ru-host-ci.yml
+    with:
+      source_dir: tests/fixtures/host-ci
+      build_dir: build/host-ci-seeded
+      cmake_args: "-DHOST_CI_SEED_FINDINGS=ON"
+      clang_tidy_config: tests/fixtures/host-ci/.clang-tidy
+      fail_on_findings: false
+      artifact_name: host-ci-sb-seeded
+
+  check-seeded:
+    needs: sb-seeded
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Seeded findings were reported
+        env:
+          TIDY: ${{ needs.sb-seeded.outputs.tidy_findings }}
+          CPPCHECK: ${{ needs.sb-seeded.outputs.cppcheck_findings }}
+        run: |
+          echo "clang-tidy: $TIDY, cppcheck: $CPPCHECK"
+          # seeded.cpp has findings for both tools.
+          if [ "${TIDY:-0}" -lt 1 ] || [ "${CPPCHECK:-0}" -lt 1 ]; then
+            echo "::error::expected clang-tidy and cppcheck to each report the seeded findings"
+            exit 1
+          fi

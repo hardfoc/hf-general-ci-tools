@@ -230,16 +230,16 @@ on:
         type: boolean
         default: false
 
-# contents: write for the gh-pages branch deploy (peaceiris/actions-gh-pages); nothing else is needed.
-permissions:
-  contents: write
-
+# Permissions are declared per job. The caller must grant contents: write,
+# even on pull requests: a called workflow may not ask for more than its
+# caller grants, and that is checked before any job runs.
 jobs:
   # =============================================================================
   # Input Validation Job (Centralized Validation)
   # =============================================================================
   input-validation:
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       validation_passed: ${{ steps.validate.outcome }}
     steps:
@@ -253,7 +253,7 @@ jobs:
           # =============================================================================
 
           # Check if we're running on the deployment branch (gh-pages)
-          if [[ "${{ github.ref }}" == "refs/heads/${{ inputs.deployment_branch }}" ]]; then
+          if [[ "$GITHUB_REF" == "refs/heads/${{ inputs.deployment_branch }}" ]]; then
             echo "❌ Error: This workflow cannot run on the deployment branch (${{ inputs.deployment_branch }})"
             echo "This prevents infinite loops when the workflow deploys to the same branch it's running on."
             echo "Current branch: ${{ github.ref }}"
@@ -381,25 +381,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: [input-validation]
     if: needs.input-validation.outputs.validation_passed == 'success'
+    permissions:
+      contents: read
     outputs:
       yaml_lint_passed: ${{ steps.yaml-lint.outcome }}
       markdown_lint_passed: ${{ steps.markdown-lint.outcome }}
       spell_check_passed: ${{ steps.spell-check.outcome }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 0
 
       - name: Setup Node.js for quality tools
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
         with:
           node-version: '20'
 
       - name: Cache pip dependencies
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') }}
@@ -540,7 +542,7 @@ jobs:
           found_any=false
           # Split on spaces and newlines
           for pat in ${{ inputs.spell_check_paths }}; do
-            matches=$(ls $pat 2>/dev/null | wc -l || true)
+            matches=$(compgen -G "$pat" | wc -l || true)
             if [ "$matches" -gt 0 ]; then found_any=true; break; fi
           done
           if [ "$found_any" != "true" ]; then
@@ -585,9 +587,11 @@ jobs:
       doxygen_version: ${{ steps.version.outputs.doxygen_version }}
       doxygen_project_number: ${{ steps.version.outputs.doxygen_project_number }}
       deployment_path: ${{ steps.version.outputs.deployment_path }}
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 0  # Full history for version detection
 
@@ -620,14 +624,16 @@ jobs:
           echo "🔍 Current github.ref: ${{ github.ref }}"
           echo "🔍 Expected pattern: refs/heads/$DEFAULT_BRANCH"
 
-          if [[ "${{ github.ref }}" == "refs/heads/$DEFAULT_BRANCH" ]]; then
+          if [[ "$GITHUB_REF" == "refs/heads/$DEFAULT_BRANCH" ]]; then
             VERSION_NAME="development"
             VERSION_TYPE="development"
             DEPLOY_STRATEGY="development"
-          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
-          echo "deploy_strategy=$DEPLOY_STRATEGY" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == refs/heads/release/v* ]]; then
+          {
+            echo "version_name=$VERSION_NAME"
+            echo "version_type=$VERSION_TYPE"
+            echo "deploy_strategy=$DEPLOY_STRATEGY"
+          } >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF" == refs/heads/release/v* ]]; then
             VERSION=$(echo "${{ github.ref }}" | sed 's|refs/heads/release/||')
             VERSION_NAME="$VERSION"
             if [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -640,24 +646,30 @@ jobs:
               VERSION_TYPE="versioned"
               DEPLOY_STRATEGY="versioned"
             fi
-          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
-          echo "deploy_strategy=$DEPLOY_STRATEGY" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+          {
+            echo "version_name=$VERSION_NAME"
+            echo "version_type=$VERSION_TYPE"
+            echo "deploy_strategy=$DEPLOY_STRATEGY"
+          } >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             VERSION=$(echo "${{ github.ref }}" | sed 's|refs/tags/||')
             VERSION_NAME="$VERSION"
             VERSION_TYPE="stable"
             DEPLOY_STRATEGY="stable"
-          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
-          echo "deploy_strategy=$DEPLOY_STRATEGY" >> $GITHUB_OUTPUT
+          {
+            echo "version_name=$VERSION_NAME"
+            echo "version_type=$VERSION_TYPE"
+            echo "deploy_strategy=$DEPLOY_STRATEGY"
+          } >> "$GITHUB_OUTPUT"
           else
             VERSION_NAME="preview"
             VERSION_TYPE="preview"
             DEPLOY_STRATEGY="preview"
-          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
-          echo "deploy_strategy=$DEPLOY_STRATEGY" >> $GITHUB_OUTPUT
+          {
+            echo "version_name=$VERSION_NAME"
+            echo "version_type=$VERSION_TYPE"
+            echo "deploy_strategy=$DEPLOY_STRATEGY"
+          } >> "$GITHUB_OUTPUT"
           fi
 
           # =============================================================================
@@ -670,21 +682,21 @@ jobs:
             # For development, try to get latest tag or use commit hash
             LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
             if [[ -n "$LATEST_TAG" ]]; then
-              echo "doxygen_version=${LATEST_TAG}-dev" >> $GITHUB_OUTPUT
-              echo "doxygen_project_number=${LATEST_TAG}-dev" >> $GITHUB_OUTPUT
+              echo "doxygen_version=${LATEST_TAG}-dev" >> "$GITHUB_OUTPUT"
+              echo "doxygen_project_number=${LATEST_TAG}-dev" >> "$GITHUB_OUTPUT"
             else
-              echo "doxygen_version=0.1.0-dev" >> $GITHUB_OUTPUT
-              echo "doxygen_project_number=0.1.0-dev" >> $GITHUB_OUTPUT
+              echo "doxygen_version=0.1.0-dev" >> "$GITHUB_OUTPUT"
+              echo "doxygen_project_number=0.1.0-dev" >> "$GITHUB_OUTPUT"
             fi
           elif [[ "$VERSION_TYPE" == "stable" || "$VERSION_TYPE" == "prerelease" ]]; then
             # Stable releases and pre-releases - use version as-is
-          echo "doxygen_version=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "doxygen_project_number=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "doxygen_version=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+          echo "doxygen_project_number=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           else
             # For other cases (preview), try to get version from git or use default
             PREVIEW_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.1.0-preview")
-          echo "doxygen_version=$PREVIEW_VERSION" >> $GITHUB_OUTPUT
-          echo "doxygen_project_number=$PREVIEW_VERSION" >> $GITHUB_OUTPUT
+          echo "doxygen_version=$PREVIEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "doxygen_project_number=$PREVIEW_VERSION" >> "$GITHUB_OUTPUT"
           fi
 
           # =============================================================================
@@ -714,12 +726,12 @@ jobs:
           echo "🔍 Generated base_url: $BASE_URL"
           echo "🔍 Version name: $VERSION_NAME"
           echo "🔍 Repository name: ${{ github.event.repository.name }}"
-          echo "🔍 Expected final URL: https://n3b3x.github.io$BASE_URL/"
-          echo "base_url=$BASE_URL" >> $GITHUB_OUTPUT
+          echo "🔍 Expected final URL: https://${GITHUB_REPOSITORY_OWNER,,}.github.io$BASE_URL/"
+          echo "base_url=$BASE_URL" >> "$GITHUB_OUTPUT"
 
           # Generate config file names
           # Always use main config as base - versioning is handled dynamically
-          echo "jekyll_config=${{ inputs.jekyll_config || '_config.yml' }}" >> $GITHUB_OUTPUT
+          echo "jekyll_config=${{ inputs.jekyll_config || '_config.yml' }}" >> "$GITHUB_OUTPUT"
 
           # =============================================================================
           # Deployment Path Generation (Standardized)
@@ -727,11 +739,11 @@ jobs:
 
           # Auto-generate standardized deployment path
           if [[ "$VERSION_TYPE" == "development" ]]; then
-          echo "deployment_path=development" >> $GITHUB_OUTPUT
+          echo "deployment_path=development" >> "$GITHUB_OUTPUT"
           elif [[ "$VERSION_TYPE" == "preview" ]]; then
-          echo "deployment_path=preview" >> $GITHUB_OUTPUT
+          echo "deployment_path=preview" >> "$GITHUB_OUTPUT"
           else
-          echo "deployment_path=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "deployment_path=$VERSION_NAME" >> "$GITHUB_OUTPUT"
           fi
 
           # =============================================================================
@@ -757,6 +769,8 @@ jobs:
       needs.input-validation.outputs.validation_passed == 'success' &&
       needs.version-detection.result == 'success' &&
       needs.quality-checks.result == 'success'
+    permissions:
+      contents: write  # push to the deployment branch (gh-pages)
     env:
       CACHE_VERSION: v1
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -765,7 +779,7 @@ jobs:
       # Repository Setup and Configuration
       # =============================================================================
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           submodules: ${{ inputs.checkout_recursive && 'recursive' || 'false' }}
           fetch-depth: 0
@@ -828,7 +842,7 @@ jobs:
       # =============================================================================
       - name: Install Doxygen (pinned version)
         if: steps.doxygen-check.outputs.doxygen_needed == 'true'
-        uses: ssciwr/doxygen-install@v1
+        uses: ssciwr/doxygen-install@501e53b879da7648ab392ee226f5b90e42148449  # v1.6.4
         with:
           version: '1.10.0'
 
@@ -837,10 +851,10 @@ jobs:
         id: graphviz-check
         run: |
           if command -v dot >/dev/null 2>&1; then
-          echo "graphviz_available=true" >> $GITHUB_OUTPUT
+          echo "graphviz_available=true" >> "$GITHUB_OUTPUT"
           echo "✅ Graphviz pre-installed: $(dot -V 2>&1 | head -1)"
           else
-          echo "graphviz_available=false" >> $GITHUB_OUTPUT
+          echo "graphviz_available=false" >> "$GITHUB_OUTPUT"
           echo "⚠️  Graphviz not pre-installed, will install via action"
           fi
 
@@ -848,21 +862,19 @@ jobs:
         if: >-
           steps.doxygen-check.outputs.doxygen_needed == 'true' &&
           steps.graphviz-check.outputs.graphviz_available == 'false'
-        uses: tlylt/install-graphviz@v1
-
-      # =============================================================================
+        uses: tlylt/install-graphviz@b2201200d85f06f0189cb74d9b69208504cf12cd  # v1.0.0
       # Language Runtime Setup with Comprehensive Caching
       # =============================================================================
       - name: Setup Ruby (bundler cache)
         if: ${{ inputs.jekyll_enabled == true }}
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94  # v1.336.0
         with:
           ruby-version: '3.2'
           bundler-cache: true
 
       - name: Setup Node.js
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true || inputs.jekyll_enabled == true }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
         with:
           node-version: '20'
 
@@ -942,7 +954,7 @@ jobs:
       # =============================================================================
       - name: Cache pip dependencies
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/pyproject.toml') || 'no-deps' }}
@@ -951,7 +963,7 @@ jobs:
 
       - name: Cache Node.js dependencies
         if: ${{ inputs.run_markdown_lint == true || inputs.run_spell_check == true }}
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/yarn.lock') || 'no-deps' }}
@@ -960,7 +972,7 @@ jobs:
 
       - name: Cache Jekyll dependencies
         if: ${{ inputs.jekyll_enabled == true }}
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-jekyll-${{ hashFiles('**/Gemfile.lock') }}
@@ -969,7 +981,7 @@ jobs:
 
       - name: Cache Doxygen build artifacts
         if: steps.doxygen-check.outputs.doxygen_needed == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4.3.0
         with:
           path: |
             ${{ steps.doxy_out.outputs.html_dir }}
@@ -1280,9 +1292,9 @@ jobs:
             exit 1
           fi
 
-          if [ $DOXYGEN_EXIT -ne 0 ]; then
+          if [ "$DOXYGEN_EXIT" -ne 0 ]; then
             echo "❌ Doxygen exited with code $DOXYGEN_EXIT"
-            exit $DOXYGEN_EXIT
+            exit "$DOXYGEN_EXIT"
           fi
 
           echo "✅ Doxygen documentation generated successfully with version: " \
@@ -1471,10 +1483,10 @@ jobs:
       - name: Caching status summary
         run: |
           echo "📊 Caching Status Summary:"
-          echo "  - Pip cache directory: $(ls -la ~/.cache/pip 2>/dev/null | wc -l || echo '0') files"
-          echo "  - NPM cache directory: $(ls -la ~/.npm 2>/dev/null | wc -l || echo '0') files"
-          echo "  - Jekyll cache directory: $(ls -la vendor/bundle 2>/dev/null | wc -l || echo '0') files"
-          echo "  - Doxygen cache: $(ls -la ${{ steps.doxy_out.outputs.html_dir }} 2>/dev/null | wc -l || echo '0') files"
+          echo "  - Pip cache directory: $(find ~/.cache/pip -mindepth 1 -maxdepth 1 2>/dev/null | wc -l) files"
+          echo "  - NPM cache directory: $(find ~/.npm -mindepth 1 -maxdepth 1 2>/dev/null | wc -l) files"
+          echo "  - Jekyll cache directory: $(find vendor/bundle -mindepth 1 -maxdepth 1 2>/dev/null | wc -l) files"
+          echo "  - Doxygen cache: $(find "${{ steps.doxy_out.outputs.html_dir }}" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l) files"
 
           # Check if dependency files exist for future cache effectiveness
           echo "🔍 Dependency Files Status:"
@@ -1558,10 +1570,12 @@ jobs:
           cat "$GEN_CONFIG"
 
           # Add version information
-          echo "" >> "$GEN_CONFIG"
-          echo "# Version information (auto-generated)" >> "$GEN_CONFIG"
-          echo "version: \"${{ needs.version-detection.outputs.version_name }}\"" >> "$GEN_CONFIG"
-          echo "version_type: \"${{ needs.version-detection.outputs.version_type }}\"" >> "$GEN_CONFIG"
+          {
+            echo ""
+            echo "# Version information (auto-generated)"
+            echo "version: \"${{ needs.version-detection.outputs.version_name }}\""
+            echo "version_type: \"${{ needs.version-detection.outputs.version_type }}\""
+          } >> "$GEN_CONFIG"
 
           # =============================================================================
           # API Reference Link Injection
@@ -1611,11 +1625,13 @@ jobs:
               echo "📝 aux_links section not found, creating new section..."
 
               # Create new aux_links section
-              echo "" >> "$GEN_CONFIG"
-              echo "# Auxiliary links (auto-generated)" >> "$GEN_CONFIG"
-              echo "aux_links:" >> "$GEN_CONFIG"
-              echo "  \"📖 API Reference\":" >> "$GEN_CONFIG"
-              echo "    - \"$API_URL\"" >> "$GEN_CONFIG"
+              {
+                echo ""
+                echo "# Auxiliary links (auto-generated)"
+                echo "aux_links:"
+                echo "  \"📖 API Reference\":"
+                echo "    - \"$API_URL\""
+              } >> "$GEN_CONFIG"
             fi
 
             echo "✅ API reference link injected successfully"
@@ -1859,7 +1875,7 @@ jobs:
           export JEKYLL_ENV="$JEKYLL_ENV"
 
           # Execute the build command
-          eval $JEKYLL_CMD
+          eval "$JEKYLL_CMD"
 
           # =============================================================================
           # Post-build Validation
@@ -1915,7 +1931,7 @@ jobs:
       # =============================================================================
       - name: Link check with Lychee
         if: ${{ inputs.run_link_check == true }}
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8  # v2.9.0
         with:
           args: >-
             ${{ inputs.link_check_config != '' && format('--config {0}', inputs.link_check_config) || '' }}
@@ -2007,13 +2023,13 @@ jobs:
           echo "✅ Created .nojekyll file to bypass Jekyll processing"
           fi
 
-          echo "DEPLOY_PATH=$DEPLOY_PATH" >> $GITHUB_ENV
+          echo "DEPLOY_PATH=$DEPLOY_PATH" >> "$GITHUB_ENV"
 
       # =============================================================================
       # Artifact Upload and Deployment
       # =============================================================================
       - name: Upload documentation artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
           name: ${{ inputs.artifact_name }}
           path: ${{ env.DEPLOY_PATH }}
@@ -2084,7 +2100,7 @@ jobs:
       # =============================================================================
       - name: Deploy Jekyll site to GitHub Pages
         if: ${{ steps.deploy-gate.outputs.deploy == 'true' }}
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453  # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ${{ env.DEPLOY_PATH || '_site' }}
@@ -2106,7 +2122,7 @@ jobs:
       # =============================================================================
       - name: Deploy Doxygen artifacts to GitHub Pages
         if: ${{ steps.deploy-gate.outputs.deploy == 'true' && steps.doxygen-check.outputs.doxygen_needed == 'true' }}
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453  # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./doxs
@@ -2261,7 +2277,7 @@ jobs:
           done
 
           # Sort versions (development first, then stable versions)
-          IFS=$'\n' VERSIONS=($(sort -V <<<"${VERSIONS[*]}"))
+          mapfile -t VERSIONS < <(printf '%s\n' "${VERSIONS[@]}" | sort -V)
 
           # Create version selector
           cat > version_selector.html << EOF
