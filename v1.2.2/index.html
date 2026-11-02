@@ -1,0 +1,1022 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.2.2/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/hf-general-ci-tools/v1.2.2/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    
+    .site-nav > ul.nav-list:first-child > li:not(:nth-child(1)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(1) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(1) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(1) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/hf-general-ci-tools/v1.2.2/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/hf-general-ci-tools/v1.2.2/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>🚀 hf-general-ci-tools | hf-general-ci-tools</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="🚀 hf-general-ci-tools" />
+<meta name="author" content="N3b3x" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Reusable GitHub Actions workflows for C/C++ and documentation CI in the hardfoc organisation" />
+<meta property="og:description" content="Reusable GitHub Actions workflows for C/C++ and documentation CI in the hardfoc organisation" />
+<link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/v1.2.2/" />
+<meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/v1.2.2/" />
+<meta property="og:site_name" content="hf-general-ci-tools" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="🚀 hf-general-ci-tools" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"N3b3x","url":"https://github.com/n3b3x"},"description":"Reusable GitHub Actions workflows for C/C++ and documentation CI in the hardfoc organisation","headline":"🚀 hf-general-ci-tools","name":"hf-general-ci-tools","sameAs":["https://github.com/hardfoc/hf-general-ci-tools","https://github.com/n3b3x"],"url":"https://hardfoc.github.io/hf-general-ci-tools/v1.2.2/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Custom head content for hf-general-ci-tools documentation -->
+<link rel="stylesheet" href="/hf-general-ci-tools/v1.2.2/assets/css/custom.css">
+<script src="/hf-general-ci-tools/v1.2.2/assets/js/custom.js" defer></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/hf-general-ci-tools/v1.2.2/" class="site-title lh-tight">
+  hf-general-ci-tools
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/" class="nav-list-link">🚀 hf-general-ci-tools</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/" class="nav-list-link">📖 Documentation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="🔄 Reusable Workflows submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/hf-general-ci-tools/v1.2.2/workflows/" class="nav-list-link">🔄 Reusable Workflows</a><ul class="nav-list"><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-cpp-lint.html" class="nav-list-link">🔧 C++ Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-cpp-analysis.html" class="nav-list-link">� C++ Static Analysis (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-docs-publish.html" class="nav-list-link">📚 Documentation Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-docs-linkcheck.html" class="nav-list-link">🔗 Documentation Link Check (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-mkdocs-publish.html" class="nav-list-link">MkDocs Publisher (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/MKDOCS.html" class="nav-list-link">Adopting the MkDocs site</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-yaml-lint.html" class="nav-list-link">📝 YAML Linting Tools (Reusable)</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-ci-gate/" class="nav-list-link">✅ CI Gate</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-host-ci/" class="nav-list-link">🖥️ Host CMake CI</a></li></ul></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ci-workflows.html" class="nav-list-link">🚀 CI Workflows & Design Philosophy</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-release.html" class="nav-list-link">📦 Release Management</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/ru-markdown-lint.html" class="nav-list-link">📄 Markdown Linting</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/docs/VERSIONING/" class="nav-list-link">🏷️ Versioning and Releases</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/adr/0001-record-architecture-decisions.html" class="nav-list-link">ADR 0001: Record architecture decisions</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/adr/template.html" class="nav-list-link">ADR NNNN: Title in the imperative</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/reference/api.html" class="nav-list-link">API reference</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/architecture/" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/cpp-ci-test/" class="nav-list-link">C/C++ Sample Sources for CI Experiments</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/CHANGELOG.html" class="nav-list-link">Changelog</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/adr/" class="nav-list-link">Decisions</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/diagrams/" class="nav-list-link">Figures</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/getting-started.html" class="nav-list-link">Getting started</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/guides/" class="nav-list-link">Guides</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/learn/" class="nav-list-link">Learn</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/reference/" class="nav-list-link">Reference</a></li><li class="nav-list-item"><a href="/hf-general-ci-tools/v1.2.2/templates/mkdocs-site/docs/guides/writing-docs.html" class="nav-list-link">Writing these docs</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search workflows, examples, and guides..." autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search workflows, examples, and guides...</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="/hf-general-ci-tools/v1.2.2/api/index.html" class="site-button"
+          
+        >
+          📖 API Reference
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools" class="site-button"
+          
+        >
+          📚 GitHub Repository
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="site-button"
+          
+        >
+          🐛 Report Issues
+        </a>
+      </li>
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/hardfoc/hf-general-ci-tools/stargazers" class="site-button"
+          
+        >
+          ⭐ Star on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="-hf-general-ci-tools">
+  
+  
+    <a href="#-hf-general-ci-tools" class="anchor-heading" aria-labelledby="-hf-general-ci-tools"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 🚀 hf-general-ci-tools
+  
+  
+</h1>
+    
+
+<p>Reusable GitHub Actions workflows (<code class="language-plaintext highlighter-rouge">ru-*.yml</code>) for C/C++ linting and static
+analysis, host CMake builds, documentation (Doxygen + Jekyll to GitHub Pages),
+link and lint checks, and a single required CI gate. The repositories in the
+hardfoc organisation call them; ESP-IDF firmware builds live in the sibling
+<a href="https://github.com/hardfoc/hf-espidf-ci-tools">hf-espidf-ci-tools</a>.</p>
+
+<p><a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml/badge.svg" alt="Workflow Self-CI" /></a>
+<a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg" alt="Docs Publish CI" /></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg" alt="License" /></a>
+<a href="https://hardfoc.github.io/hf-general-ci-tools"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" alt="Docs" /></a></p>
+<h2 id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ul>
+  <li><a href="#architecture">Architecture</a></li>
+  <li><a href="#versioning">Versioning</a></li>
+  <li><a href="#permissions-contract">Permissions contract</a></li>
+  <li><a href="#one-required-check-the-ci-gate">One required check: the CI gate</a></li>
+  <li><a href="#workflows-callers-and-inputs">Workflows: callers and inputs</a></li>
+  <li><a href="#how-this-repository-tests-itself">How this repository tests itself</a></li>
+</ul>
+<h2 id="architecture">
+  
+  
+    <a href="#architecture" class="anchor-heading" aria-labelledby="architecture"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Architecture
+  
+  
+</h2>
+    
+
+<pre><code class="language-mermaid">flowchart LR
+  subgraph callers["Calling repositories (pin @v1)"]
+    drivers["hf-*-driver repos (~21)"]
+    core["hf-core, hf-internal-interface-wrap,&lt;br/&gt;hf-hal-* boards, hf-pincfg"]
+    espci["hf-espidf-ci-tools,&lt;br/&gt;hf-espidf-project-tools"]
+    products["product repos"]
+  end
+
+  subgraph general["hf-general-ci-tools"]
+    gate["ru-ci-gate"]
+    host["ru-host-ci"]
+    lint["ru-cpp-lint"]
+    ana["ru-cpp-analysis"]
+    pub["ru-docs-publish"]
+    link["ru-docs-linkcheck"]
+    md["ru-markdown-lint"]
+    yml["ru-yaml-lint"]
+    rel["ru-release"]
+  end
+
+  subgraph espidf["hf-espidf-ci-tools"]
+    build["ru-build"]
+    relart["ru-release-with-artifacts"]
+  end
+
+  drivers --&gt; lint &amp; ana &amp; pub &amp; link &amp; md &amp; yml &amp; build &amp; relart
+  core --&gt; lint &amp; ana &amp; pub &amp; link &amp; md &amp; yml &amp; build &amp; relart
+  core --&gt; rel
+  espci --&gt; pub &amp; link &amp; md &amp; yml
+  products --&gt; gate &amp; host &amp; lint &amp; pub
+  pub -- "push" --&gt; pages[("gh-pages branch&lt;br/&gt;(GitHub Pages)")]
+  rel &amp; relart -- "create" --&gt; releases[("GitHub Releases")]
+</code></pre>
+
+<p>Each workflow is self-contained. It calls only third-party actions, which are
+pinned to commit SHAs, and never another workflow of this repository at a
+moving ref. Pinning a caller to <code class="language-plaintext highlighter-rouge">@v1</code> therefore pins everything it runs.</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Workflow</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href=".github/workflows/ru-ci-gate.yml"><code class="language-plaintext highlighter-rouge">ru-ci-gate.yml</code></a></td>
+      <td>One required check that passes only if every job passed (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-ci-gate/">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-host-ci.yml"><code class="language-plaintext highlighter-rouge">ru-host-ci.yml</code></a></td>
+      <td>CMake configure/build/ctest, then clang-tidy 18 and cppcheck on the compile database (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-host-ci/">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-cpp-lint.yml"><code class="language-plaintext highlighter-rouge">ru-cpp-lint.yml</code></a></td>
+      <td>clang-format and clang-tidy through cpp-linter-action (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-cpp-lint.html">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-cpp-analysis.yml"><code class="language-plaintext highlighter-rouge">ru-cpp-analysis.yml</code></a></td>
+      <td>cppcheck over source directories (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-cpp-analysis.html">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-docs-publish.yml"><code class="language-plaintext highlighter-rouge">ru-docs-publish.yml</code></a></td>
+      <td>Doxygen and Jekyll, versioned deploy to <code class="language-plaintext highlighter-rouge">gh-pages</code>; PRs build without deploying (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-docs-publish.html">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-docs-linkcheck.yml"><code class="language-plaintext highlighter-rouge">ru-docs-linkcheck.yml</code></a></td>
+      <td>lychee link check (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-docs-linkcheck.html">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-markdown-lint.yml"><code class="language-plaintext highlighter-rouge">ru-markdown-lint.yml</code></a></td>
+      <td>markdownlint-cli2 (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-markdown-lint.html">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-yaml-lint.yml"><code class="language-plaintext highlighter-rouge">ru-yaml-lint.yml</code></a></td>
+      <td>yamllint (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-yaml-lint.html">guide</a>)</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ru-release.yml"><code class="language-plaintext highlighter-rouge">ru-release.yml</code></a></td>
+      <td>GitHub Release with generated notes (<a href="/hf-general-ci-tools/v1.2.2/docs/ru-release.html">guide</a>)</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="versioning">
+  
+  
+    <a href="#versioning" class="anchor-heading" aria-labelledby="versioning"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Versioning
+  
+  
+</h2>
+    
+
+<p>Pin the moving major tag:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/&lt;workflow&gt;.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p>Releases are semver tags (<code class="language-plaintext highlighter-rouge">v1.0.0</code>, <code class="language-plaintext highlighter-rouge">v1.1.0</code>, …). <code class="language-plaintext highlighter-rouge">v1</code> always points at the
+newest <code class="language-plaintext highlighter-rouge">v1.x.y</code>, so callers get fixes and new optional inputs, never breaking
+changes. A removed input, a new required input or a new required permission
+only arrives with a new major (<code class="language-plaintext highlighter-rouge">@v2</code>). Pull requests here are checked for
+exactly those changes. See <a href="/hf-general-ci-tools/v1.2.2/docs/VERSIONING/">docs/VERSIONING.md</a> and
+<a href="/hf-general-ci-tools/v1.2.2/CHANGELOG.html">CHANGELOG.md</a>.</p>
+
+<blockquote>
+  <p>After a fix lands here, start a <strong>new</strong> run. “Re-run failed jobs” reuses the
+reusable-workflow revision that the original run resolved.</p>
+</blockquote>
+<h2 id="permissions-contract">
+  
+  
+    <a href="#permissions-contract" class="anchor-heading" aria-labelledby="permissions-contract"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Permissions contract
+  
+  
+</h2>
+    
+
+<p>Each workflow declares minimal <code class="language-plaintext highlighter-rouge">permissions</code> on every job. A called workflow
+cannot ask for more than its caller grants. If it does, the run fails before
+any job starts (<code class="language-plaintext highlighter-rouge">startup_failure</code>). Grant <strong>at least</strong> the following, on the
+calling job or at the top of the calling workflow. The self-CI fails if a
+workflow’s job permissions ever differ from this table.</p>
+
+<!-- permissions-table:start -->
+<p>| Workflow | Caller must grant | Why |
+| — | — | — |
+| <a href=".github/workflows/ru-ci-gate.yml"><code class="language-plaintext highlighter-rouge">ru-ci-gate.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | read the calling workflow to verify <code class="language-plaintext highlighter-rouge">needs</code> |
+| <a href=".github/workflows/ru-cpp-analysis.yml"><code class="language-plaintext highlighter-rouge">ru-cpp-analysis.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
+| <a href=".github/workflows/ru-cpp-lint.yml"><code class="language-plaintext highlighter-rouge">ru-cpp-lint.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code>, <code class="language-plaintext highlighter-rouge">pull-requests: write</code> | checkout; cpp-linter thread comments and annotations |
+| <a href=".github/workflows/ru-docs-linkcheck.yml"><code class="language-plaintext highlighter-rouge">ru-docs-linkcheck.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
+| <a href=".github/workflows/ru-docs-publish.yml"><code class="language-plaintext highlighter-rouge">ru-docs-publish.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: write</code> | push to the deployment branch; required on pull requests too, although PRs never deploy |
+| <a href=".github/workflows/ru-mkdocs-publish.yml"><code class="language-plaintext highlighter-rouge">ru-mkdocs-publish.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: write</code> | the deploy job pushes to the deployment branch; the build job needs only <code class="language-plaintext highlighter-rouge">contents: read</code>, but a caller grants the most any job needs |
+| <a href=".github/workflows/ru-host-ci.yml"><code class="language-plaintext highlighter-rouge">ru-host-ci.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
+| <a href=".github/workflows/ru-markdown-lint.yml"><code class="language-plaintext highlighter-rouge">ru-markdown-lint.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
+| <a href=".github/workflows/ru-release.yml"><code class="language-plaintext highlighter-rouge">ru-release.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: write</code> | create the GitHub Release |
+| <a href=".github/workflows/ru-yaml-lint.yml"><code class="language-plaintext highlighter-rouge">ru-yaml-lint.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
+<!-- permissions-table:end --></p>
+<h2 id="one-required-check-the-ci-gate">
+  
+  
+    <a href="#one-required-check-the-ci-gate" class="anchor-heading" aria-labelledby="one-required-check-the-ci-gate"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> One required check: the CI gate
+  
+  
+</h2>
+    
+
+<p>Put every job of a repository’s CI in one workflow, and end it with the gate:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>  <span class="na">ci-gate</span><span class="pi">:</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">CI gate</span>
+    <span class="na">needs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">build</span><span class="pi">,</span> <span class="nv">lint</span><span class="pi">,</span> <span class="nv">docs</span><span class="pi">]</span>     <span class="c1"># every other job in the workflow</span>
+    <span class="na">if</span><span class="pi">:</span> <span class="s">always()</span>                   <span class="c1"># a skipped required check counts as passing</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-ci-gate.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">needs_json</span><span class="pi">:</span> <span class="s">$</span>
+      <span class="na">allow_skipped</span><span class="pi">:</span> <span class="s">docs</span>          <span class="c1"># jobs that may be skipped by design</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<p>The repository ruleset then requires <strong>only</strong> the check <code class="language-plaintext highlighter-rouge">CI gate / gate</code>.
+GitHub names checks from a called workflow <code class="language-plaintext highlighter-rouge">&lt;calling job&gt; / &lt;called job&gt;</code>. The
+gate fails if any needed job failed or was cancelled, or was skipped without
+being listed in <code class="language-plaintext highlighter-rouge">allow_skipped</code>. It also fails if the calling workflow leaves
+a job out of <code class="language-plaintext highlighter-rouge">needs</code> or drops <code class="language-plaintext highlighter-rouge">if: always()</code>.</p>
+<h2 id="workflows-callers-and-inputs">
+  
+  
+    <a href="#workflows-callers-and-inputs" class="anchor-heading" aria-labelledby="workflows-callers-and-inputs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Workflows: callers and inputs
+  
+  
+</h2>
+    
+
+<p>Each example is the smallest working caller. The inputs tables are generated
+from the workflow files (<code class="language-plaintext highlighter-rouge">.github/scripts/gen_readme_inputs.py</code>), and CI fails
+if they go stale.</p>
+<h3 id="ru-ci-gate">
+  
+  
+    <a href="#ru-ci-gate" class="anchor-heading" aria-labelledby="ru-ci-gate"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-ci-gate
+  
+  
+</h3>
+    
+
+<p>See <a href="#one-required-check-the-ci-gate">the CI gate</a> for the caller.</p>
+
+<!-- inputs:ru-ci-gate.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">needs_json</code> | string | yes | - | The caller’s needs context as JSON: the expression toJSON(needs) |
+| <code class="language-plaintext highlighter-rouge">allow_skipped</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Jobs (ids from <code class="language-plaintext highlighter-rouge">needs</code>) that may be skipped without failing the gate, separated by commas, spaces or newlines. Every other job must succeed. |
+| <code class="language-plaintext highlighter-rouge">verify_needs</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Read the calling workflow file and fail if a job is missing from the gate’s <code class="language-plaintext highlighter-rouge">needs</code>, or if the gate job lacks <code class="language-plaintext highlighter-rouge">if: always()</code>. |
+<!-- inputs:ru-ci-gate.yml:end --></p>
+<h3 id="ru-host-ci">
+  
+  
+    <a href="#ru-host-ci" class="anchor-heading" aria-labelledby="ru-host-ci"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-host-ci
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">host</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-host-ci.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">preset</span><span class="pi">:</span> <span class="s">host-debug</span>
+      <span class="na">build_dir</span><span class="pi">:</span> <span class="s">build/host-debug</span>          <span class="c1"># the preset's binaryDir</span>
+      <span class="na">tidy_paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">^(src|include)/"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-host-ci.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">preset</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | CMake configure preset (from CMakePresets.json in source_dir). Empty: configure with -S source_dir -B build_dir. |
+| <code class="language-plaintext highlighter-rouge">source_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">.</code> | CMake source directory, relative to the repository root |
+| <code class="language-plaintext highlighter-rouge">build_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">build/host</code> | Build directory, relative to the repository root. With a preset this must be the preset’s binaryDir; compile_commands.json is read from here. |
+| <code class="language-plaintext highlighter-rouge">cmake_args</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Extra arguments for the configure step (space separated) |
+| <code class="language-plaintext highlighter-rouge">build_type</code> | string | no | <code class="language-plaintext highlighter-rouge">Debug</code> | CMAKE_BUILD_TYPE when no preset is used |
+| <code class="language-plaintext highlighter-rouge">run_tests</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run ctest after the build |
+| <code class="language-plaintext highlighter-rouge">ctest_args</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Extra arguments for ctest (space separated) |
+| <code class="language-plaintext highlighter-rouge">tidy_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Python regular expression matched (re.search) against each translation unit’s path relative to the repository root. Only matching files are given to clang-tidy and cppcheck. Empty: every file in the database. |
+| <code class="language-plaintext highlighter-rouge">exclude_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">(^\|/)(third_party\|external\|vendor\|_deps)/</code> | Python regular expression; translation units whose relative path matches are never analysed, and findings in matching files are not counted. The build directory is always excluded. |
+| <code class="language-plaintext highlighter-rouge">run_clang_tidy</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run clang-tidy 18 on the selected files |
+| <code class="language-plaintext highlighter-rouge">clang_tidy_config</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Path to a .clang-tidy file. Empty: clang-tidy’s normal lookup from each source file |
+| <code class="language-plaintext highlighter-rouge">run_cppcheck</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run cppcheck on the selected files |
+| <code class="language-plaintext highlighter-rouge">cppcheck_suppressions</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Path to a cppcheck –suppressions-list file (optional) |
+| <code class="language-plaintext highlighter-rouge">cppcheck_enable</code> | string | no | <code class="language-plaintext highlighter-rouge">warning,performance,portability</code> | cppcheck –enable value |
+| <code class="language-plaintext highlighter-rouge">fail_on_findings</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Fail the job when clang-tidy or cppcheck report findings |
+| <code class="language-plaintext highlighter-rouge">apt_packages</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Extra apt packages to install before configuring (space separated) |
+| <code class="language-plaintext highlighter-rouge">submodules</code> | string | no | <code class="language-plaintext highlighter-rouge">false</code> | actions/checkout submodules value: false, true or recursive |
+| <code class="language-plaintext highlighter-rouge">runs_on</code> | string | no | <code class="language-plaintext highlighter-rouge">ubuntu-24.04</code> | Runner label (Ubuntu 24.04 or newer, for clang-tidy-18 from apt) |
+| <code class="language-plaintext highlighter-rouge">artifact_name</code> | string | no | <code class="language-plaintext highlighter-rouge">host-ci-reports</code> | Name of the uploaded report artifact |
+<!-- inputs:ru-host-ci.yml:end --></p>
+<h3 id="ru-cpp-lint">
+  
+  
+    <a href="#ru-cpp-lint" class="anchor-heading" aria-labelledby="ru-cpp-lint"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-cpp-lint
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">lint</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+      <span class="na">pull-requests</span><span class="pi">:</span> <span class="s">write</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">clang_format_config</span><span class="pi">:</span> <span class="s">_config/.clang-format</span>
+      <span class="na">clang_tidy_config</span><span class="pi">:</span> <span class="s">_config/.clang-tidy</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-cpp-lint.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">clang_version</code> | string | no | <code class="language-plaintext highlighter-rouge">20</code> | Clang major version |
+| <code class="language-plaintext highlighter-rouge">clang_format_config</code> | string | no | <code class="language-plaintext highlighter-rouge">_config/.clang-format</code> | Path to clang-format configuration file |
+| <code class="language-plaintext highlighter-rouge">clang_tidy_config</code> | string | no | <code class="language-plaintext highlighter-rouge">_config/.clang-tidy</code> | Path to clang-tidy configuration file |
+| <code class="language-plaintext highlighter-rouge">tidy_checks</code> | string | no | - | clang-tidy checks (comma-separated glob patterns, use - prefix to disable) |
+| <code class="language-plaintext highlighter-rouge">extensions</code> | string | no | <code class="language-plaintext highlighter-rouge">c,cpp,cc,cxx,h,hpp</code> | File extensions to check (comma-separated) |
+| <code class="language-plaintext highlighter-rouge">ignore</code> | string | no | <code class="language-plaintext highlighter-rouge">build\|.git</code> | Files or directories to exclude from linting (pipe-separated) |
+| <code class="language-plaintext highlighter-rouge">files_changed_only</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Only lint files that have been changed in the pull request |
+| <code class="language-plaintext highlighter-rouge">lines_changed_only</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Only inspect lines that have changed in the pull request |
+| <code class="language-plaintext highlighter-rouge">step_summary</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Add a summary of linting results to the workflow step summary |
+| <code class="language-plaintext highlighter-rouge">file_annotations</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Display linting errors and warnings as file annotations in the GitHub UI |
+| <code class="language-plaintext highlighter-rouge">thread_comments</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Post a single, collapsible thread comment in a pull request detailing all linting issues |
+<!-- inputs:ru-cpp-lint.yml:end --></p>
+<h3 id="ru-cpp-analysis">
+  
+  
+    <a href="#ru-cpp-analysis" class="anchor-heading" aria-labelledby="ru-cpp-analysis"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-cpp-analysis
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">cppcheck</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">src</span><span class="nv"> </span><span class="s">inc"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-cpp-analysis.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">paths</code> | string | no | <code class="language-plaintext highlighter-rouge">src inc examples</code> | Dirs to analyze (space-separated) |
+| <code class="language-plaintext highlighter-rouge">std</code> | string | no | <code class="language-plaintext highlighter-rouge">c++17</code> | C++ standard |
+| <code class="language-plaintext highlighter-rouge">strict</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Fail job if any issues found |
+| <code class="language-plaintext highlighter-rouge">exclude</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Paths to exclude (space-separated) |
+| <code class="language-plaintext highlighter-rouge">enable</code> | string | no | <code class="language-plaintext highlighter-rouge">warning,style,performance,portability,information</code> | Checks to enable (comma-separated: all,warning,style,performance, portability,information,unusedFunction,missingInclude) |
+| <code class="language-plaintext highlighter-rouge">force</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Force checking even with incomplete analysis |
+| <code class="language-plaintext highlighter-rouge">max_configs</code> | number | no | <code class="language-plaintext highlighter-rouge">0</code> | Maximum configs to check (for template-heavy code, 0=unlimited) |
+<!-- inputs:ru-cpp-analysis.yml:end --></p>
+<h3 id="ru-docs-publish">
+  
+  
+    <a href="#ru-docs-publish" class="anchor-heading" aria-labelledby="ru-docs-publish"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-docs-publish
+  
+  
+</h3>
+    
+
+<p>Call it on pull requests as well. They take the PR build path: the whole site
+is built and uploaded as an artifact, and nothing is deployed.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">main</span><span class="pi">]</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">write</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">doxygen_config</span><span class="pi">:</span> <span class="s">_config/Doxyfile</span>
+      <span class="na">jekyll_enabled</span><span class="pi">:</span> <span class="no">true</span>
+      <span class="na">jekyll_source</span><span class="pi">:</span> <span class="s2">"</span><span class="s">."</span>
+      <span class="na">jekyll_config</span><span class="pi">:</span> <span class="s">_config/_config.yml</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+<h4 id="ru-docs-publish-inputs">
+  
+  
+    <a href="#ru-docs-publish-inputs" class="anchor-heading" aria-labelledby="ru-docs-publish-inputs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-docs-publish inputs
+  
+  
+</h4>
+    
+
+<!-- inputs:ru-docs-publish.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">checkout_recursive</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Checkout submodules recursively (useful for projects with documentation in submodules) |
+| <code class="language-plaintext highlighter-rouge">run_link_check</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run documentation link checker |
+| <code class="language-plaintext highlighter-rouge">link_check_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">**/*.md</code> | Space-separated paths to check for broken links |
+| <code class="language-plaintext highlighter-rouge">link_check_config</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Path to lychee.toml config file (optional) |
+| <code class="language-plaintext highlighter-rouge">verbose</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable verbose output for link checking |
+| <code class="language-plaintext highlighter-rouge">yamllint_config</code> | string | no | <code class="language-plaintext highlighter-rouge">_config/.yamllint</code> | Path to yamllint configuration file |
+| <code class="language-plaintext highlighter-rouge">run_markdown_lint</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Run markdown linting on documentation files |
+| <code class="language-plaintext highlighter-rouge">markdown_lint_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">**/*.md</code> | Glob patterns for markdown files to lint |
+| <code class="language-plaintext highlighter-rouge">markdown_lint_config</code> | string | no | <code class="language-plaintext highlighter-rouge">_config/.markdownlint.json</code> | Path to markdownlint configuration file |
+| <code class="language-plaintext highlighter-rouge">run_spell_check</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Run spell checking on documentation files |
+| <code class="language-plaintext highlighter-rouge">spell_check_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">**/*.md</code> | Glob patterns for files to spell check |
+| <code class="language-plaintext highlighter-rouge">spell_check_config</code> | string | no | <code class="language-plaintext highlighter-rouge">.cspell.json</code> | Path to cspell configuration file |
+| <code class="language-plaintext highlighter-rouge">deployment_branch</code> | string | no | <code class="language-plaintext highlighter-rouge">gh-pages</code> | Branch name for deployment (required for versioned documentation) |
+| <code class="language-plaintext highlighter-rouge">deploy_pages</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Deploy to GitHub Pages. Ignored on pull_request, pull_request_target and merge_group events, which always take the PR build path (build and upload the docs-html artifact, no deploy). |
+| <code class="language-plaintext highlighter-rouge">artifact_name</code> | string | no | <code class="language-plaintext highlighter-rouge">docs-html</code> | Name of the uploaded site artifact (set it when calling this workflow more than once in one run) |
+| <code class="language-plaintext highlighter-rouge">doxygen_config</code> | string | no | <code class="language-plaintext highlighter-rouge">Doxyfile</code> | Path to Doxyfile (relative to repo root) - output directory auto-detected from OUTPUT_DIRECTORY and HTML_OUTPUT settings |
+| <code class="language-plaintext highlighter-rouge">doxygen_working_directory</code> | string | no | <code class="language-plaintext highlighter-rouge">.</code> | Directory to execute Doxygen from (defaults to repository root). Relative paths in the Doxyfile are resolved against this directory. |
+| <code class="language-plaintext highlighter-rouge">doxygen_fail_on_warnings</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Treat Doxygen warnings as errors in CI |
+| <code class="language-plaintext highlighter-rouge">jekyll_enabled</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable Jekyll static site generation for enhanced documentation presentation |
+| <code class="language-plaintext highlighter-rouge">jekyll_config</code> | string | no | <code class="language-plaintext highlighter-rouge">_config.yml</code> | Comma-separated list of Jekyll configuration files (e.g., “_config.yml,_config_prod.yml”) |
+| <code class="language-plaintext highlighter-rouge">jekyll_source</code> | string | no | <code class="language-plaintext highlighter-rouge">docs</code> | Jekyll source directory containing your site files |
+| <code class="language-plaintext highlighter-rouge">jekyll_destination</code> | string | no | <code class="language-plaintext highlighter-rouge">_site</code> | Jekyll build destination directory for generated site |
+| <code class="language-plaintext highlighter-rouge">jekyll_environment</code> | string | no | <code class="language-plaintext highlighter-rouge">production</code> | Jekyll environment (development, production, staging) - affects which config files are loaded |
+| <code class="language-plaintext highlighter-rouge">jekyll_safe</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run in safe mode (disables custom plugins, used by GitHub Pages) - CI Recommended |
+| <code class="language-plaintext highlighter-rouge">jekyll_plugins_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Comma-separated list of plugin directories (–plugins option) |
+| <code class="language-plaintext highlighter-rouge">jekyll_layouts_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Layout directory (–layouts option) |
+| <code class="language-plaintext highlighter-rouge">jekyll_verbose</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable verbose output during Jekyll build - CI Recommended for debugging |
+| <code class="language-plaintext highlighter-rouge">jekyll_strict_front_matter</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Cause build to fail if there is a YAML syntax error in front matter - CI Recommended |
+| <code class="language-plaintext highlighter-rouge">jekyll_drafts</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Include draft posts in the build (useful for development) |
+| <code class="language-plaintext highlighter-rouge">jekyll_future</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Include future-dated posts in the build |
+| <code class="language-plaintext highlighter-rouge">jekyll_unpublished</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Include unpublished posts in the build |
+| <code class="language-plaintext highlighter-rouge">jekyll_incremental</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable incremental builds for faster development (may cause issues in CI) |
+| <code class="language-plaintext highlighter-rouge">jekyll_lsi</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable LSI (Latent Semantic Indexing) for related posts |
+| <code class="language-plaintext highlighter-rouge">jekyll_limit_posts</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Limit the number of posts to parse and publish |
+| <code class="language-plaintext highlighter-rouge">jekyll_profile</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable profiling output to show build performance (reduces build time) |
+| <code class="language-plaintext highlighter-rouge">jekyll_quiet</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Suppress normal output during Jekyll build (reduces debugging info) |
+| <code class="language-plaintext highlighter-rouge">jekyll_trace</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Show full backtrace when an error occurs (debug only) |
+<!-- inputs:ru-docs-publish.yml:end --></p>
+<h3 id="ru-mkdocs-publishyml">
+  
+  
+    <a href="#ru-mkdocs-publishyml" class="anchor-heading" aria-labelledby="ru-mkdocs-publishyml"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">ru-mkdocs-publish.yml</code>
+  
+  
+</h3>
+    
+
+<p>mkdocs-material site with Doxygen merged under <code class="language-plaintext highlighter-rouge">/api/</code>. Pull requests build
+strictly and check links without deploying; pushes to the default branch and
+<code class="language-plaintext highlighter-rouge">v*</code> tags deploy to <code class="language-plaintext highlighter-rouge">gh-pages</code> with versioned docs. Guide:
+<a href="/hf-general-ci-tools/v1.2.2/docs/ru-mkdocs-publish.html">docs/ru-mkdocs-publish.md</a>.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">write</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-mkdocs-publish.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">python_version</code> | string | no | <code class="language-plaintext highlighter-rouge">3.12</code> | Python used to build the site. |
+| <code class="language-plaintext highlighter-rouge">requirements</code> | string | no | <code class="language-plaintext highlighter-rouge">requirements-docs.txt</code> | pip requirements file with the pinned site toolchain (mkdocs, mkdocs-material, mike, …). |
+| <code class="language-plaintext highlighter-rouge">mkdocs_config</code> | string | no | <code class="language-plaintext highlighter-rouge">mkdocs.yml</code> | Path of mkdocs.yml. |
+| <code class="language-plaintext highlighter-rouge">submodules</code> | string | no | <code class="language-plaintext highlighter-rouge">false</code> | Submodules to check out with the repository: ‘false’, ‘true’ (top level) or ‘recursive’. |
+| <code class="language-plaintext highlighter-rouge">submodule_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. ‘lib/core/drivers/internal/pincfg’. Use it instead of ‘recursive’ when the checks need a few nested submodules. |
+| <code class="language-plaintext highlighter-rouge">check_commands</code> | string | no | <code class="language-plaintext highlighter-rouge">if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi</code> | Shell lines run before the build; any failure fails the job. The default runs the figure drift check (tools/figkit/build.py –check) and the generated-table check (tools/docs/gen.py –check) when present. |
+| <code class="language-plaintext highlighter-rouge">doxygen_config</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. |
+| <code class="language-plaintext highlighter-rouge">doxygen_working_directory</code> | string | no | <code class="language-plaintext highlighter-rouge">.</code> | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. |
+| <code class="language-plaintext highlighter-rouge">doxygen_html_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. |
+| <code class="language-plaintext highlighter-rouge">api_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">api</code> | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). |
+| <code class="language-plaintext highlighter-rouge">link_check</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run lychee offline on the built site (internal links, anchors and images, API included). |
+| <code class="language-plaintext highlighter-rouge">link_check_args</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Extra lychee arguments, for example –exclude-path patterns. |
+| <code class="language-plaintext highlighter-rouge">deploy</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. |
+| <code class="language-plaintext highlighter-rouge">deployment_branch</code> | string | no | <code class="language-plaintext highlighter-rouge">gh-pages</code> | Branch GitHub Pages serves from. |
+| <code class="language-plaintext highlighter-rouge">dev_version</code> | string | no | <code class="language-plaintext highlighter-rouge">dev</code> | mike version name a push to the default branch publishes to. |
+| <code class="language-plaintext highlighter-rouge">latest_alias</code> | string | no | <code class="language-plaintext highlighter-rouge">latest</code> | mike alias moved to each release (v* tag). |
+<!-- inputs:ru-mkdocs-publish.yml:end --></p>
+<h3 id="ru-docs-linkcheck">
+  
+  
+    <a href="#ru-docs-linkcheck" class="anchor-heading" aria-labelledby="ru-docs-linkcheck"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-docs-linkcheck
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">links</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">paths</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docs/**/*.md</span><span class="nv"> </span><span class="s">*.md"</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-docs-linkcheck.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">checkout_recursive</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Checkout submodules recursively (useful for projects with documentation in submodules) |
+| <code class="language-plaintext highlighter-rouge">paths</code> | string | no | <code class="language-plaintext highlighter-rouge">docs/** *.md **/docs/**</code> | Space-separated paths to check for broken links |
+| <code class="language-plaintext highlighter-rouge">fail_on_errors</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Fail the workflow if broken links are found |
+| <code class="language-plaintext highlighter-rouge">timeout</code> | string | no | <code class="language-plaintext highlighter-rouge">10</code> | Timeout in seconds for each link check |
+| <code class="language-plaintext highlighter-rouge">max_retries</code> | string | no | <code class="language-plaintext highlighter-rouge">3</code> | Maximum number of retries per request |
+| <code class="language-plaintext highlighter-rouge">retry_wait_time</code> | string | no | <code class="language-plaintext highlighter-rouge">1</code> | Minimum wait time in seconds between retries |
+| <code class="language-plaintext highlighter-rouge">exclude_private</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Exclude private/internal links |
+| <code class="language-plaintext highlighter-rouge">exclude_mail</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Exclude mailto links |
+| <code class="language-plaintext highlighter-rouge">verbose</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable verbose output |
+| <code class="language-plaintext highlighter-rouge">config_file</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Path to lychee.toml config file (optional) |
+<!-- inputs:ru-docs-linkcheck.yml:end --></p>
+<h3 id="ru-markdown-lint">
+  
+  
+    <a href="#ru-markdown-lint" class="anchor-heading" aria-labelledby="ru-markdown-lint"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-markdown-lint
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">markdown</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s">_config/.markdownlint.json</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-markdown-lint.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">globs</code> | string | no | <code class="language-plaintext highlighter-rouge">**/*.md</code> | Space-separated list of glob patterns to check (default: all markdown files) |
+| <code class="language-plaintext highlighter-rouge">config_file</code> | string | no | <code class="language-plaintext highlighter-rouge">_config/.markdownlint.json</code> | Path to markdownlint configuration file (default: _config/.markdownlint.json) |
+| <code class="language-plaintext highlighter-rouge">exclude_patterns</code> | string | no | <code class="language-plaintext highlighter-rouge">.git/**,node_modules/**,venv/**,.venv/**,_site/**,**/hf-espidf-project-tools/**</code> | Comma-separated patterns to exclude from checking |
+| <code class="language-plaintext highlighter-rouge">use_docker</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Use Docker container instead of official action (for more control) |
+| <code class="language-plaintext highlighter-rouge">fix</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Automatically fix fixable issues (equivalent to –fix flag) |
+| <code class="language-plaintext highlighter-rouge">separator</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Separator to use between glob patterns (default: space) |
+<!-- inputs:ru-markdown-lint.yml:end --></p>
+<h3 id="ru-yaml-lint">
+  
+  
+    <a href="#ru-yaml-lint" class="anchor-heading" aria-labelledby="ru-yaml-lint"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-yaml-lint
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">yaml</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+    <span class="na">with</span><span class="pi">:</span>
+      <span class="na">config_file</span><span class="pi">:</span> <span class="s">_config/.yamllint</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-yaml-lint.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">paths</code> | string | no | <code class="language-plaintext highlighter-rouge">**/*.yml,**/*.yaml</code> | Comma-separated list of paths to check (default: all YAML files) |
+| <code class="language-plaintext highlighter-rouge">config_file</code> | string | no | <code class="language-plaintext highlighter-rouge">_config/.yamllint</code> | Path to yamllint configuration file (default: _config/.yamllint) |
+| <code class="language-plaintext highlighter-rouge">strict_mode</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Enable strict mode (fail on warnings) |
+| <code class="language-plaintext highlighter-rouge">exclude_patterns</code> | string | no | <code class="language-plaintext highlighter-rouge">.git/**,node_modules/**,venv/**,.venv/**,**/hf-espidf-project-tools/**</code> | Comma-separated patterns to exclude from checking |
+<!-- inputs:ru-yaml-lint.yml:end --></p>
+<h3 id="ru-release">
+  
+  
+    <a href="#ru-release" class="anchor-heading" aria-labelledby="ru-release"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ru-release
+  
+  
+</h3>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">tags</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">v*"</span><span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">release</span><span class="pi">:</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">write</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-release.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">draft</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Create as draft release |
+| <code class="language-plaintext highlighter-rouge">prerelease</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Mark as pre-release |
+| <code class="language-plaintext highlighter-rouge">tag_name</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Tag name for release (defaults to github.ref_name) |
+<!-- inputs:ru-release.yml:end --></p>
+<h2 id="how-this-repository-tests-itself">
+  
+  
+    <a href="#how-this-repository-tests-itself" class="anchor-heading" aria-labelledby="how-this-repository-tests-itself"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> How this repository tests itself
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Workflow</th>
+      <th>What it checks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href=".github/workflows/ci-self.yml"><code class="language-plaintext highlighter-rouge">ci-self.yml</code></a></td>
+      <td>Runs actionlint with shellcheck (pinned, any finding fails). Fails any <code class="language-plaintext highlighter-rouge">run:</code> block ending in a bare <code class="language-plaintext highlighter-rouge">cond &amp;&amp; cmd</code>. Checks the permissions contract against the table above, the README inputs tables, and breaking changes against the PR base. Runs unit tests for these checks, and runs the CI gate on itself</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ci-docs-publish.yml"><code class="language-plaintext highlighter-rouge">ci-docs-publish.yml</code></a></td>
+      <td>Builds this site (Jekyll source <code class="language-plaintext highlighter-rouge">.</code>) and a fixture site whose source is a subdirectory</td>
+    </tr>
+    <tr>
+      <td><a href=".github/workflows/ci-host-ci.yml"><code class="language-plaintext highlighter-rouge">ci-host-ci.yml</code></a></td>
+      <td>Runs <code class="language-plaintext highlighter-rouge">ru-host-ci</code> on a fixture: preset path on clean code must pass; <code class="language-plaintext highlighter-rouge">-S/-B</code> path with seeded defects must report findings</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ci-cpp-lint.yml</code>, <code class="language-plaintext highlighter-rouge">ci-cpp-analysis.yml</code>, <code class="language-plaintext highlighter-rouge">ci-docs-linkcheck.yml</code>, <code class="language-plaintext highlighter-rouge">ci-markdown-lint.yml</code>, <code class="language-plaintext highlighter-rouge">ci-yaml-lint.yml</code></td>
+      <td>Each runs its workflow on this repository</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p>Third-party actions are pinned to commit SHAs with a <code class="language-plaintext highlighter-rouge"># vX.Y.Z</code> comment, and
+Dependabot keeps them current. Contributions follow
+<a href="/hf-general-ci-tools/v1.2.2/CONTRIBUTING.md">CONTRIBUTING.md</a>. Licensed under <a href="/hf-general-ci-tools/v1.2.2/LICENSE">GPL v3</a>.</p>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+
+  <footer class="site-footer">
+  <div class="site-footer-credits">
+    <p>Built with ❤️ using <a href="https://just-the-docs.github.io/just-the-docs/">Just the Docs</a></p>
+    <p><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/main/LICENSE">GPL v3 License</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools">View on GitHub</a></p>
+  </div>
+</footer>
+
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      <footer class="site-nav-footer">
+  <div class="nav-footer-links">
+    <a href="https://github.com/hardfoc/hf-general-ci-tools" class="nav-footer-link" aria-label="GitHub Repository">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      GitHub
+    </a>
+    <a href="https://github.com/hardfoc/hf-general-ci-tools/issues" class="nav-footer-link" aria-label="Report Issues">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      Issues
+    </a>
+  </div>
+</footer>
+
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+<button id="search-button" class="search-button btn-reset" aria-label="Focus on search">
+  <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+</button>
+
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+
