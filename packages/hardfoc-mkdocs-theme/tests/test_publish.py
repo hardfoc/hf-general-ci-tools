@@ -47,9 +47,9 @@ class PublishRootTest(unittest.TestCase):
         # An orphan: no history shared with main.
         self.assertEqual(git(self.clone, "rev-list", "--count", "gh-pages"), "1")
 
-    def test_replaces_old_site_keeps_cname_and_is_idempotent(self):
+    def test_replaces_old_site_and_is_idempotent(self):
         publish_root(self.site, self.clone, "gh-pages", "Publish")
-        # Someone adds a custom domain and an old file sits on the branch.
+        # A stale custom domain and an old file sit on the branch.
         git(self.clone, "worktree", "add", "-q", str(pathlib.Path(self.tmp.name) / "wt"), "gh-pages")
         wt = pathlib.Path(self.tmp.name) / "wt"
         (wt / "CNAME").write_text("docs.example.org\n")
@@ -63,12 +63,17 @@ class PublishRootTest(unittest.TestCase):
         (self.site / "sub/index.html").unlink()
         (self.site / "sub").rmdir()
         self.assertTrue(publish_root(self.site, self.clone, "gh-pages", "Publish 2"))
-        self.assertEqual(self.files(), {".nojekyll", "CNAME", "index.html"})
+        self.assertEqual(self.files(), {".nojekyll", "index.html"})
         self.assertEqual(git(self.clone, "show", "gh-pages:index.html"), "<h1>v2</h1>")
         # A fast-forward of the remote branch: never needs a force push.
         git(self.clone, "merge-base", "--is-ancestor", "origin/gh-pages", "gh-pages")
         self.push()
         self.assertFalse(publish_root(self.site, self.clone, "gh-pages", "Publish 3"))
+
+    def test_custom_domain_comes_from_the_site(self):
+        (self.site / "CNAME").write_text("docs.example.org\n")
+        publish_root(self.site, self.clone, "gh-pages", "Publish")
+        self.assertEqual(git(self.clone, "show", "gh-pages:CNAME"), "docs.example.org")
 
     def test_refuses_a_folder_that_is_not_a_site(self):
         (self.site / "index.html").unlink()

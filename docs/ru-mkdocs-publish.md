@@ -124,7 +124,7 @@ The organisation portal (`hardfoc.github.io`) has one current site, not versions
 | --- | --- | --- |
 | `site_url` | `https://hardfoc.github.io/<repo>/latest/` | `https://hardfoc.github.io/` (or `/<repo>/`) |
 | Version selector, older-version banner | Yes | No |
-| Push to the default branch | Publishes `dev` | Replaces the whole deployment branch with the built site, in one ordinary commit (`CNAME` kept, `.nojekyll` written; no commit when nothing changed) |
+| Push to the default branch | Publishes `dev` | Replaces the whole deployment branch with the built site, in one ordinary commit (`.nojekyll` written; a `CNAME` only when the site has one, `docs/CNAME`; no commit when nothing changed) |
 | Push of a `v*` tag | Publishes `vX.Y.Z` | Nothing (a notice) |
 | Pull request | Build, checks, Lighthouse, screenshots | The same |
 
