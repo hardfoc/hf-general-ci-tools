@@ -28,29 +28,25 @@ var NAVTREE =
     [ "🚀 hf-general-ci-tools", "index.html#autotoc_md2", [
       [ "} md_README", "index.html#autotoc_md0", null ],
       [ "permalink: /", "index.html#autotoc_md1", null ],
-      [ "📋 Overview", "index.html#autotoc_md5", [
-        [ "✨ Key Features", "index.html#autotoc_md6", null ]
+      [ "Contents", "index.html#autotoc_md3", null ],
+      [ "Architecture", "index.html#autotoc_md4", null ],
+      [ "Versioning", "index.html#autotoc_md5", null ],
+      [ "Permissions contract", "index.html#autotoc_md6", null ],
+      [ "One required check: the CI gate", "index.html#autotoc_md7", null ],
+      [ "Workflows: callers and inputs", "index.html#autotoc_md8", [
+        [ "ru-ci-gate", "index.html#autotoc_md9", null ],
+        [ "ru-host-ci", "index.html#autotoc_md10", null ],
+        [ "ru-cpp-lint", "index.html#autotoc_md11", null ],
+        [ "ru-cpp-analysis", "index.html#autotoc_md12", null ],
+        [ "ru-docs-publish", "index.html#autotoc_md13", [
+          [ "ru-docs-publish inputs", "index.html#autotoc_md14", null ]
+        ] ],
+        [ "ru-docs-linkcheck", "index.html#autotoc_md15", null ],
+        [ "ru-markdown-lint", "index.html#autotoc_md16", null ],
+        [ "ru-yaml-lint", "index.html#autotoc_md17", null ],
+        [ "ru-release", "index.html#autotoc_md18", null ]
       ] ],
-      [ "🔄 Reusable Workflows", "index.html#autotoc_md8", null ],
-      [ "🏠 Repository-Specific Workflows", "index.html#autotoc_md10", null ],
-      [ "📚 Documentation", "index.html#autotoc_md12", [
-        [ "📖 Available Guides", "index.html#autotoc_md13", null ]
-      ] ],
-      [ "🚀 Quick Start", "index.html#autotoc_md15", [
-        [ "🎯 Using Reusable Workflows", "index.html#autotoc_md16", [
-          [ "🔧 Basic CI Pipeline", "index.html#autotoc_md17", null ],
-          [ "🎨 Individual Workflow Examples", "index.html#autotoc_md18", null ]
-        ] ]
-      ] ],
-      [ "📋 Prerequisites", "index.html#autotoc_md20", [
-        [ "✅ Required Setup", "index.html#autotoc_md21", null ],
-        [ "🏗️ Recommended Project Structure", "index.html#autotoc_md22", null ]
-      ] ],
-      [ "🔗 Related Resources", "index.html#autotoc_md24", [
-        [ "📚 Official Documentation", "index.html#autotoc_md25", null ],
-        [ "🛠️ Configuration Examples", "index.html#autotoc_md26", null ]
-      ] ],
-      [ "📄 License", "index.html#autotoc_md28", null ]
+      [ "How this repository tests itself", "index.html#autotoc_md19", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
