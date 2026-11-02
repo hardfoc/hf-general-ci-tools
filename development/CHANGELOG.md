@@ -15,6 +15,13 @@ that heading.
 
 ## [Unreleased]
 
+### Fixed (documentation platform)
+
+- Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter's and
+  JetBrains Mono's metrics (`size-adjust`, `ascent-override`, `descent-override`), so the swap to the web font
+  keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance
+  budget on cumulative layout shift.
+
 ### Added (documentation platform)
 
 - `packages/hardfoc-mkdocs-theme`: the HardFOC documentation theme as one pip package: `theme: hardfoc`

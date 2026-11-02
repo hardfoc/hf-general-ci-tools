@@ -282,6 +282,21 @@ that heading.</p>
   
 </h2>
     
+<h3 id="fixed-documentation-platform">
+  
+  
+    <a href="#fixed-documentation-platform" class="anchor-heading" aria-labelledby="fixed-documentation-platform"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Fixed (documentation platform)
+  
+  
+</h3>
+    
+
+<ul>
+  <li>Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter’s and
+JetBrains Mono’s metrics (<code class="language-plaintext highlighter-rouge">size-adjust</code>, <code class="language-plaintext highlighter-rouge">ascent-override</code>, <code class="language-plaintext highlighter-rouge">descent-override</code>), so the swap to the web font
+keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance
+budget on cumulative layout shift.</li>
+</ul>
 <h3 id="added-documentation-platform">
   
   
