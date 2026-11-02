@@ -1,11 +1,3 @@
----
-layout: default
-title: "Migrating a repository to MkDocs"
-description: "Step by step: move one HardFOC repository from the Jekyll docs site to the MkDocs platform"
-nav_order: 6
-parent: "🔄 Reusable Workflows"
----
-
 # Migrating a repository to MkDocs
 
 Move one repository's documentation from the Jekyll (just-the-docs) site to the HardFOC MkDocs platform, from a

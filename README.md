@@ -1,32 +1,23 @@
----
-layout: default
-title: "🚀 hf-general-ci-tools"
-description: "Reusable GitHub Actions workflows for C/C++ and documentation CI in the hardfoc organisation"
-nav_order: 1
-permalink: /
----
+# hf-general-ci-tools
 
-# 🚀 hf-general-ci-tools
+Reusable GitHub Actions workflows for every HardFOC repository: C/C++ lint and analysis, host CMake builds, the
+MkDocs documentation platform, link and lint checks, releases and a single required CI gate. ESP-IDF firmware
+builds live in the sibling [hf-espidf-ci-tools](https://github.com/hardfoc/hf-espidf-ci-tools).
 
-Reusable GitHub Actions workflows (`ru-*.yml`) for C/C++ linting and static
-analysis, host CMake builds, documentation (Doxygen + Jekyll to GitHub Pages),
-link and lint checks, and a single required CI gate. The repositories in the
-hardfoc organisation call them; ESP-IDF firmware builds live in the sibling
-[hf-espidf-ci-tools](https://github.com/hardfoc/hf-espidf-ci-tools).
+[![Workflow Self-CI](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml/badge.svg?branch=main)](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml)
+[![Docs](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg?branch=main)](https://hardfoc.github.io/hf-general-ci-tools/latest/)
+[![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/hardfoc/hf-general-ci-tools)](https://github.com/hardfoc/hf-general-ci-tools/releases)
 
-[![Workflow Self-CI](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml/badge.svg)](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml)
-[![Docs Publish CI](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg)](https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml)
-[![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://hardfoc.github.io/hf-general-ci-tools)
+**Documentation: <https://hardfoc.github.io/hf-general-ci-tools/latest/>**
 
-## Contents
-
-- [Architecture](#architecture)
-- [Versioning](#versioning)
-- [Permissions contract](#permissions-contract)
-- [One required check: the CI gate](#one-required-check-the-ci-gate)
-- [Workflows: callers and inputs](#workflows-callers-and-inputs)
-- [How this repository tests itself](#how-this-repository-tests-itself)
+| Page | What it covers |
+| --- | --- |
+| [Quickstart](https://hardfoc.github.io/hf-general-ci-tools/latest/quickstart/) | The smallest CI for a repository, pinned to `@v1`, with the gate |
+| [Workflow catalogue](https://hardfoc.github.io/hf-general-ci-tools/latest/workflows/) | Every reusable workflow: purpose, jobs, permissions, inputs, failure modes |
+| [Versioning](https://hardfoc.github.io/hf-general-ci-tools/latest/VERSIONING/) | Tags, the moving `v1`, what is breaking, automatic patch releases |
+| [Permissions contract](https://hardfoc.github.io/hf-general-ci-tools/latest/permissions/) | What each workflow needs from its caller |
+| [Docs platform](https://hardfoc.github.io/hf-general-ci-tools/latest/docs-platform/) | The theme package, the publish workflow, migration and the style guide |
 
 ## Architecture
 
@@ -470,7 +461,7 @@ jobs:
 | Workflow | What it checks |
 | --- | --- |
 | [`ci-self.yml`](.github/workflows/ci-self.yml) | Runs actionlint with shellcheck (pinned, any finding fails). Fails any `run:` block ending in a bare `cond && cmd`. Checks the permissions contract against the table above, the README inputs tables, and breaking changes against the PR base. Runs unit tests for these checks, and runs the CI gate on itself |
-| [`ci-docs-publish.yml`](.github/workflows/ci-docs-publish.yml) | Builds this site (Jekyll source `.`) and a fixture site whose source is a subdirectory |
+| [`ci-docs-publish.yml`](.github/workflows/ci-docs-publish.yml) | Builds and publishes this repository's site with `ru-mkdocs-publish` at the same commit; runs it unversioned on a fixture; runs the legacy Jekyll workflow on a fixture site in a subdirectory |
 | [`ci-host-ci.yml`](.github/workflows/ci-host-ci.yml) | Runs `ru-host-ci` on a fixture: preset path on clean code must pass; `-S/-B` path with seeded defects must report findings |
 | `ci-cpp-lint.yml`, `ci-cpp-analysis.yml`, `ci-docs-linkcheck.yml`, `ci-markdown-lint.yml`, `ci-yaml-lint.yml` | Each runs its workflow on this repository |
 

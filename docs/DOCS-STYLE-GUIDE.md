@@ -1,11 +1,3 @@
----
-layout: default
-title: "Documentation style guide"
-description: "What every HardFOC documentation site and README contains, and how it is written"
-nav_order: 7
-parent: "🔄 Reusable Workflows"
----
-
 # Documentation style guide
 
 What every HardFOC documentation site contains, how its pages are written and what a README looks like. The pilot
@@ -32,7 +24,7 @@ site, `hardfoc/hf-tmc9660-driver`, follows every rule here; copy its structure.
    as the lead paragraph.
 3. **Sections** (`##`) in the order a reader needs them. A section that is only a link list belongs in a table or
    in the navigation instead.
-4. **A next step** when there is an obvious one ("Next: [Porting](porting.md)").
+4. **A next step** when there is an obvious one (`Next: [Porting](porting.md)`).
 
 No Jekyll front matter, no Liquid. Material front matter is allowed only for `hide:` (the home page hides the
 navigation and table of contents).
@@ -118,7 +110,7 @@ cells short; long prose goes under the table.
 ## Links
 
 - Link pages by file (`[Porting](porting.md#threads)`); MkDocs checks them in strict mode.
-- Link repository files relatively (`[`inc/x.hpp`](../inc/x.hpp)`); the plugin turns them into GitHub links at
+- Link repository files relatively (``[`inc/x.hpp`](../inc/x.hpp)``); the plugin turns them into GitHub links at
   the commit that was built.
 - Link the API reference with `api/...html`; the link check verifies it after Doxygen is merged.
 - External links go to the primary source (vendor page, datasheet, specification).

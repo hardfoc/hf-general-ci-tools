@@ -1,16 +1,9 @@
----
-layout: default
-title: "🖥️ Host CMake CI"
-description: "Configure, build and test a CMake project on the host, then run clang-tidy and cppcheck on its compilation database"
-nav_order: 10
-parent: "🔄 Reusable Workflows"
-permalink: /docs/ru-host-ci/
----
+# ru-host-ci
 
-# 🖥️ Host CMake CI (Reusable)
+Build, test and analyse a CMake project on the host, with clang-tidy 18 and cppcheck over the compiler's own
+compile database.
 
-`ru-host-ci.yml` runs the native (host) half of a C/C++ project's CI in one
-job:
+`ru-host-ci.yml` runs the native (host) half of a C/C++ project's CI in one job:
 
 1. **Configure.** Uses `cmake --preset <preset>` when `preset` is set, otherwise
    `cmake -S <source_dir> -B <build_dir> -G Ninja`. Either way it passes
@@ -52,34 +45,39 @@ jobs:
 
 ## Inputs
 
+<!-- generated: inputs-ru-host-ci -->
 | Input | Type | Default | Description |
-|-------|------|---------|-------------|
-| `preset` | string | `""` | Configure preset from `<source_dir>/CMakePresets.json`; empty uses `-S/-B` |
-| `source_dir` | string | `.` | CMake source directory |
-| `build_dir` | string | `build/host` | Build directory; with a preset, the preset's `binaryDir` (relative to the repository root) |
-| `cmake_args` | string | `""` | Extra configure arguments |
-| `build_type` | string | `Debug` | `CMAKE_BUILD_TYPE` when no preset is used |
-| `run_tests` | boolean | `true` | Run ctest |
-| `ctest_args` | string | `""` | Extra ctest arguments |
-| `tidy_paths` | string | `""` | Python regex (search) on repository-relative paths; empty selects every unit |
-| `exclude_paths` | string | `(^\|/)(third_party\|external\|vendor\|_deps)/` | Python regex; matching units are not analysed and findings in matching files do not count |
-| `run_clang_tidy` | boolean | `true` | Run clang-tidy 18 |
-| `clang_tidy_config` | string | `""` | `--config-file` for clang-tidy; empty uses the usual `.clang-tidy` lookup |
-| `run_cppcheck` | boolean | `true` | Run cppcheck |
-| `cppcheck_suppressions` | string | `""` | `--suppressions-list` file |
-| `cppcheck_enable` | string | `warning,performance,portability` | `--enable` value |
-| `fail_on_findings` | boolean | `true` | Fail when either analyser reports a finding |
-| `apt_packages` | string | `""` | Extra apt packages (for example a library the build needs) |
-| `submodules` | string | `false` | `actions/checkout` submodules value |
-| `runs_on` | string | `ubuntu-24.04` | Runner label |
-| `artifact_name` | string | `host-ci-reports` | Report artifact name |
+| --- | --- | --- | --- |
+| `preset` | string | empty | CMake configure preset (from CMakePresets.json in source_dir). Empty: configure with -S source_dir -B build_dir. |
+| `source_dir` | string | `.` | CMake source directory, relative to the repository root |
+| `build_dir` | string | `build/host` | Build directory, relative to the repository root. With a preset this must be the preset's binaryDir; compile_commands.json is read from here. |
+| `cmake_args` | string | empty | Extra arguments for the configure step (space separated) |
+| `build_type` | string | `Debug` | CMAKE_BUILD_TYPE when no preset is used |
+| `run_tests` | boolean | `true` | Run ctest after the build |
+| `ctest_args` | string | empty | Extra arguments for ctest (space separated) |
+| `tidy_paths` | string | empty | Python regular expression matched (re.search) against each translation unit's path relative to the repository root. Only matching files are given to clang-tidy and cppcheck. Empty: every file in the database. |
+| `exclude_paths` | string | `(^\|/)(third_party\|external\|vendor\|_deps)/` | Python regular expression; translation units whose relative path matches are never analysed, and findings in matching files are not counted. The build directory is always excluded. |
+| `run_clang_tidy` | boolean | `true` | Run clang-tidy 18 on the selected files |
+| `clang_tidy_config` | string | empty | Path to a .clang-tidy file. Empty: clang-tidy's normal lookup from each source file |
+| `run_cppcheck` | boolean | `true` | Run cppcheck on the selected files |
+| `cppcheck_suppressions` | string | empty | Path to a cppcheck --suppressions-list file (optional) |
+| `cppcheck_enable` | string | `warning,performance,portability` | cppcheck --enable value |
+| `fail_on_findings` | boolean | `true` | Fail the job when clang-tidy or cppcheck report findings |
+| `apt_packages` | string | empty | Extra apt packages to install before configuring (space separated) |
+| `submodules` | string | `false` | actions/checkout submodules value: false, true or recursive |
+| `runs_on` | string | `ubuntu-24.04` | Runner label (Ubuntu 24.04 or newer, for clang-tidy-18 from apt) |
+| `artifact_name` | string | `host-ci-reports` | Name of the uploaded report artifact |
+<!-- /generated -->
 
-Outputs: `tidy_findings` and `cppcheck_findings`, the counts of findings
-(empty when a tool did not run).
+Outputs: `tidy_findings` and `cppcheck_findings`, the counts of findings (empty when a tool did not run).
 
-## Permissions
+## Jobs and permissions
 
-`contents: read`.
+<!-- generated: jobs-ru-host-ci -->
+| Job | Permissions | Steps |
+| --- | --- | --- |
+| `host` (build, test, analyse) | `contents: read` | `actions/checkout`; Install toolchain and analysers; Configure (compile_commands.json exported); Build; Test (ctest); Select files to analyse; clang-tidy 18; cppcheck; Upload reports; Enforce zero findings |
+<!-- /generated -->
 
 ## Self-test
 
@@ -88,3 +86,12 @@ Outputs: `tidy_findings` and `cppcheck_findings`, the counts of findings
 - with the preset on clean code, where it must pass with `fail_on_findings: true`
   (the vendored file with a defect is excluded by the default `exclude_paths`);
 - through `-S/-B` with seeded defects, where both analysers must report findings.
+
+## When it fails
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `compile_commands.json` not found | `build_dir` is not the preset's `binaryDir` | Set `build_dir` to the preset's `binaryDir`, from the repository root |
+| clang-tidy reports errors in third-party headers | The headers are not under an excluded path | Extend `exclude_paths`, or mark them `SYSTEM` in CMake |
+| cppcheck reports a finding the code means | A known false positive | Add it to the `cppcheck_suppressions` file with the path |
+| No files analysed | `tidy_paths` matches nothing | Check the regex against paths relative to the repository root |

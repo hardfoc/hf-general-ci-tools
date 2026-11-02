@@ -37,6 +37,10 @@ that heading.
 
 ### Changed (documentation platform)
 
+- This repository's documentation site is built with the platform itself (`ru-mkdocs-publish` at the same
+  commit, `theme: hardfoc`): a quickstart, the workflow catalogue, one page per workflow with jobs, permissions and
+  inputs generated from the YAML, the permissions contract, versioning, the platform guide and the self-CI. The
+  Jekyll site files (`_config/_config.yml`, `_includes`, `_layouts`, `assets`) and the Jekyll-era guides are gone.
 - Root `404.html` of versioned sites: a branded page (HardFOC mark, theme colours and font, light and dark) that
   says "Redirecting to the latest documentation" while `versions.json` loads, and shows "Page not found" with links
   only when no redirect applies, after two seconds, or without JavaScript.

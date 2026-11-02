@@ -1,13 +1,6 @@
----
-layout: default
-title: "✅ CI Gate"
-description: "One required status check that passes only when every CI job passed"
-nav_order: 9
-parent: "🔄 Reusable Workflows"
-permalink: /docs/ru-ci-gate/
----
+# ru-ci-gate
 
-# ✅ CI Gate (Reusable)
+One required status check per repository: it passes only when every other CI job passed.
 
 `ru-ci-gate.yml` turns the results of all jobs in a workflow into a single
 check. A repository's ruleset then requires that one check instead of a list
@@ -65,15 +58,23 @@ and an unlisted `skipped` all fail it.
 
 ## Inputs
 
-| Input | Type | Required | Default | Description |
-|-------|------|----------|---------|-------------|
-| `needs_json` | string | ✅ | | Pass `${{ toJSON(needs) }}` |
-| `allow_skipped` | string | ❌ | `""` | Job ids that may be skipped (comma, space or newline separated) |
-| `verify_needs` | boolean | ❌ | `true` | Check the calling workflow for missing `needs` and `if: always()` |
+<!-- generated: inputs-ru-ci-gate -->
+| Input | Type | Default | Description |
+| --- | --- | --- | --- |
+| `needs_json` | string | required | The caller's needs context as JSON: the expression toJSON(needs) |
+| `allow_skipped` | string | empty | Jobs (ids from `needs`) that may be skipped without failing the gate, separated by commas, spaces or newlines. Every other job must succeed. |
+| `verify_needs` | boolean | `true` | Read the calling workflow file and fail if a job is missing from the gate's `needs`, or if the gate job lacks `if: always()`. |
+<!-- /generated -->
 
-## Permissions
+## Jobs and permissions
 
-`contents: read`, used to read the calling workflow file.
+<!-- generated: jobs-ru-ci-gate -->
+| Job | Permissions | Steps |
+| --- | --- | --- |
+| `gate` (gate) | `contents: read` | Evaluate needed jobs |
+<!-- /generated -->
+
+`contents: read` is used to read the calling workflow file.
 
 ## Jobs that run conditionally
 
