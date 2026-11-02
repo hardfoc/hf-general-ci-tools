@@ -1331,7 +1331,7 @@ a versioned site with <a href="https://github.com/jimporter/mike">mike</a>, with
 says what its pages contain.</p>
 <h2 id="where-the-theme-comes-from">Where the theme comes from<a class="headerlink" href="#where-the-theme-comes-from" title="Permanent link">&para;</a></h2>
 <p>The theme, the plugin, figkit and the pinned toolchain are the <code>hardfoc-mkdocs-theme</code> package in
-<a href="https://github.com/hardfoc/hf-general-ci-tools/blob/7d9e72aae83a24bf02832721eabd3cf34ae0dedf/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a>. Every job installs it with pip from
+<a href="https://github.com/hardfoc/hf-general-ci-tools/blob/cb0dff85a831f2289e77f276a6b90036db687c50/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a>. Every job installs it with pip from
 <strong>the commit this workflow runs from</strong> (the <code>job</code> context's <code>workflow_repository</code> and <code>workflow_sha</code>), so a caller
 pinned to <code>@v1</code> builds with the theme released in <code>v1</code>, and a branch under review builds with that branch's theme.
 <code>theme_ref</code> overrides the ref. A repository's own <code>requirements-docs.txt</code>, if it has one, is installed afterwards
