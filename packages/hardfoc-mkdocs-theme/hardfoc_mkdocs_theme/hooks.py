@@ -271,11 +271,13 @@ def on_page_markdown(markdown: str, page, config, files) -> str:
         if line.lstrip().startswith(("```", "~~~")):
             in_fence = not in_fence
         if not in_fence:
+            # Raw HTML written on the page first; the links rewritten below are already relative to the built page
+            # (an API link becomes an <a> with a re-based href) and must not be re-based a second time.
+            if "<" in line and page_dir != out_dir:
+                line = _rebase_html(line, page_dir, out_dir)
             line = _sub_outside_code(LINK, sub, line)
             if line.lstrip().startswith("|"):
                 line = CODE_SPAN.sub(unescape_pipes, line)
-            if "<" in line and page_dir != out_dir:
-                line = _rebase_html(line, page_dir, out_dir)
         out.append(line)
     return "\n".join(out)
 
