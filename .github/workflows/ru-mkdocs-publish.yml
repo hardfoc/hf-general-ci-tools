@@ -104,7 +104,7 @@ on:
         description: >-
           true: a versioned site, published with mike (default branch -> dev_version, v* tag -> that version, with
           latest_alias moved to it). false: one unversioned site (the organisation portal), published from the default
-          branch as the whole content of deployment_branch at its root (CNAME kept); tags publish nothing. The build
+          branch as the whole content of deployment_branch at its root (a custom domain only from a CNAME file in the site); tags publish nothing. The build
           tells the theme plugin which (HARDFOC_DOCS_VERSIONED), so site_url and the version selector match.
         type: boolean
         default: true

@@ -4,8 +4,8 @@
 
 Run inside a clone of the repository. The deployment branch is fetched from ``origin`` (created as an orphan branch
 when it does not exist), its content is replaced by SITE_DIR in one ordinary commit, and nothing is pushed: the
-caller pushes (never with force). Kept from the branch: ``CNAME`` (a custom domain set in the Pages settings).
-Always written: ``.nojekyll``, so GitHub Pages serves the files as they are. A site identical to the branch makes no
+caller pushes (never with force). Nothing of the old branch is kept: a custom domain is a ``CNAME`` file in the
+site itself (``docs/CNAME``), so a stale ``CNAME`` left on the branch cannot take the site over. Always written: ``.nojekyll``, so GitHub Pages serves the files as they are. A site identical to the branch makes no
 commit. Prints ``changed`` or ``unchanged``.
 
 This is what ``ru-mkdocs-publish.yml`` runs with ``versioning: false``; a versioned site is published with mike.
@@ -20,7 +20,7 @@ import subprocess
 import sys
 import tempfile
 
-KEEP = (".git", "CNAME")
+KEEP = (".git",)
 
 
 def _git(repo: pathlib.Path, *args: str, check: bool = True) -> subprocess.CompletedProcess:
@@ -28,7 +28,7 @@ def _git(repo: pathlib.Path, *args: str, check: bool = True) -> subprocess.Compl
 
 
 def replace_tree(site: pathlib.Path, tree: pathlib.Path, keep: tuple[str, ...] = KEEP) -> None:
-    """Make ``tree`` hold exactly the files of ``site`` (plus the ``keep`` entries already in it and ``.nojekyll``)."""
+    """Make ``tree`` hold exactly the files of ``site`` (plus ``.nojekyll`` and the ``keep`` entries)."""
     for entry in tree.iterdir():
         if entry.name in keep:
             continue

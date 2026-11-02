@@ -19,7 +19,8 @@ that heading.
 
 - `ru-mkdocs-publish.yml`: `versioning` input (default `true`). `false` builds an unversioned site (the
   organisation portal) and publishes it from the default branch as the whole content of the deployment branch, at
-  its root, in one ordinary commit (`CNAME` kept); tags publish nothing.
+  its root, in one ordinary commit; tags publish nothing. The custom domain comes from a `CNAME` file in the
+  site (`docs/CNAME`), never from what the branch held before, so a stale `CNAME` cannot take the site over.
 - Theme plugin: `versioned` option (unset: versioned, except `<org>.github.io`), overridden by
   `HARDFOC_DOCS_VERSIONED`; an unversioned site gets the Pages root as `site_url` and no version selector.
 - `hardfoc-docs publish-root`: the publish step for unversioned sites, with unit tests against a scratch remote.
