@@ -105,6 +105,47 @@
   <meta property="og:description" content="Reusable GitHub Actions workflows for the HardFOC organisation: C/C++ lint and analysis, host builds, the documentation platform, link and lint checks, releases and a single required CI gate.">
   <meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/latest/docs-platform/">
   <meta name="twitter:card" content="summary">
+  <script>
+(function () {
+  if (typeof mermaid != "undefined" && !(mermaid instanceof Element)) return;
+  var SRC = "https://unpkg.com/mermaid@11/dist/mermaid.min.js", config = {}, real, loading, waiting = [];
+  var stub = {
+    initialize: function (c) { config = c || {}; if (real) real.initialize(config); },
+    render: function (id, text) {
+      var el = null, pres = document.querySelectorAll("pre.mermaid:not([data-hf-mermaid])");
+      for (var i = 0; i < pres.length && !el; i++) if (pres[i].textContent === text) el = pres[i];
+      if (el) el.setAttribute("data-hf-mermaid", "");
+      return near(el).then(load).then(function (m) { return m.render(id, text); });
+    }
+  };
+  function load() {
+    return loading || (loading = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = SRC;
+      s.onload = function () {
+        real = window.mermaid;
+        window.mermaid = stub;
+        real.initialize(config);
+        resolve(real);
+      };
+      s.onerror = function () { loading = null; reject(new Error("Mermaid did not load")); };
+      document.head.appendChild(s);
+    }));
+  }
+  function near(el) {
+    if (real || !el || !("IntersectionObserver" in window)) return Promise.resolve();
+    return new Promise(function (resolve) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); resolve(); }
+      }, { rootMargin: "100% 0px" });
+      io.observe(el);
+      waiting.push(function () { io.disconnect(); resolve(); });
+    });
+  }
+  window.addEventListener("beforeprint", function () { waiting.splice(0).forEach(function (go) { go(); }); });
+  window.mermaid = stub;
+})();
+</script>
 
   </head>
   
@@ -1047,7 +1088,7 @@
 <tbody>
 <tr>
 <td>Theme package</td>
-<td><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/cb0dff85a831f2289e77f276a6b90036db687c50/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/3d659a2cc883820968048541ecb55cc326a106b4/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a></td>
 <td><code>theme: hardfoc</code> (brand, layout, components, light and dark), <code>plugins: [hardfoc]</code> (Markdown dialect, validation, repository links, figures, page checks), figkit, the <code>hardfoc-docs</code> command and the pinned toolchain</td>
 </tr>
 <tr>
@@ -1057,12 +1098,12 @@
 </tr>
 <tr>
 <td>Template</td>
-<td><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/cb0dff85a831f2289e77f276a6b90036db687c50/templates/mkdocs-site/mkdocs.yml"><code>templates/mkdocs-site</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/3d659a2cc883820968048541ecb55cc326a106b4/templates/mkdocs-site/mkdocs.yml"><code>templates/mkdocs-site</code></a></td>
 <td>The skeleton of a driver site; the self-CI builds it</td>
 </tr>
 <tr>
 <td>Migration tool</td>
-<td><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/cb0dff85a831f2289e77f276a6b90036db687c50/tools/docs-migrate.py"><code>tools/docs-migrate.py</code></a></td>
+<td><a href="https://github.com/hardfoc/hf-general-ci-tools/blob/3d659a2cc883820968048541ecb55cc326a106b4/tools/docs-migrate.py"><code>tools/docs-migrate.py</code></a></td>
 <td>The mechanical move from Jekyll, with a <code>--check</code> dry run</td>
 </tr>
 <tr>
@@ -1158,7 +1199,7 @@ Markdown extensions, strict validation and the version selector.</p>
 </tr>
 </tbody>
 </table>
-<p>This site uses a generator itself: <a href="https://github.com/hardfoc/hf-general-ci-tools/blob/cb0dff85a831f2289e77f276a6b90036db687c50/tools/docs/generators/workflows.py"><code>tools/docs/generators/workflows.py</code></a>
+<p>This site uses a generator itself: <a href="https://github.com/hardfoc/hf-general-ci-tools/blob/3d659a2cc883820968048541ecb55cc326a106b4/tools/docs/generators/workflows.py"><code>tools/docs/generators/workflows.py</code></a>
 writes the catalogue, the permissions table and every inputs and jobs table from the workflow files.</p>
 <h2 id="preview-a-site-locally">Preview a site locally<a class="headerlink" href="#preview-a-site-locally" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>.<span class="w"> </span>.venv/bin/activate
