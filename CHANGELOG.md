@@ -36,12 +36,27 @@ that heading.
 - `templates/mkdocs-site` is a driver skeleton on the theme package; it no longer copies CSS, overrides, hooks or
   figkit into a repository.
 - `ru-mkdocs-publish.yml`: a `vX.Y.Z` tag publishes version `vX.Y.Z` (was `X.Y`; `release_version: minor` keeps
-  the old behaviour). The publish step calls `mike` directly. `requirements` is optional.
+  the old behaviour). `requirements` is optional.
 
+### Fixed
 
-Everything below becomes **v1.0.0**, the first tagged release. Until callers
-move from `@main` to `@v1`, `@main` stays compatible with them: no input has
-been removed and no workflow needs more permissions than before.
+- `ru-docs-publish`: copy static assets kept next to the Jekyll config (for
+  example `_config/assets/css/custom.css`) into the site source before the
+  build. Jekyll skips underscore folders, so driver sites never received
+  their custom CSS and JavaScript.
+- `ru-docs-publish`: set the generated config's `url` to the publishing
+  repository's Pages host, so canonical links and the sitemap stop pointing
+  at an old owner.
+- `ru-mkdocs-publish`: call the `mike` command; `python3 -m mike` fails because
+  mike has no `__main__`, so every deploy step failed.
+- `ru-docs-publish`: stop appending the version name to the site title; it
+  made the sidebar title wrap. The version stays available as `version`.
+
+## [1.1.0] - 2026-11-02
+
+First release callers pin as `@v1` (v1.0.0 was cut before the platform work
+below had landed). No input has been removed and no workflow needs more
+permissions than before.
 
 ### Added
 

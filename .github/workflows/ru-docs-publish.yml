@@ -1555,11 +1555,32 @@ jobs:
           TITLE=$(grep '^title:' "$BASE_CONFIG" | \
             sed 's/^title: *//' | sed 's/^"//' | sed 's/"$//' | \
             sed 's/  #.*$//' | sed 's/^ *//' | sed 's/ *$//')
-          sed -i "s|^title:.*|title: \"$TITLE - ${{ needs.version-detection.outputs.version_name }}\"|" \
-            "$GEN_CONFIG"
+          # The version is exposed as `version` below; appending it to the
+          # title made the sidebar site title wrap over several lines.
+          sed -i "s|^title:.*|title: \"$TITLE\"|" "$GEN_CONFIG"
           echo "🔍 Setting baseurl to: ${{ needs.version-detection.outputs.base_url }}"
           sed -i "s|^baseurl:.*|baseurl: \"${{ needs.version-detection.outputs.base_url }}\"|" \
             "$GEN_CONFIG"
+
+          # Absolute URLs (canonical links, sitemap, feed) use the Pages host of
+          # the repository that is publishing, not whatever the config names.
+          SITE_URL="https://${GITHUB_REPOSITORY_OWNER,,}.github.io"
+          if grep -q '^url:' "$GEN_CONFIG"; then
+            sed -i "s|^url:.*|url: \"$SITE_URL\"|" "$GEN_CONFIG"
+          else
+            echo "url: \"$SITE_URL\"" >> "$GEN_CONFIG"
+          fi
+
+          # Static assets kept next to the config (for example
+          # _config/assets/css/custom.css) are invisible to Jekyll because the
+          # folder name starts with an underscore. Copy them into the site
+          # source so head_custom.html's /assets/... links resolve.
+          CONFIG_ASSETS="$(dirname "$BASE_CONFIG")/assets"
+          if [ -d "$CONFIG_ASSETS" ]; then
+            mkdir -p "$JEKYLL_SOURCE/assets"
+            cp -R "$CONFIG_ASSETS/." "$JEKYLL_SOURCE/assets/"
+            echo "📁 Copied $CONFIG_ASSETS into $JEKYLL_SOURCE/assets"
+          fi
 
           # Verify the baseurl was set correctly
           echo "🔍 Verifying baseurl in generated config:"
