@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['❌_20strong_20avoid_20this_3a_20strong_0',['❌ &lt;strong&gt;Avoid This:&lt;/strong&gt;',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md90',1,'']]]
+  ['✨_20strong_20live_20ci_20example_20strong_0',['✨ strong Live CI Example strong',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md#autotoc_md184',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md#autotoc_md208',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md237',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md291',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md462',1,'✨ &lt;strong&gt;Live CI Example&lt;/strong&gt;']]]
 ];

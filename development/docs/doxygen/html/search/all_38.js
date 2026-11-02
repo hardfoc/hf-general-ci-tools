@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['🔗_20automatic_20api_20reference_20link_20injection_0',['🔗 Automatic API Reference Link Injection',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md299',1,'']]],
-  ['🔗_20ci_20docs_20linkcheck_20yml_20strong_20link_20check_20testing_1',['&lt;strong&gt;🔗 ci-docs-linkcheck.yml&lt;/strong&gt; - Link Check Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md39',1,'']]],
-  ['🔗_20documentation_20link_20check_20reusable_2',['🔗 Documentation Link Check (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md200',1,'']]],
-  ['🔗_20link_20checking_3',['🔗 Link Checking',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md271',1,'']]],
-  ['🔗_20related_20documentation_4',['🔗 Related Documentation',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md248',1,'']]],
-  ['🔗_20related_20resources_5',['🔗 Related Resources',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md#autotoc_md167',1,'🔗 Related Resources'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md#autotoc_md196',1,'🔗 Related Resources'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md329',1,'🔗 Related Resources'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md445',1,'🔗 Related Resources']]],
-  ['🔗_20related_20workflows_6',['🔗 Related Workflows',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-markdown-lint.md#autotoc_md375',1,'🔗 Related Workflows'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-release.md#autotoc_md413',1,'🔗 Related Workflows']]],
-  ['🔗_20ru_20docs_20linkcheck_20yml_20strong_20documentation_20link_20check_7',['&lt;strong&gt;🔗 ru-docs-linkcheck.yml&lt;/strong&gt; - Documentation Link Check',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md32',1,'']]]
+  ['🔍_20c_20static_20analysis_20reusable_0',['🔍 C++ Static Analysis (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md#autotoc_md181',1,'']]],
+  ['🔍_20ci_20cpp_20analysis_20yml_20strong_20c_20analysis_20testing_1',['&lt;strong&gt;🔍 ci-cpp-analysis.yml&lt;/strong&gt; - C++ Analysis Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md38',1,'']]],
+  ['🔍_20configuration_20validation_2',['🔍 Configuration Validation',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md103',1,'']]],
+  ['🔍_20how_20it_20works_3',['🔍 How It Works',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md262',1,'']]],
+  ['🔍_20jekyll_20configuration_20validation_4',['🔍 Jekyll Configuration Validation',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md329',1,'']]],
+  ['🔍_20ru_20cpp_20analysis_20yml_20strong_20c_20static_20analysis_5',['&lt;strong&gt;🔍 ru-cpp-analysis.yml&lt;/strong&gt; - C++ Static Analysis',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md31',1,'']]]
 ];

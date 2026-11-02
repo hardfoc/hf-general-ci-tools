@@ -38,16 +38,18 @@ var NAVTREE =
         [ "ru-host-ci", "index.html#autotoc_md10", null ],
         [ "ru-cpp-lint", "index.html#autotoc_md11", null ],
         [ "ru-cpp-analysis", "index.html#autotoc_md12", null ],
-        [ "ru-docs-publish", "index.html#autotoc_md13", [
-          [ "ru-docs-publish inputs", "index.html#autotoc_md14", null ]
+        [ "ru-mkdocs-publish", "index.html#autotoc_md13", [
+          [ "ru-mkdocs-publish inputs", "index.html#autotoc_md14", null ]
         ] ],
-        [ "ru-mkdocs-publish.yml", "index.html#autotoc_md15", null ],
-        [ "ru-docs-linkcheck", "index.html#autotoc_md16", null ],
-        [ "ru-markdown-lint", "index.html#autotoc_md17", null ],
-        [ "ru-yaml-lint", "index.html#autotoc_md18", null ],
-        [ "ru-release", "index.html#autotoc_md19", null ]
+        [ "ru-docs-publish", "index.html#autotoc_md15", [
+          [ "ru-docs-publish inputs", "index.html#autotoc_md16", null ]
+        ] ],
+        [ "ru-docs-linkcheck", "index.html#autotoc_md17", null ],
+        [ "ru-markdown-lint", "index.html#autotoc_md18", null ],
+        [ "ru-yaml-lint", "index.html#autotoc_md19", null ],
+        [ "ru-release", "index.html#autotoc_md20", null ]
       ] ],
-      [ "How this repository tests itself", "index.html#autotoc_md20", null ]
+      [ "How this repository tests itself", "index.html#autotoc_md21", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

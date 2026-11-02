@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['📊_20output_20and_20reporting_0',['📊 Output and Reporting',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md244',1,'']]],
-  ['📊_20output_20control_1',['📊 Output Control',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md214',1,'']]],
-  ['📊_20output_20options_2',['📊 Output Options',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md#autotoc_md180',1,'']]]
+  ['📄_20license_0',['📄 License',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md#autotoc_md93',1,'']]],
+  ['📄_20markdown_20linting_1',['📄 Markdown Linting',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-markdown-lint.md#autotoc_md374',1,'']]]
 ];

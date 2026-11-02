@@ -1,9 +1,13 @@
 var searchData=
 [
-  ['📝_20ci_20yaml_20lint_20yml_20strong_20yaml_20lint_20testing_0',['&lt;strong&gt;📝 ci-yaml-lint.yml&lt;/strong&gt; - YAML Lint Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md40',1,'']]],
-  ['📝_20common_20rules_1',['📝 Common Rules',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-markdown-lint.md#autotoc_md361',1,'']]],
-  ['📝_20documentation_20quality_2',['📝 Documentation Quality',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md272',1,'']]],
-  ['📝_20ru_20yaml_20lint_20yml_20strong_20yaml_20linting_20tools_3',['&lt;strong&gt;📝 ru-yaml-lint.yml&lt;/strong&gt; - YAML Linting Tools',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md33',1,'']]],
-  ['📝_20workflow_20examples_4',['📝 Workflow Examples',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md#autotoc_md484',1,'']]],
-  ['📝_20yaml_20linting_20tools_20reusable_5',['📝 YAML Linting Tools (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md423',1,'']]]
+  ['📚_20ci_20docs_20publish_20yml_20strong_20docs_20publishing_20testing_0',['&lt;strong&gt;📚 ci-docs-publish.yml&lt;/strong&gt; - Docs Publishing Testing',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md39',1,'']]],
+  ['📚_20documentation_20publisher_20reusable_1',['📚 Documentation Publisher (Reusable)',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md288',1,'']]],
+  ['📚_20documentation_20structure_2',['📚 Documentation Structure',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/index.md#autotoc_md77',1,'']]],
+  ['📚_20doxygen_20configuration_3',['📚 Doxygen Configuration',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md304',1,'']]],
+  ['📚_20examples_20in_20production_4',['📚 Examples in Production',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-release.md#autotoc_md451',1,'']]],
+  ['📚_20external_20resources_5',['📚 External Resources',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md284',1,'']]],
+  ['📚_20further_20reading_6',['📚 Further Reading',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md#autotoc_md535',1,'']]],
+  ['📚_20related_20guides_7',['📚 Related Guides',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md47',1,'']]],
+  ['📚_20related_20workflows_8',['📚 Related Workflows',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-analysis.md#autotoc_md200',1,'📚 Related Workflows'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-cpp-lint.md#autotoc_md229',1,'📚 Related Workflows'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md362',1,'📚 Related Workflows'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-yaml-lint.md#autotoc_md480',1,'📚 Related Workflows']]],
+  ['📚_20ru_20docs_20publish_20yml_20strong_20documentation_20publisher_9',['&lt;strong&gt;📚 ru-docs-publish.yml&lt;/strong&gt; - Documentation Publisher',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ci-workflows.md#autotoc_md32',1,'']]]
 ];

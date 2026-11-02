@@ -1,7 +1,14 @@
 var searchData=
 [
-  ['keeping_20callers_20current_0',['Keeping callers current',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/VERSIONING.md#autotoc_md509',1,'']]],
-  ['keeping_20the_20template_20and_20the_20sites_20in_20step_1',['Keeping the template and the sites in step',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/MKDOCS.md#autotoc_md136',1,'']]],
-  ['key_20features_20strong_2',['&lt;strong&gt;Key Features&lt;/strong&gt;',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-linkcheck.md#autotoc_md204',1,'']]],
-  ['key_20markdownlint_20rules_3',['Key Markdownlint Rules',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-markdown-lint.md#autotoc_md362',1,'']]]
+  ['jekyll_20advanced_20options_0',['⚙️ Jekyll Advanced Options',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md309',1,'']]],
+  ['jekyll_20configuration_1',['Jekyll Configuration',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md308',1,'🎨 Jekyll Configuration'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md316',1,'Advanced Jekyll Configuration']]],
+  ['jekyll_20configuration_2',['Verify Jekyll configuration',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md#autotoc_md529',1,'']]],
+  ['jekyll_20configuration_20guide_3',['🔧 Jekyll Configuration Guide',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md98',1,'']]],
+  ['jekyll_20configuration_20validation_4',['🔍 Jekyll Configuration Validation',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md329',1,'']]],
+  ['jekyll_20guide_5',['@page md_docs_2jekyll-guide jekyll-guide',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md96',1,'']]],
+  ['jekyll_20integration_6',['Jekyll Integration',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/versioning-guide.md#autotoc_md512',1,'🎨 Jekyll Integration'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md327',1,'Jekyll Integration'],['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-docs-publish.md#autotoc_md315',1,'With Jekyll Integration']]],
+  ['jekyll_5fenv_20tt_20runtime_20environment_20variable_7',['1. &lt;tt&gt;JEKYLL_ENV&lt;/tt&gt; - Runtime Environment Variable',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md129',1,'']]],
+  ['jobs_20and_20permissions_8',['Jobs and permissions',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-mkdocs-publish.md#autotoc_md416',1,'']]],
+  ['jobs_20that_20run_20conditionally_9',['Jobs that run conditionally',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/ru-ci-gate.md#autotoc_md178',1,'']]],
+  ['just_20the_20docs_10',['Navigation in Just the Docs',['..//home/runner/work/hf-general-ci-tools/hf-general-ci-tools/docs/jekyll-guide.md#autotoc_md121',1,'']]]
 ];
