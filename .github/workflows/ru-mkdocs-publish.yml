@@ -89,7 +89,6 @@ on:
         type: string
         default: "latest"
 
-permissions: {}
 
 env:
   NO_MKDOCS_2_WARNING: "1"
