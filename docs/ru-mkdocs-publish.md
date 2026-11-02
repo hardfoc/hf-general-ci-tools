@@ -1,18 +1,10 @@
----
-layout: default
-title: "MkDocs Publisher (Reusable)"
-description: "Reusable workflow: the HardFOC documentation platform: build, check, audit and publish a versioned MkDocs site"
-nav_order: 4
-parent: "🔄 Reusable Workflows"
----
+# ru-mkdocs-publish
 
-# MkDocs Publisher (reusable)
+Build, check, audit and publish a HardFOC documentation site with the shared theme, versioned or not.
 
-**Workflow:** `ru-mkdocs-publish.yml` (**[RU] MkDocs Publish**)
-
-Builds a HardFOC documentation site with the shared theme, checks it, audits it and publishes it to `gh-pages` as
+`ru-mkdocs-publish.yml` builds a HardFOC documentation site with the shared theme, checks it, audits it and publishes it to `gh-pages` as
 a versioned site with [mike](https://github.com/jimporter/mike), with the Doxygen API reference under `api/`.
-[MIGRATING-TO-MKDOCS.md](MIGRATING-TO-MKDOCS.md) moves a repository onto it; [DOCS-STYLE-GUIDE.md](DOCS-STYLE-GUIDE.md)
+[Migrating to MkDocs](MIGRATING-TO-MKDOCS.md) moves a repository onto it; the [style guide](DOCS-STYLE-GUIDE.md)
 says what its pages contain.
 
 ## Where the theme comes from
@@ -40,7 +32,8 @@ reachable through them too. Material's version selector in the header lists ever
 
 ## Jobs and permissions
 
-The caller must grant `contents: write` for the publish job; a caller that never publishes can grant `contents: read`.
+The caller grants `contents: write`, even one that never publishes (pull requests, `deploy: false`): GitHub checks
+the permissions of every job of a called workflow before the run starts, whatever the job's `if`.
 
 | Job | Permissions | Steps |
 | --- | --- | --- |
@@ -60,31 +53,33 @@ same page under `latest/` (`/docs/x/`, `/development/x/` to `latest/x/`; `/doxs/
 
 ## Inputs
 
+<!-- generated: inputs-ru-mkdocs-publish -->
 | Input | Type | Default | Description |
 | --- | --- | --- | --- |
-| `python_version` | string | `3.12` | Python used to build the site |
-| `requirements` | string | `requirements-docs.txt` | Optional extra pip requirements, installed after the theme when the file exists |
-| `theme_ref` | string | empty | Ref of this repository to install the theme from; empty: the workflow's own commit |
-| `mkdocs_config` | string | `mkdocs.yml` | Path of `mkdocs.yml` |
-| `submodules` | string | `false` | `false`, `true` or `recursive` |
-| `submodule_paths` | string | empty | Space-separated submodule paths initialised (shallow) after checkout, nested ones included |
-| `check_commands` | string | `hardfoc-docs check` | Shell lines run before the build (a repository's own `tools/figkit` / `tools/docs/gen.py` when present) |
-| `doxygen_config` | string | empty | Doxyfile of the API reference; empty builds no API |
-| `doxygen_working_directory` | string | `.` | Directory Doxygen runs in |
-| `doxygen_html_dir` | string | empty | Generated HTML directory; empty reads `OUTPUT_DIRECTORY` / `HTML_OUTPUT` |
-| `api_dir` | string | `api` | Site folder for the Doxygen HTML |
-| `link_check` | boolean | `true` | lychee offline on the merged site |
-| `link_check_args` | string | empty | Extra lychee arguments |
-| `lighthouse` | boolean | `true` | Run the Lighthouse budget |
-| `lighthouse_budgets` | string | `performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9` | Minimum category scores (median of 3 runs) |
-| `screenshots` | boolean | `true` | Capture phone and desktop screenshots, light and dark |
-| `versioning` | boolean | `true` | `true`: versioned with mike. `false`: one site, published from the default branch at the root of `deployment_branch` |
-| `deploy` | boolean | `false` | Publish; ignored on pull requests |
-| `deployment_branch` | string | `gh-pages` | Branch GitHub Pages serves |
-| `dev_version` | string | `dev` | Version a push to the default branch publishes |
-| `latest_alias` | string | `latest` | Alias moved to each release |
-| `release_version` | string | `tag` | `tag` publishes `vX.Y.Z`; `minor` publishes `X.Y` |
-| `prune_legacy` | boolean | `true` | Remove the pre-MkDocs site from the deployment branch on publish |
+| `python_version` | string | `3.12` | Python used to build the site. |
+| `requirements` | string | `requirements-docs.txt` | Optional pip requirements file installed after the theme package (extra MkDocs plugins). Skipped when the file does not exist; the theme package already pins mkdocs, mkdocs-material, awesome-nav, pymdown and mike. |
+| `theme_ref` | string | empty | Ref of hardfoc/hf-general-ci-tools to install the theme package from. Empty: the commit this workflow runs from, so the theme always matches the workflow. |
+| `mkdocs_config` | string | `mkdocs.yml` | Path of mkdocs.yml. |
+| `submodules` | string | `false` | Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'. |
+| `submodule_paths` | string | empty | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules. |
+| `check_commands` | string | `if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] && [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi` | Shell lines run before the build; any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them. |
+| `doxygen_config` | string | empty | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. |
+| `doxygen_working_directory` | string | `.` | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. |
+| `doxygen_html_dir` | string | empty | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. |
+| `api_dir` | string | `api` | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). |
+| `link_check` | boolean | `true` | Run lychee offline on the built site (internal links, anchors and images, API included). |
+| `link_check_args` | string | empty | Extra lychee arguments, for example --exclude-path patterns. |
+| `lighthouse` | boolean | `true` | Run Lighthouse on the built site (home page and the first navigation pages) against the budgets. |
+| `lighthouse_budgets` | string | `performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9` | Minimum Lighthouse category scores (0-1, median of three runs, mobile emulation), space-separated category=score pairs. A score below its minimum fails the job. |
+| `screenshots` | boolean | `true` | Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact). |
+| `versioning` | boolean | `true` | true: a versioned site, published with mike (default branch -> dev_version, v* tag -> that version, with latest_alias moved to it). false: one unversioned site (the organisation portal), published from the default branch as the whole content of deployment_branch at its root (CNAME kept); tags publish nothing. The build tells the theme plugin which (HARDFOC_DOCS_VERSIONED), so site_url and the version selector match. |
+| `deploy` | boolean | `false` | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. |
+| `deployment_branch` | string | `gh-pages` | Branch GitHub Pages serves from. |
+| `dev_version` | string | `dev` | mike version name a push to the default branch publishes to. |
+| `latest_alias` | string | `latest` | mike alias moved to each release (v* tag). |
+| `release_version` | string | `tag` | Version name a v* tag publishes: 'tag' (the tag itself, vX.Y.Z) or 'minor' (X.Y, a patch release replaces the docs of its minor release). |
+| `prune_legacy` | boolean | `true` | On publish, remove every top-level entry of the deployment branch that is not a mike version or alias (the old Jekyll / Doxygen site: development/, doxs/, html/, version_selector.html, ...), in the publish commit. Kept: versions.json, index.html, 404.html, .nojekyll, CNAME, robots.txt. |
+<!-- /generated -->
 
 ## Example
 
@@ -150,3 +145,15 @@ as it is, so the current site stays up.
 
 GitHub Pages must serve the `gh-pages` branch from `/` (**Settings > Pages > Build and deployment**: source
 *Deploy from a branch*, branch `gh-pages`, folder `/`). The workflow never changes repository settings.
+
+## When it fails
+
+| Symptom | Cause |
+| --- | --- |
+| "Install the theme" fails | The caller pins a ref of hf-general-ci-tools without the theme package (older than `v1.1.0`) |
+| The strict build fails | A warning: a broken link or anchor, a page missing from `.nav.yml`, Jekyll front matter, a page without `# Title`, an image without alt text, a link to a repository file that does not exist |
+| Drift checks fail | A figure or generated table no longer matches the code: run `hardfoc-docs figures` / `hardfoc-docs gen` and commit |
+| lychee fails | A broken link or anchor in the built site, the API reference included |
+| Lighthouse fails | A score under budget; the `lighthouse-report` artifact names the audits |
+| Old pages still served at the root | The first publish has not run yet, or `prune_legacy` is false |
+| The site shows the README rendered by Jekyll | Pages serves a branch other than `gh-pages`, or **GitHub Actions** |

@@ -1,12 +1,4 @@
----
-layout: default
-title: "🏷️ Versioning and Releases"
-description: "How the reusable workflows are versioned, pinned by callers, and released"
-nav_order: 20
-permalink: /docs/VERSIONING/
----
-
-# Versioning and Releases
+# Versioning and releases
 
 Many repositories call these reusable workflows. When all of them used
 `@main`, one bad commit here broke every one of them at once. Versioning
