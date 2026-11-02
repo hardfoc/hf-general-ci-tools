@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Publish Docs API<span id="projectnumber">&#160;v1.0.0</span>
+   <div id="projectname">Publish Docs API<span id="projectnumber">&#160;v1.1.0</span>
    </div>
    <div id="projectbrief">Auto-generated API documentation for example C and C++ code used by the workflow guides.</div>
   </td>
@@ -97,301 +97,473 @@ $(function(){initNavTree('index.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><h2><a class="anchor" id="autotoc_md0"></a>
 } md_README</h2>
-<p>layout: default title: "🚀 hf-general-ci-tools" description: "A comprehensive collection of reusable GitHub Actions workflows for modern CI/CD pipelines" nav_order: 1 </p>
+<p>layout: default title: "🚀 hf-general-ci-tools" description: "Reusable GitHub Actions workflows for C/C++ and documentation CI in the hardfoc organisation" nav_order: 1 </p>
 <h2><a class="anchor" id="autotoc_md1"></a>
 permalink: /</h2>
 <h1><a class="anchor" id="autotoc_md2"></a>
 🚀 hf-general-ci-tools</h1>
-<p><b>A comprehensive collection of reusable GitHub Actions workflows for modern CI/CD pipelines</b></p>
-<hr  />
-<p><a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg" alt="Docs Publish CI" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-yaml-lint.yml/badge.svg" alt="YAML Lint CI" style="pointer-events: none;" class="inline"/></a> [<img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg" alt="License" style="pointer-events: none;" class="inline"/>](LICENSE) <a href="https://hardfoc.github.io/hf-general-ci-tools"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" alt="GitHub Pages" style="pointer-events: none;" class="inline"/></a></p>
-<p><em>Streamline your development workflow with battle-tested, production-ready GitHub Actions</em></p>
-<hr  />
-<h2><a class="anchor" id="autotoc_md5"></a>
-📋 Overview</h2>
-<p>This repository provides a curated set of <b>reusable GitHub Actions workflows</b> designed to accelerate your CI/CD pipeline setup. Whether you're working on C/C++ projects, documentation, or need comprehensive quality checks, these workflows have you covered.</p>
-<blockquote class="doxtable">
-<p>&zwj;<b>📖 <a href="https://hardfoc.github.io/hf-general-ci-tools/">📚🌐 Live Complete Documentation</a></b> - Interactive guides, examples, and step-by-step tutorials </p>
-</blockquote>
-<h3><a class="anchor" id="autotoc_md6"></a>
-✨ Key Features</h3>
+<p>Reusable GitHub Actions workflows (<code>ru-*.yml</code>) for C/C++ linting and static analysis, host CMake builds, documentation (Doxygen + Jekyll to GitHub Pages), link and lint checks, and a single required CI gate. The repositories in the hardfoc organisation call them; ESP-IDF firmware builds live in the sibling <a href="https://github.com/hardfoc/hf-espidf-ci-tools">hf-espidf-ci-tools</a>.</p>
+<p><a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-self.yml/badge.svg" alt="Workflow Self-CI" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml"><img src="https://github.com/hardfoc/hf-general-ci-tools/actions/workflows/ci-docs-publish.yml/badge.svg" alt="Docs Publish CI" style="pointer-events: none;" class="inline"/></a> [<img src="https://img.shields.io/badge/license-GPL%20v3-blue.svg" alt="License" style="pointer-events: none;" class="inline"/>](LICENSE) <a href="https://hardfoc.github.io/hf-general-ci-tools"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg" alt="Docs" style="pointer-events: none;" class="inline"/></a></p>
+<h2><a class="anchor" id="autotoc_md3"></a>
+Contents</h2>
 <ul>
-<li>🔧 <b>C/C++ Development</b> - Linting, static analysis, and code quality</li>
-<li>📚 <b>Documentation</b> - Doxygen generation and GitHub Pages deployment</li>
-<li>🔗 <b>Link Validation</b> - Comprehensive link checking for documentation</li>
-<li>📝 <b>YAML Validation</b> - Ensure your workflow files are properly formatted</li>
-<li>🎯 <b>Production Ready</b> - Battle-tested workflows used in real projects</li>
-<li>⚙️ <b>Highly Configurable</b> - Extensive customization options</li>
-<li>🚀 <b>Easy Integration</b> - Drop-in workflows for immediate use</li>
+<li>Architecture</li>
+<li>Versioning</li>
+<li>Permissions contract</li>
+<li>One required check: the CI gate</li>
+<li>Workflows: callers and inputs</li>
+<li>How this repository tests itself</li>
 </ul>
-<hr  />
+<h2><a class="anchor" id="autotoc_md4"></a>
+Architecture</h2>
+<div class="fragment"><div class="line">flowchart LR</div>
+<div class="line">  subgraph callers[&quot;Calling repositories (pin @v1)&quot;]</div>
+<div class="line">    drivers[&quot;hf-*-driver repos (~21)&quot;]</div>
+<div class="line">    core[&quot;hf-core, hf-internal-interface-wrap,&lt;br/&gt;hf-hal-* boards, hf-pincfg&quot;]</div>
+<div class="line">    espci[&quot;hf-espidf-ci-tools,&lt;br/&gt;hf-espidf-project-tools&quot;]</div>
+<div class="line">    products[&quot;product repos&quot;]</div>
+<div class="line">  end</div>
+<div class="line"> </div>
+<div class="line">  subgraph general[&quot;hf-general-ci-tools&quot;]</div>
+<div class="line">    gate[&quot;ru-ci-gate&quot;]</div>
+<div class="line">    host[&quot;ru-host-ci&quot;]</div>
+<div class="line">    lint[&quot;ru-cpp-lint&quot;]</div>
+<div class="line">    ana[&quot;ru-cpp-analysis&quot;]</div>
+<div class="line">    pub[&quot;ru-docs-publish&quot;]</div>
+<div class="line">    link[&quot;ru-docs-linkcheck&quot;]</div>
+<div class="line">    md[&quot;ru-markdown-lint&quot;]</div>
+<div class="line">    yml[&quot;ru-yaml-lint&quot;]</div>
+<div class="line">    rel[&quot;ru-release&quot;]</div>
+<div class="line">  end</div>
+<div class="line"> </div>
+<div class="line">  subgraph espidf[&quot;hf-espidf-ci-tools&quot;]</div>
+<div class="line">    build[&quot;ru-build&quot;]</div>
+<div class="line">    relart[&quot;ru-release-with-artifacts&quot;]</div>
+<div class="line">  end</div>
+<div class="line"> </div>
+<div class="line">  drivers --&gt; lint &amp; ana &amp; pub &amp; link &amp; md &amp; yml &amp; build &amp; relart</div>
+<div class="line">  core --&gt; lint &amp; ana &amp; pub &amp; link &amp; md &amp; yml &amp; build &amp; relart</div>
+<div class="line">  core --&gt; rel</div>
+<div class="line">  espci --&gt; pub &amp; link &amp; md &amp; yml</div>
+<div class="line">  products --&gt; gate &amp; host &amp; lint &amp; pub</div>
+<div class="line">  pub -- &quot;push&quot; --&gt; pages[(&quot;gh-pages branch&lt;br/&gt;(GitHub Pages)&quot;)]</div>
+<div class="line">  rel &amp; relart -- &quot;create&quot; --&gt; releases[(&quot;GitHub Releases&quot;)]</div>
+</div><!-- fragment --><p>Each workflow is self-contained. It calls only third-party actions, which are pinned to commit SHAs, and never another workflow of this repository at a moving ref. Pinning a caller to <code>@v1</code> therefore pins everything it runs.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Workflow   </th><th class="markdownTableHeadNone">Purpose    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-ci-gate.yml"><code>ru-ci-gate.yml</code></a>   </td><td class="markdownTableBodyNone">One required check that passes only if every job passed (guide)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-host-ci.yml"><code>ru-host-ci.yml</code></a>   </td><td class="markdownTableBodyNone">CMake configure/build/ctest, then clang-tidy 18 and cppcheck on the compile database (guide)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-cpp-lint.yml"><code>ru-cpp-lint.yml</code></a>   </td><td class="markdownTableBodyNone">clang-format and clang-tidy through cpp-linter-action (guide)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-cpp-analysis.yml"><code>ru-cpp-analysis.yml</code></a>   </td><td class="markdownTableBodyNone">cppcheck over source directories (guide)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-docs-publish.yml"><code>ru-docs-publish.yml</code></a>   </td><td class="markdownTableBodyNone">Doxygen and Jekyll, versioned deploy to <code>gh-pages</code>; PRs build without deploying (guide)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-docs-linkcheck.yml"><code>ru-docs-linkcheck.yml</code></a>   </td><td class="markdownTableBodyNone">lychee link check (guide)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-markdown-lint.yml"><code>ru-markdown-lint.yml</code></a>   </td><td class="markdownTableBodyNone">markdownlint-cli2 (guide)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-yaml-lint.yml"><code>ru-yaml-lint.yml</code></a>   </td><td class="markdownTableBodyNone">yamllint (guide)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-release.yml"><code>ru-release.yml</code></a>   </td><td class="markdownTableBodyNone">GitHub Release with generated notes (guide)   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md5"></a>
+Versioning</h2>
+<p>Pin the moving major tag:</p>
+<div class="fragment"><div class="line">uses: hardfoc/hf-general-ci-tools/.github/workflows/&lt;workflow&gt;.yml@v1</div>
+</div><!-- fragment --><p>Releases are semver tags (<code>v1.0.0</code>, <code>v1.1.0</code>, ...). <code>v1</code> always points at the newest <code>v1.x.y</code>, so callers get fixes and new optional inputs, never breaking changes. A removed input, a new required input or a new required permission only arrives with a new major (<code>@v2</code>). Pull requests here are checked for exactly those changes. See docs/VERSIONING.md and CHANGELOG.md.</p>
+<blockquote class="doxtable">
+<p>&zwj;After a fix lands here, start a <b>new</b> run. "Re-run failed jobs" reuses the reusable-workflow revision that the original run resolved. </p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md6"></a>
+Permissions contract</h2>
+<p>Each workflow declares minimal <code>permissions</code> on every job. A called workflow cannot ask for more than its caller grants. If it does, the run fails before any job starts (<code>startup_failure</code>). Grant <b>at least</b> the following, on the calling job or at the top of the calling workflow. The self-CI fails if a workflow's job permissions ever differ from this table.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Workflow   </th><th class="markdownTableHeadNone">Caller must grant   </th><th class="markdownTableHeadNone">Why    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-ci-gate.yml"><code>ru-ci-gate.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">read the calling workflow to verify <code>needs</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-cpp-analysis.yml"><code>ru-cpp-analysis.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-cpp-lint.yml"><code>ru-cpp-lint.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>, <code>pull-requests: write</code>   </td><td class="markdownTableBodyNone">checkout; cpp-linter thread comments and annotations    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-docs-linkcheck.yml"><code>ru-docs-linkcheck.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-docs-publish.yml"><code>ru-docs-publish.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: write</code>   </td><td class="markdownTableBodyNone">push to the deployment branch; required on pull requests too, although PRs never deploy    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-host-ci.yml"><code>ru-host-ci.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-markdown-lint.yml"><code>ru-markdown-lint.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-release.yml"><code>ru-release.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: write</code>   </td><td class="markdownTableBodyNone">create the GitHub Release    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-yaml-lint.yml"><code>ru-yaml-lint.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md7"></a>
+One required check: the CI gate</h2>
+<p>Put every job of a repository's CI in one workflow, and end it with the gate:</p>
+<div class="fragment"><div class="line">ci-gate:</div>
+<div class="line">  name: CI gate</div>
+<div class="line">  needs: [build, lint, docs]     # every other job in the workflow</div>
+<div class="line">  if: always()                   # a skipped required check counts as passing</div>
+<div class="line">  uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-ci-gate.yml@v1</div>
+<div class="line">  permissions:</div>
+<div class="line">    contents: read</div>
+<div class="line">  with:</div>
+<div class="line">    needs_json: ${{ toJSON(needs) }}</div>
+<div class="line">    allow_skipped: docs          # jobs that may be skipped by design</div>
+</div><!-- fragment --><p>The repository ruleset then requires <b>only</b> the check <code>CI gate / gate</code>. GitHub names checks from a called workflow <code>&lt;calling job&gt; / &lt;called job&gt;</code>. The gate fails if any needed job failed or was cancelled, or was skipped without being listed in <code>allow_skipped</code>. It also fails if the calling workflow leaves a job out of <code>needs</code> or drops <code>if: always()</code>.</p>
 <h2><a class="anchor" id="autotoc_md8"></a>
-🔄 Reusable Workflows</h2>
-<blockquote class="doxtable">
-<p>&zwj;<b>For other repositories</b> - These workflows are designed to be called from your own repositories </p>
-</blockquote>
+Workflows: callers and inputs</h2>
+<p>Each example is the smallest working caller. The inputs tables are generated from the workflow files (<code>.github/scripts/gen_readme_inputs.py</code>), and CI fails if they go stale.</p>
+<h3><a class="anchor" id="autotoc_md9"></a>
+ru-ci-gate</h3>
+<p>See the CI gate for the caller.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Workflow   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Features   </th><th class="markdownTableHeadNone">Quick Start    </th></tr>
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-cpp-lint.yml">🔧 C/C++ Lint</a></b>   </td><td class="markdownTableBodyNone">Code quality and formatting checks   </td><td class="markdownTableBodyNone">• clang-format<br  />
-• clang-tidy<br  />
-• Configurable rules   </td><td class="markdownTableBodyNone">→ Use Now    </td></tr>
+<td class="markdownTableBodyNone"><code>needs_json</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">yes   </td><td class="markdownTableBodyNone">-   </td><td class="markdownTableBodyNone">The caller's needs context as JSON: the expression toJSON(needs)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-cpp-analysis.yml">🛡️ Static Analysis</a></b>   </td><td class="markdownTableBodyNone">Security and bug detection   </td><td class="markdownTableBodyNone">• cppcheck integration<br  />
-• Custom rules<br  />
-• Multiple standards   </td><td class="markdownTableBodyNone">→ Use Now    </td></tr>
+<td class="markdownTableBodyNone"><code>allow_skipped</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Jobs (ids from <code>needs</code>) that may be skipped without failing the gate, separated by commas, spaces or newlines. Every other job must succeed.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-docs-publish.yml">📚 Documentation</a></b>   </td><td class="markdownTableBodyNone">Documentation generation &amp; deployment   </td><td class="markdownTableBodyNone">• Doxygen support<br  />
-• Jekyll sites<br  />
-• GitHub Pages   </td><td class="markdownTableBodyNone">→ Use Now    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-docs-linkcheck.yml">🔗 Link Check</a></b>   </td><td class="markdownTableBodyNone">Documentation link validation   </td><td class="markdownTableBodyNone">• Lychee integration<br  />
-• Custom configs<br  />
-• Exclude patterns   </td><td class="markdownTableBodyNone">→ Use Now    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-yaml-lint.yml">📝 YAML Lint</a></b>   </td><td class="markdownTableBodyNone">YAML file validation   </td><td class="markdownTableBodyNone">• Syntax checking<br  />
-• Style validation<br  />
-• Custom rules   </td><td class="markdownTableBodyNone">→ Use Now    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-markdown-lint.yml">� Markdown Lint</a></b>   </td><td class="markdownTableBodyNone">Markdown file validation   </td><td class="markdownTableBodyNone">• Syntax checking<br  />
-• Style validation<br  />
-• Auto-fix support   </td><td class="markdownTableBodyNone">→ Use Now    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ru-release.yml">�📦 Release</a></b>   </td><td class="markdownTableBodyNone">Automated GitHub releases   </td><td class="markdownTableBodyNone">• Auto-generated notes<br  />
-• Draft/prerelease support<br  />
-• Tag-based releases   </td><td class="markdownTableBodyNone">→ Use Now   </td></tr>
+<td class="markdownTableBodyNone"><code>verify_needs</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Read the calling workflow file and fail if a job is missing from the gate's <code>needs</code>, or if the gate job lacks <code>if: always()</code>.   </td></tr>
 </table>
-<hr  />
-<h2><a class="anchor" id="autotoc_md10"></a>
-🏠 Repository-Specific Workflows</h2>
-<blockquote class="doxtable">
-<p>&zwj;<b>Internal workflows</b> - These are used by this repository itself. </p>
-</blockquote>
-<table class="markdownTable">
+<h3><a class="anchor" id="autotoc_md10"></a>
+ru-host-ci</h3>
+<div class="fragment"><div class="line">jobs:</div>
+<div class="line">  host:</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-host-ci.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: read</div>
+<div class="line">    with:</div>
+<div class="line">      preset: host-debug</div>
+<div class="line">      build_dir: build/host-debug          # the preset&#39;s binaryDir</div>
+<div class="line">      tidy_paths: &quot;^(src|include)/&quot;</div>
+</div><!-- fragment --><table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Workflow   </th><th class="markdownTableHeadNone">Purpose   </th><th class="markdownTableHeadNone">Trigger   </th><th class="markdownTableHeadNone">Status    </th></tr>
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ci-docs-publish.yml">📚 Docs Publish CI</a></b>   </td><td class="markdownTableBodyNone">Builds and deploys this repo's documentation site   </td><td class="markdownTableBodyNone">Push to main, PRs   </td><td class="markdownTableBodyNone">✅ Active    </td></tr>
+<td class="markdownTableBodyNone"><code>preset</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">CMake configure preset (from CMakePresets.json in source_dir). Empty: configure with -S source_dir -B build_dir.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b><a href=".github/workflows/ci-yaml-lint.yml">📝 YAML Lint CI</a></b>   </td><td class="markdownTableBodyNone">Validates YAML syntax in this repository   </td><td class="markdownTableBodyNone">Push, PRs   </td><td class="markdownTableBodyNone">✅ Active   </td></tr>
+<td class="markdownTableBodyNone"><code>source_dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.</code>   </td><td class="markdownTableBodyNone">CMake source directory, relative to the repository root    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>build_dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>build/host</code>   </td><td class="markdownTableBodyNone">Build directory, relative to the repository root. With a preset this must be the preset's binaryDir; compile_commands.json is read from here.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>cmake_args</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Extra arguments for the configure step (space separated)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>build_type</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>Debug</code>   </td><td class="markdownTableBodyNone">CMAKE_BUILD_TYPE when no preset is used    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>run_tests</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Run ctest after the build    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ctest_args</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Extra arguments for ctest (space separated)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>tidy_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Python regular expression matched (re.search) against each translation unit's path relative to the repository root. Only matching files are given to clang-tidy and cppcheck. Empty: every file in the database.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>exclude_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>(^\|/)(third_party\|external\|vendor\|_deps)/</code>   </td><td class="markdownTableBodyNone">Python regular expression; translation units whose relative path matches are never analysed, and findings in matching files are not counted. The build directory is always excluded.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>run_clang_tidy</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Run clang-tidy 18 on the selected files    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>clang_tidy_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to a .clang-tidy file. Empty: clang-tidy's normal lookup from each source file    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>run_cppcheck</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Run cppcheck on the selected files    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>cppcheck_suppressions</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to a cppcheck &ndash;suppressions-list file (optional)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>cppcheck_enable</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>warning,performance,portability</code>   </td><td class="markdownTableBodyNone">cppcheck &ndash;enable value    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>fail_on_findings</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Fail the job when clang-tidy or cppcheck report findings    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>apt_packages</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Extra apt packages to install before configuring (space separated)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>submodules</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">actions/checkout submodules value: false, true or recursive    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>runs_on</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>ubuntu-24.04</code>   </td><td class="markdownTableBodyNone">Runner label (Ubuntu 24.04 or newer, for clang-tidy-18 from apt)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>artifact_name</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>host-ci-reports</code>   </td><td class="markdownTableBodyNone">Name of the uploaded report artifact   </td></tr>
 </table>
-<hr  />
-<h2><a class="anchor" id="autotoc_md12"></a>
-📚 Documentation</h2>
-<p><b>🌐 <a href="https://hardfoc.github.io/hf-general-ci-tools/">Live Documentation Site</a></b> <br  />
- <em>Published documentation with enhanced navigation and search</em></p>
-<h3><a class="anchor" id="autotoc_md13"></a>
-📖 Available Guides</h3>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Guide   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Target Audience    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>📋 Documentation Index</b>   </td><td class="markdownTableBodyNone">Complete overview and navigation   </td><td class="markdownTableBodyNone">All users    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>🔧 C/C++ Linting Tools</b>   </td><td class="markdownTableBodyNone">Code quality and formatting setup   </td><td class="markdownTableBodyNone">C/C++ developers    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>� C/C++ Static Analysis</b>   </td><td class="markdownTableBodyNone">Security analysis configuration   </td><td class="markdownTableBodyNone">Security-focused teams    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>📚 Documentation Publisher</b>   </td><td class="markdownTableBodyNone">Documentation generation &amp; deployment   </td><td class="markdownTableBodyNone">Documentation teams    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>🔗 Documentation Link Check</b>   </td><td class="markdownTableBodyNone">Link validation setup   </td><td class="markdownTableBodyNone">Documentation maintainers    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>📝 YAML Linting Tools</b>   </td><td class="markdownTableBodyNone">YAML validation configuration   </td><td class="markdownTableBodyNone">DevOps engineers    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>� CI Workflows &amp; Design</b>   </td><td class="markdownTableBodyNone">Testing philosophy and live examples   </td><td class="markdownTableBodyNone">All users   </td></tr>
-</table>
-<hr  />
-<h2><a class="anchor" id="autotoc_md15"></a>
-🚀 Quick Start</h2>
-<blockquote class="doxtable">
-<p>&zwj;<b>📚 <a href="https://hardfoc.github.io/hf-general-ci-tools/">View Complete Documentation</a></b> - Interactive guides, examples, and configuration templates </p>
-</blockquote>
-<h3><a class="anchor" id="autotoc_md16"></a>
-🎯 Using Reusable Workflows</h3>
-<blockquote class="doxtable">
-<p>&zwj;<b>For other repositories</b> - Copy and customize these examples for your project </p>
-</blockquote>
-<p><b>Version pinning:</b> callers pin the major tag <code>@v1</code>, which moves to the latest <code>v1.x.y</code> release. Pin a full tag (<code>@v1.2.3</code>) or a commit SHA if you need a fixed version. The <code>v1</code> tag is created with the first release.</p>
-<h4><a class="anchor" id="autotoc_md17"></a>
-🔧 Basic CI Pipeline</h4>
-<div class="fragment"><div class="line">name: 🚀 CI Pipeline</div>
-<div class="line">on:</div>
-<div class="line">  push: { branches: [ main ] }</div>
-<div class="line">  pull_request: { branches: [ main ] }</div>
-<div class="line"> </div>
-<div class="line">jobs:</div>
-<div class="line">  # Code quality checks</div>
+<h3><a class="anchor" id="autotoc_md11"></a>
+ru-cpp-lint</h3>
+<div class="fragment"><div class="line">jobs:</div>
 <div class="line">  lint:</div>
 <div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: read</div>
+<div class="line">      pull-requests: write</div>
 <div class="line">    with:</div>
-<div class="line">      clang_version: &quot;20&quot;</div>
-<div class="line">      style: &quot;file&quot;</div>
-<div class="line">      extensions: &quot;c,cpp,h,hpp&quot;</div>
-<div class="line"> </div>
-<div class="line">  # Security analysis</div>
-<div class="line">  static:</div>
+<div class="line">      clang_format_config: _config/.clang-format</div>
+<div class="line">      clang_tidy_config: _config/.clang-tidy</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>clang_version</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>20</code>   </td><td class="markdownTableBodyNone">Clang major version    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>clang_format_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config/.clang-format</code>   </td><td class="markdownTableBodyNone">Path to clang-format configuration file    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>clang_tidy_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config/.clang-tidy</code>   </td><td class="markdownTableBodyNone">Path to clang-tidy configuration file    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>tidy_checks</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone">-   </td><td class="markdownTableBodyNone">clang-tidy checks (comma-separated glob patterns, use - prefix to disable)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>extensions</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>c,cpp,cc,cxx,h,hpp</code>   </td><td class="markdownTableBodyNone">File extensions to check (comma-separated)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ignore</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>build\|.git</code>   </td><td class="markdownTableBodyNone">Files or directories to exclude from linting (pipe-separated)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>files_changed_only</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Only lint files that have been changed in the pull request    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>lines_changed_only</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Only inspect lines that have changed in the pull request    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>step_summary</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Add a summary of linting results to the workflow step summary    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>file_annotations</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Display linting errors and warnings as file annotations in the GitHub UI    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>thread_comments</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Post a single, collapsible thread comment in a pull request detailing all linting issues   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md12"></a>
+ru-cpp-analysis</h3>
+<div class="fragment"><div class="line">jobs:</div>
+<div class="line">  cppcheck:</div>
 <div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-analysis.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: read</div>
 <div class="line">    with:</div>
-<div class="line">      paths: &quot;src include&quot;</div>
-<div class="line">      std: &quot;c++17&quot;</div>
-<div class="line">      strict: false</div>
+<div class="line">      paths: &quot;src inc&quot;</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>src inc examples</code>   </td><td class="markdownTableBodyNone">Dirs to analyze (space-separated)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>std</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>c++17</code>   </td><td class="markdownTableBodyNone">C++ standard    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>strict</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Fail job if any issues found    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>exclude</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Paths to exclude (space-separated)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>enable</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>warning,style,performance,portability,information</code>   </td><td class="markdownTableBodyNone">Checks to enable (comma-separated: all,warning,style,performance, portability,information,unusedFunction,missingInclude)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>force</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Force checking even with incomplete analysis    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>max_configs</code>   </td><td class="markdownTableBodyNone">number   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>0</code>   </td><td class="markdownTableBodyNone">Maximum configs to check (for template-heavy code, 0=unlimited)   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md13"></a>
+ru-docs-publish</h3>
+<p>Call it on pull requests as well. They take the PR build path: the whole site is built and uploaded as an artifact, and nothing is deployed.</p>
+<div class="fragment"><div class="line">on:</div>
+<div class="line">  push:</div>
+<div class="line">    branches: [main]</div>
+<div class="line">  pull_request:</div>
 <div class="line"> </div>
-<div class="line">  # Documentation generation</div>
-<div class="line">  docs:</div>
-<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</div>
-<div class="line">    with:</div>
-<div class="line">      doxygen_config: &quot;_config/Doxyfile&quot;</div>
-<div class="line">      output_dir: &quot;docs/doxygen/html&quot;</div>
-<div class="line"> </div>
-<div class="line">  # Link validation</div>
-<div class="line">  link-check:</div>
-<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</div>
-<div class="line">    with:</div>
-<div class="line">      paths: &quot;docs/**,*.md&quot;</div>
-</div><!-- fragment --><h4><a class="anchor" id="autotoc_md18"></a>
-🎨 Individual Workflow Examples</h4>
-<details >
-<summary >
-<b>🔧 C/C++ Linting Only</b></summary>
-<p></p>
-<div class="fragment"><div class="line">name: Code Quality</div>
-<div class="line">on: [push, pull_request]</div>
-<div class="line">jobs:</div>
-<div class="line">  lint:</div>
-<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-cpp-lint.yml@v1</div>
-<div class="line">    with:</div>
-<div class="line">      source_dirs: &quot;src/&quot;</div>
-<div class="line">      include_patterns: &quot;*.cpp,*.hpp,*.c,*.h&quot;</div>
-<div class="line">      clang_version: &quot;20&quot;</div>
-<div class="line">      style: &quot;file&quot;</div>
-</div><!-- fragment --> </details>
-<details >
-<summary >
-<b>📚 Documentation Only</b></summary>
-<p></p>
-<div class="fragment"><div class="line">name: Build Docs</div>
-<div class="line">on: [push]</div>
 <div class="line">jobs:</div>
 <div class="line">  docs:</div>
 <div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-publish.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: write</div>
 <div class="line">    with:</div>
+<div class="line">      doxygen_config: _config/Doxyfile</div>
 <div class="line">      jekyll_enabled: true</div>
-<div class="line">      jekyll_source: &quot;docs&quot;</div>
-<div class="line">      deploy_pages: true</div>
-<div class="line">      run_link_check: true</div>
-</div><!-- fragment --> </details>
-<details >
-<summary >
-<b>🔗 Link Checking Only</b></summary>
-<p></p>
-<div class="fragment"><div class="line">name: Check Links</div>
-<div class="line">on: [push, pull_request]</div>
-<div class="line">jobs:</div>
-<div class="line">  link-check:</div>
+<div class="line">      jekyll_source: &quot;.&quot;</div>
+<div class="line">      jekyll_config: _config/_config.yml</div>
+</div><!-- fragment --><h4><a class="anchor" id="autotoc_md14"></a>
+ru-docs-publish inputs</h4>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>checkout_recursive</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Checkout submodules recursively (useful for projects with documentation in submodules)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>run_link_check</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Run documentation link checker    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>link_check_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>**/*.md</code>   </td><td class="markdownTableBodyNone">Space-separated paths to check for broken links    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>link_check_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to lychee.toml config file (optional)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>verbose</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable verbose output for link checking    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>yamllint_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config/.yamllint</code>   </td><td class="markdownTableBodyNone">Path to yamllint configuration file    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>run_markdown_lint</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Run markdown linting on documentation files    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>markdown_lint_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>**/*.md</code>   </td><td class="markdownTableBodyNone">Glob patterns for markdown files to lint    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>markdown_lint_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config/.markdownlint.json</code>   </td><td class="markdownTableBodyNone">Path to markdownlint configuration file    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>run_spell_check</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Run spell checking on documentation files    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>spell_check_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>**/*.md</code>   </td><td class="markdownTableBodyNone">Glob patterns for files to spell check    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>spell_check_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.cspell.json</code>   </td><td class="markdownTableBodyNone">Path to cspell configuration file    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>deployment_branch</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>gh-pages</code>   </td><td class="markdownTableBodyNone">Branch name for deployment (required for versioned documentation)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>deploy_pages</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Deploy to GitHub Pages. Ignored on pull_request, pull_request_target and merge_group events, which always take the PR build path (build and upload the docs-html artifact, no deploy).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>artifact_name</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>docs-html</code>   </td><td class="markdownTableBodyNone">Name of the uploaded site artifact (set it when calling this workflow more than once in one run)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>doxygen_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>Doxyfile</code>   </td><td class="markdownTableBodyNone">Path to Doxyfile (relative to repo root) - output directory auto-detected from OUTPUT_DIRECTORY and HTML_OUTPUT settings    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>doxygen_working_directory</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.</code>   </td><td class="markdownTableBodyNone">Directory to execute Doxygen from (defaults to repository root). Relative paths in the Doxyfile are resolved against this directory.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>doxygen_fail_on_warnings</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Treat Doxygen warnings as errors in CI    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_enabled</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable Jekyll static site generation for enhanced documentation presentation    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config.yml</code>   </td><td class="markdownTableBodyNone">Comma-separated list of Jekyll configuration files (e.g., "_config.yml,_config_prod.yml")    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_source</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>docs</code>   </td><td class="markdownTableBodyNone">Jekyll source directory containing your site files    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_destination</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_site</code>   </td><td class="markdownTableBodyNone">Jekyll build destination directory for generated site    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_environment</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>production</code>   </td><td class="markdownTableBodyNone">Jekyll environment (development, production, staging) - affects which config files are loaded    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_safe</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Run in safe mode (disables custom plugins, used by GitHub Pages) - CI Recommended    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_plugins_dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Comma-separated list of plugin directories (&ndash;plugins option)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_layouts_dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Layout directory (&ndash;layouts option)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_verbose</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable verbose output during Jekyll build - CI Recommended for debugging    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_strict_front_matter</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Cause build to fail if there is a YAML syntax error in front matter - CI Recommended    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_drafts</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Include draft posts in the build (useful for development)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_future</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Include future-dated posts in the build    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_unpublished</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Include unpublished posts in the build    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_incremental</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable incremental builds for faster development (may cause issues in CI)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_lsi</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable LSI (Latent Semantic Indexing) for related posts    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_limit_posts</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Limit the number of posts to parse and publish    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_profile</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable profiling output to show build performance (reduces build time)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>jekyll_quiet</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Suppress normal output during Jekyll build (reduces debugging info)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>jekyll_trace</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Show full backtrace when an error occurs (debug only)   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md15"></a>
+ru-docs-linkcheck</h3>
+<div class="fragment"><div class="line">jobs:</div>
+<div class="line">  links:</div>
 <div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-docs-linkcheck.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: read</div>
 <div class="line">    with:</div>
-<div class="line">      paths: &quot;docs/**,*.md&quot;</div>
-<div class="line">      verbose: true</div>
-<div class="line">      timeout: &quot;30&quot;</div>
-</div><!-- fragment --> </details>
-<details >
-<summary >
-<b>� Markdown Validation Only</b></summary>
-<p></p>
-<div class="fragment"><div class="line">name: Docs Quality</div>
-<div class="line">on: [push, pull_request]</div>
-<div class="line">jobs:</div>
+<div class="line">      paths: &quot;docs/**/*.md *.md&quot;</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>checkout_recursive</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Checkout submodules recursively (useful for projects with documentation in submodules)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>docs/** *.md **/docs/**</code>   </td><td class="markdownTableBodyNone">Space-separated paths to check for broken links    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>fail_on_errors</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Fail the workflow if broken links are found    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>timeout</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>10</code>   </td><td class="markdownTableBodyNone">Timeout in seconds for each link check    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>max_retries</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>3</code>   </td><td class="markdownTableBodyNone">Maximum number of retries per request    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>retry_wait_time</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>1</code>   </td><td class="markdownTableBodyNone">Minimum wait time in seconds between retries    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>exclude_private</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Exclude private/internal links    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>exclude_mail</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Exclude mailto links    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>verbose</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable verbose output    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>config_file</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to lychee.toml config file (optional)   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md16"></a>
+ru-markdown-lint</h3>
+<div class="fragment"><div class="line">jobs:</div>
 <div class="line">  markdown:</div>
 <div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-markdown-lint.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: read</div>
 <div class="line">    with:</div>
-<div class="line">      globs: &quot;docs/**/*.md *.md&quot;</div>
-<div class="line">      fix: false</div>
-</div><!-- fragment --> </details>
-<details >
-<summary >
-<b>�📦 Release Creation Only</b></summary>
-<p></p>
-<div class="fragment"><div class="line">name: Release</div>
-<div class="line">on:</div>
+<div class="line">      config_file: _config/.markdownlint.json</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>globs</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>**/*.md</code>   </td><td class="markdownTableBodyNone">Space-separated list of glob patterns to check (default: all markdown files)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>config_file</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config/.markdownlint.json</code>   </td><td class="markdownTableBodyNone">Path to markdownlint configuration file (default: _config/.markdownlint.json)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>exclude_patterns</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.git/**,node_modules/**,venv/**,.venv/**,_site/**,**/hf-espidf-project-tools/**</code>   </td><td class="markdownTableBodyNone">Comma-separated patterns to exclude from checking    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>use_docker</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Use Docker container instead of official action (for more control)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>fix</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Automatically fix fixable issues (equivalent to &ndash;fix flag)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>separator</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Separator to use between glob patterns (default: space)   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md17"></a>
+ru-yaml-lint</h3>
+<div class="fragment"><div class="line">jobs:</div>
+<div class="line">  yaml:</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-yaml-lint.yml@v1</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: read</div>
+<div class="line">    with:</div>
+<div class="line">      config_file: _config/.yamllint</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>**/*.yml,**/*.yaml</code>   </td><td class="markdownTableBodyNone">Comma-separated list of paths to check (default: all YAML files)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>config_file</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>_config/.yamllint</code>   </td><td class="markdownTableBodyNone">Path to yamllint configuration file (default: _config/.yamllint)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>strict_mode</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Enable strict mode (fail on warnings)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>exclude_patterns</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.git/**,node_modules/**,venv/**,.venv/**,**/hf-espidf-project-tools/**</code>   </td><td class="markdownTableBodyNone">Comma-separated patterns to exclude from checking   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md18"></a>
+ru-release</h3>
+<div class="fragment"><div class="line">on:</div>
 <div class="line">  push:</div>
-<div class="line">    tags: [&#39;v*&#39;]</div>
+<div class="line">    tags: [&quot;v*&quot;]</div>
+<div class="line"> </div>
 <div class="line">jobs:</div>
 <div class="line">  release:</div>
 <div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-release.yml@v1</div>
-<div class="line">    with:</div>
-<div class="line">      draft: false</div>
-<div class="line">      prerelease: false</div>
-</div><!-- fragment --> </details>
-<hr  />
-<h2><a class="anchor" id="autotoc_md20"></a>
-📋 Prerequisites</h2>
-<h3><a class="anchor" id="autotoc_md21"></a>
-✅ Required Setup</h3>
+<div class="line">    permissions:</div>
+<div class="line">      contents: write</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>draft</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Create as draft release    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>prerelease</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Mark as pre-release    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>tag_name</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Tag name for release (defaults to github.ref_name)   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md19"></a>
+How this repository tests itself</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Requirement   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Example    </th></tr>
+<th class="markdownTableHeadNone">Workflow   </th><th class="markdownTableHeadNone">What it checks    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>GitHub Actions</b>   </td><td class="markdownTableBodyNone">Enabled in your repository   </td><td class="markdownTableBodyNone">Repository Settings → Actions    </td></tr>
+<td class="markdownTableBodyNone"><a href=".github/workflows/ci-self.yml"><code>ci-self.yml</code></a>   </td><td class="markdownTableBodyNone">Runs actionlint with shellcheck (pinned, any finding fails). Fails any <code>run:</code> block ending in a bare <code>cond &amp;&amp; cmd</code>. Checks the permissions contract against the table above, the README inputs tables, and breaking changes against the PR base. Runs unit tests for these checks, and runs the CI gate on itself    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Project Structure</b>   </td><td class="markdownTableBodyNone">Proper C/C++ project layout   </td><td class="markdownTableBodyNone"><code>src/</code>, <code>include/</code>, <code>docs/</code>    </td></tr>
+<td class="markdownTableBodyNone"><a href=".github/workflows/ci-docs-publish.yml"><code>ci-docs-publish.yml</code></a>   </td><td class="markdownTableBodyNone">Builds this site (Jekyll source <code>.</code>) and a fixture site whose source is a subdirectory    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Configuration Files</b>   </td><td class="markdownTableBodyNone">Tool-specific configs   </td><td class="markdownTableBodyNone"><code>_config/.clang-format</code>, <code>_config/.clang-tidy</code>, <code>_config/.yamllint</code>   </td></tr>
+<td class="markdownTableBodyNone"><a href=".github/workflows/ci-host-ci.yml"><code>ci-host-ci.yml</code></a>   </td><td class="markdownTableBodyNone">Runs <code>ru-host-ci</code> on a fixture: preset path on clean code must pass; <code>-S/-B</code> path with seeded defects must report findings    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ci-cpp-lint.yml</code>, <code>ci-cpp-analysis.yml</code>, <code>ci-docs-linkcheck.yml</code>, <code>ci-markdown-lint.yml</code>, <code>ci-yaml-lint.yml</code>   </td><td class="markdownTableBodyNone">Each runs its workflow on this repository   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md22"></a>
-🏗️ Recommended Project Structure</h3>
-<div class="fragment"><div class="line">your-awesome-project/</div>
-<div class="line">├── .github/workflows/          # Your CI workflows</div>
-<div class="line">│   └── ci.yml                  # Main CI pipeline</div>
-<div class="line">├── src/                        # Source code</div>
-<div class="line">│   ├── main.cpp</div>
-<div class="line">│   └── utils/</div>
-<div class="line">├── include/                    # Header files</div>
-<div class="line">│   └── utils.h</div>
-<div class="line">├── docs/                       # Documentation</div>
-<div class="line">│   ├── index.md</div>
-<div class="line">│   └── api/</div>
-<div class="line">├── _config/                   # Centralized lint/documentation configs</div>
-<div class="line">│   ├── Doxyfile               # Documentation configuration (run from repo root)</div>
-<div class="line">│   ├── .clang-format</div>
-<div class="line">│   ├── .clang-tidy</div>
-<div class="line">│   ├── .markdownlint.json</div>
-<div class="line">│   ├── .markdownlint-rules.md</div>
-<div class="line">│   └── .yamllint</div>
-<div class="line">├── cpp-ci-test/               # Sample C/C++ sources for CI testing and Doxygen</div>
-<div class="line">└── README.md                  # Project documentation</div>
-</div><!-- fragment --><hr  />
-<h2><a class="anchor" id="autotoc_md24"></a>
-🔗 Related Resources</h2>
-<h3><a class="anchor" id="autotoc_md25"></a>
-📚 Official Documentation</h3>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Tool   </th><th class="markdownTableHeadNone">Documentation   </th><th class="markdownTableHeadNone">Purpose    </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href="https://docs.github.com/en/actions">GitHub Actions</a></b>   </td><td class="markdownTableBodyNone">Official GitHub Actions docs   </td><td class="markdownTableBodyNone">Workflow syntax and features    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b><a href="https://clang.llvm.org/docs/ClangFormat.html">Clang Format</a></b>   </td><td class="markdownTableBodyNone">Code formatting tool   </td><td class="markdownTableBodyNone">Style configuration    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href="https://cppcheck.sourceforge.io/">Cppcheck</a></b>   </td><td class="markdownTableBodyNone">Static analysis tool   </td><td class="markdownTableBodyNone">Bug and security detection    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b><a href="https://www.doxygen.nl/">Doxygen</a></b>   </td><td class="markdownTableBodyNone">Documentation generator   </td><td class="markdownTableBodyNone">API documentation    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b><a href="https://jekyllrb.com/">Jekyll</a></b>   </td><td class="markdownTableBodyNone">Static site generator   </td><td class="markdownTableBodyNone">Documentation websites   </td></tr>
-</table>
-<h3><a class="anchor" id="autotoc_md26"></a>
-🛠️ Configuration Examples</h3>
-<ul>
-<li><b>Jekyll Integration Guide</b> - Advanced Jekyll configuration for documentation sites</li>
-<li><b>Versioning Guide</b> - Multi-version documentation strategies</li>
-</ul>
-<hr  />
-<h2><a class="anchor" id="autotoc_md28"></a>
-📄 License</h2>
-<p><b>GNU General Public License v3.0</b> - See the [LICENSE](LICENSE) file for details</p>
-<hr  />
-<p><b>⭐ Star this repository if you find it helpful!</b></p>
-<p><a href="https://github.com/hardfoc/hf-general-ci-tools/issues">Report Bug</a> • <a href="https://github.com/hardfoc/hf-general-ci-tools/issues">Request Feature</a> • Contribute </p>
+<p>Third-party actions are pinned to commit SHAs with a <code># vX.Y.Z</code> comment, and Dependabot keeps them current. Contributions follow CONTRIBUTING.md. Licensed under [GPL v3](LICENSE). </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"/>
 </div><!-- contents -->
@@ -399,7 +571,7 @@ permalink: /</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Nov 1 2026 23:42:43 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+    <li class="footer">Generated on Mon Nov 2 2026 01:21:36 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
   </ul>
 </div>
 </body>
