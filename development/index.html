@@ -50,7 +50,7 @@
 
 
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>🚀 hf-general-ci-tools | hf-general-ci-tools - development</title>
+<title>🚀 hf-general-ci-tools | hf-general-ci-tools</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="🚀 hf-general-ci-tools" />
 <meta name="author" content="N3b3x" />
@@ -59,7 +59,7 @@
 <meta property="og:description" content="Reusable GitHub Actions workflows for C/C++ and documentation CI in the hardfoc organisation" />
 <link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/development/" />
 <meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/development/" />
-<meta property="og:site_name" content="hf-general-ci-tools - development" />
+<meta property="og:site_name" content="hf-general-ci-tools" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="🚀 hf-general-ci-tools" />
@@ -145,7 +145,7 @@
     <header class="side-bar">
   <div class="site-header">
     <a href="/hf-general-ci-tools/development/" class="site-title lh-tight">
-  hf-general-ci-tools - development
+  hf-general-ci-tools
 
 </a>
     <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
@@ -431,6 +431,7 @@ workflow’s job permissions ever differ from this table.</p>
 | <a href=".github/workflows/ru-cpp-lint.yml"><code class="language-plaintext highlighter-rouge">ru-cpp-lint.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code>, <code class="language-plaintext highlighter-rouge">pull-requests: write</code> | checkout; cpp-linter thread comments and annotations |
 | <a href=".github/workflows/ru-docs-linkcheck.yml"><code class="language-plaintext highlighter-rouge">ru-docs-linkcheck.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
 | <a href=".github/workflows/ru-docs-publish.yml"><code class="language-plaintext highlighter-rouge">ru-docs-publish.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: write</code> | push to the deployment branch; required on pull requests too, although PRs never deploy |
+| <a href=".github/workflows/ru-mkdocs-publish.yml"><code class="language-plaintext highlighter-rouge">ru-mkdocs-publish.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: write</code> | the deploy job pushes to the deployment branch; the build job needs only <code class="language-plaintext highlighter-rouge">contents: read</code>, but a caller grants the most any job needs |
 | <a href=".github/workflows/ru-host-ci.yml"><code class="language-plaintext highlighter-rouge">ru-host-ci.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
 | <a href=".github/workflows/ru-markdown-lint.yml"><code class="language-plaintext highlighter-rouge">ru-markdown-lint.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: read</code> | checkout |
 | <a href=".github/workflows/ru-release.yml"><code class="language-plaintext highlighter-rouge">ru-release.yml</code></a> | <code class="language-plaintext highlighter-rouge">contents: write</code> | create the GitHub Release |
@@ -729,6 +730,52 @@ is built and uploaded as an artifact, and nothing is deployed.</p>
 | <code class="language-plaintext highlighter-rouge">jekyll_quiet</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Suppress normal output during Jekyll build (reduces debugging info) |
 | <code class="language-plaintext highlighter-rouge">jekyll_trace</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Show full backtrace when an error occurs (debug only) |
 <!-- inputs:ru-docs-publish.yml:end --></p>
+<h3 id="ru-mkdocs-publishyml">
+  
+  
+    <a href="#ru-mkdocs-publishyml" class="anchor-heading" aria-labelledby="ru-mkdocs-publishyml"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">ru-mkdocs-publish.yml</code>
+  
+  
+</h3>
+    
+
+<p>mkdocs-material site with Doxygen merged under <code class="language-plaintext highlighter-rouge">/api/</code>. Pull requests build
+strictly and check links without deploying; pushes to the default branch and
+<code class="language-plaintext highlighter-rouge">v*</code> tags deploy to <code class="language-plaintext highlighter-rouge">gh-pages</code> with versioned docs. Guide:
+<a href="/hf-general-ci-tools/development/docs/ru-mkdocs-publish.html">docs/ru-mkdocs-publish.md</a>.</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><div class="table-wrapper"><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">docs</span><span class="pi">:</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">write</span>
+    <span class="na">uses</span><span class="pi">:</span> <span class="s">hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1</span>
+</pre></td></tr></tbody></table></div></code></pre></div></div>
+
+<!-- inputs:ru-mkdocs-publish.yml:start -->
+<p>| Input | Type | Required | Default | Description |
+| — | — | — | — | — |
+| <code class="language-plaintext highlighter-rouge">python_version</code> | string | no | <code class="language-plaintext highlighter-rouge">3.12</code> | Python used to build the site. |
+| <code class="language-plaintext highlighter-rouge">requirements</code> | string | no | <code class="language-plaintext highlighter-rouge">requirements-docs.txt</code> | pip requirements file with the pinned site toolchain (mkdocs, mkdocs-material, mike, …). |
+| <code class="language-plaintext highlighter-rouge">mkdocs_config</code> | string | no | <code class="language-plaintext highlighter-rouge">mkdocs.yml</code> | Path of mkdocs.yml. |
+| <code class="language-plaintext highlighter-rouge">submodules</code> | string | no | <code class="language-plaintext highlighter-rouge">false</code> | Submodules to check out with the repository: ‘false’, ‘true’ (top level) or ‘recursive’. |
+| <code class="language-plaintext highlighter-rouge">submodule_paths</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. ‘lib/core/drivers/internal/pincfg’. Use it instead of ‘recursive’ when the checks need a few nested submodules. |
+| <code class="language-plaintext highlighter-rouge">check_commands</code> | string | no | <code class="language-plaintext highlighter-rouge">if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi</code> | Shell lines run before the build; any failure fails the job. The default runs the figure drift check (tools/figkit/build.py –check) and the generated-table check (tools/docs/gen.py –check) when present. |
+| <code class="language-plaintext highlighter-rouge">doxygen_config</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. |
+| <code class="language-plaintext highlighter-rouge">doxygen_working_directory</code> | string | no | <code class="language-plaintext highlighter-rouge">.</code> | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. |
+| <code class="language-plaintext highlighter-rouge">doxygen_html_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. |
+| <code class="language-plaintext highlighter-rouge">api_dir</code> | string | no | <code class="language-plaintext highlighter-rouge">api</code> | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). |
+| <code class="language-plaintext highlighter-rouge">link_check</code> | boolean | no | <code class="language-plaintext highlighter-rouge">true</code> | Run lychee offline on the built site (internal links, anchors and images, API included). |
+| <code class="language-plaintext highlighter-rouge">link_check_args</code> | string | no | <code class="language-plaintext highlighter-rouge">""</code> | Extra lychee arguments, for example –exclude-path patterns. |
+| <code class="language-plaintext highlighter-rouge">deploy</code> | boolean | no | <code class="language-plaintext highlighter-rouge">false</code> | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. |
+| <code class="language-plaintext highlighter-rouge">deployment_branch</code> | string | no | <code class="language-plaintext highlighter-rouge">gh-pages</code> | Branch GitHub Pages serves from. |
+| <code class="language-plaintext highlighter-rouge">dev_version</code> | string | no | <code class="language-plaintext highlighter-rouge">dev</code> | mike version name a push to the default branch publishes to. |
+| <code class="language-plaintext highlighter-rouge">latest_alias</code> | string | no | <code class="language-plaintext highlighter-rouge">latest</code> | mike alias moved to each release (v* tag). |
+<!-- inputs:ru-mkdocs-publish.yml:end --></p>
 <h3 id="ru-docs-linkcheck">
   
   

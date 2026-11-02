@@ -50,7 +50,7 @@
 
 
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Changelog | hf-general-ci-tools - development</title>
+<title>Changelog | hf-general-ci-tools</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Changelog" />
 <meta name="author" content="N3b3x" />
@@ -59,7 +59,7 @@
 <meta property="og:description" content="A comprehensive collection of reusable GitHub Actions workflows for general CI/CD tasks, including C/C++ linting, static analysis, documentation generation, and link checking" />
 <link rel="canonical" href="https://hardfoc.github.io/hf-general-ci-tools/development/CHANGELOG.html" />
 <meta property="og:url" content="https://hardfoc.github.io/hf-general-ci-tools/development/CHANGELOG.html" />
-<meta property="og:site_name" content="hf-general-ci-tools - development" />
+<meta property="og:site_name" content="hf-general-ci-tools" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Changelog" />
@@ -145,7 +145,7 @@
     <header class="side-bar">
   <div class="site-header">
     <a href="/hf-general-ci-tools/development/" class="site-title lh-tight">
-  hf-general-ci-tools - development
+  hf-general-ci-tools
 
 </a>
     <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
@@ -282,10 +282,40 @@ that heading.</p>
   
 </h2>
     
+<h3 id="fixed">
+  
+  
+    <a href="#fixed" class="anchor-heading" aria-labelledby="fixed"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Fixed
+  
+  
+</h3>
+    
 
-<p>Everything below becomes <strong>v1.0.0</strong>, the first tagged release. Until callers
-move from <code class="language-plaintext highlighter-rouge">@main</code> to <code class="language-plaintext highlighter-rouge">@v1</code>, <code class="language-plaintext highlighter-rouge">@main</code> stays compatible with them: no input has
-been removed and no workflow needs more permissions than before.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ru-docs-publish</code>: copy static assets kept next to the Jekyll config (for
+example <code class="language-plaintext highlighter-rouge">_config/assets/css/custom.css</code>) into the site source before the
+build. Jekyll skips underscore folders, so driver sites never received
+their custom CSS and JavaScript.</li>
+  <li><code class="language-plaintext highlighter-rouge">ru-docs-publish</code>: set the generated config’s <code class="language-plaintext highlighter-rouge">url</code> to the publishing
+repository’s Pages host, so canonical links and the sitemap stop pointing
+at an old owner.</li>
+  <li><code class="language-plaintext highlighter-rouge">ru-mkdocs-publish</code>: call the <code class="language-plaintext highlighter-rouge">mike</code> command; <code class="language-plaintext highlighter-rouge">python3 -m mike</code> fails because
+mike has no <code class="language-plaintext highlighter-rouge">__main__</code>, so every deploy step failed.</li>
+  <li><code class="language-plaintext highlighter-rouge">ru-docs-publish</code>: stop appending the version name to the site title; it
+made the sidebar title wrap. The version stays available as <code class="language-plaintext highlighter-rouge">version</code>.</li>
+</ul>
+<h2 id="110---2026-11-02">
+  
+  
+    <a href="#110---2026-11-02" class="anchor-heading" aria-labelledby="110---2026-11-02"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> [1.1.0] - 2026-11-02
+  
+  
+</h2>
+    
+
+<p>First release callers pin as <code class="language-plaintext highlighter-rouge">@v1</code> (v1.0.0 was cut before the platform work
+below had landed). No input has been removed and no workflow needs more
+permissions than before.</p>
 <h3 id="added">
   
   
@@ -334,10 +364,10 @@ node16 runtime of v1 is no longer supported.</li>
 top-level <code class="language-plaintext highlighter-rouge">permissions</code>. In <code class="language-plaintext highlighter-rouge">ru-docs-publish.yml</code>, only the <code class="language-plaintext highlighter-rouge">build</code> job
 keeps <code class="language-plaintext highlighter-rouge">contents: write</code>.</li>
 </ul>
-<h3 id="fixed">
+<h3 id="fixed-1">
   
   
-    <a href="#fixed" class="anchor-heading" aria-labelledby="fixed"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Fixed
+    <a href="#fixed-1" class="anchor-heading" aria-labelledby="fixed-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Fixed
   
   
 </h3>

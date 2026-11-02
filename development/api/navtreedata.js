@@ -41,12 +41,13 @@ var NAVTREE =
         [ "ru-docs-publish", "index.html#autotoc_md13", [
           [ "ru-docs-publish inputs", "index.html#autotoc_md14", null ]
         ] ],
-        [ "ru-docs-linkcheck", "index.html#autotoc_md15", null ],
-        [ "ru-markdown-lint", "index.html#autotoc_md16", null ],
-        [ "ru-yaml-lint", "index.html#autotoc_md17", null ],
-        [ "ru-release", "index.html#autotoc_md18", null ]
+        [ "ru-mkdocs-publish.yml", "index.html#autotoc_md15", null ],
+        [ "ru-docs-linkcheck", "index.html#autotoc_md16", null ],
+        [ "ru-markdown-lint", "index.html#autotoc_md17", null ],
+        [ "ru-yaml-lint", "index.html#autotoc_md18", null ],
+        [ "ru-release", "index.html#autotoc_md19", null ]
       ] ],
-      [ "How this repository tests itself", "index.html#autotoc_md19", null ]
+      [ "How this repository tests itself", "index.html#autotoc_md20", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
