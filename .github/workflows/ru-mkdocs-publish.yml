@@ -468,7 +468,7 @@ jobs:
           gone = sorted(p.name for p in root.iterdir() if p.name not in keep)
           if gone:
               print("Removing the previous site:", " ".join(gone))
-              subprocess.run(["git", "-C", str(root), "rm", "-r", "-q", "--ignore-unmatch", "--", *gone], check=True)
+              subprocess.run(["git", "-C", str(root), "rm", "-r", "-q", "-f", "--ignore-unmatch", "--", *gone], check=True)
               subprocess.run(["rm", "-rf", "--", *[str(root / g) for g in gone]], check=True)
               subprocess.run(["git", "-C", str(root), "commit", "-q", "-m", "Remove the previous documentation site"],
                              check=True)
