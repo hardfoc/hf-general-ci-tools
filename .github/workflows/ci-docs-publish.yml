@@ -76,3 +76,18 @@ jobs:
       run_spell_check: false
       deploy_pages: false
       artifact_name: "docs-html-selftest-subdir"
+
+  # Self-test of ru-mkdocs-publish with versioning: false on the organisation-site fixture of the theme package: the
+  # strict build, the plugin's unversioned switch and the offline link check, through the real workflow. Never
+  # deploys (pull requests never deploy, and deploy is false).
+  selftest-mkdocs-unversioned:
+    uses: ./.github/workflows/ru-mkdocs-publish.yml
+    permissions:
+      contents: write
+    with:
+      mkdocs_config: packages/hardfoc-mkdocs-theme/tests/fixtures/org-site/mkdocs.yml
+      check_commands: ""
+      versioning: false
+      lighthouse: false
+      screenshots: false
+      deploy: false
