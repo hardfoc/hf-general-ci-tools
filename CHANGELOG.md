@@ -50,6 +50,10 @@ that heading.
 
 ### Fixed (documentation platform)
 
+- Theme: no layout shift when the web fonts arrive. Text is laid out in local fallback faces with Inter's and
+  JetBrains Mono's metrics (`size-adjust`, `ascent-override`, `descent-override`), so the swap to the web font
+  keeps every line in place; text-heavy pages (pin maps, long tables) no longer miss the Lighthouse performance
+  budget on cumulative layout shift.
 - `hardfoc-docs screenshots` without `--page` crashed (`UnboundLocalError`).
 - Theme plugin: a link from `docs/` to a repository file that does not exist was turned into a GitHub link that
   404s; it is now a warning, so `mkdocs build --strict` fails (a folder that is empty, a submodule not checked
