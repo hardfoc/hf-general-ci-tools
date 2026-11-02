@@ -27,7 +27,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Publish Docs API<span id="projectnumber">&#160;v1.2.1</span>
+   <div id="projectname">Publish Docs API<span id="projectnumber">&#160;v1.2.2</span>
    </div>
    <div id="projectbrief">Auto-generated API documentation for example C and C++ code used by the workflow guides.</div>
   </td>
@@ -196,12 +196,14 @@ Permissions contract</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href=".github/workflows/ru-docs-publish.yml"><code>ru-docs-publish.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: write</code>   </td><td class="markdownTableBodyNone">push to the deployment branch; required on pull requests too, although PRs never deploy    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-mkdocs-publish.yml"><code>ru-mkdocs-publish.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: write</code>   </td><td class="markdownTableBodyNone">the deploy job pushes to the deployment branch; the build job needs only <code>contents: read</code>, but a caller grants the most any job needs    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href=".github/workflows/ru-host-ci.yml"><code>ru-host-ci.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href=".github/workflows/ru-markdown-lint.yml"><code>ru-markdown-lint.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href=".github/workflows/ru-release.yml"><code>ru-release.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: write</code>   </td><td class="markdownTableBodyNone">create the GitHub Release    </td></tr>
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-markdown-lint.yml"><code>ru-markdown-lint.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href=".github/workflows/ru-release.yml"><code>ru-release.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: write</code>   </td><td class="markdownTableBodyNone">create the GitHub Release    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href=".github/workflows/ru-yaml-lint.yml"><code>ru-yaml-lint.yml</code></a>   </td><td class="markdownTableBodyNone"><code>contents: read</code>   </td><td class="markdownTableBodyNone">checkout   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md7"></a>
@@ -450,6 +452,50 @@ ru-docs-publish inputs</h4>
 <td class="markdownTableBodyNone"><code>jekyll_trace</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Show full backtrace when an error occurs (debug only)   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md15"></a>
+<code>ru-mkdocs-publish.yml</code></h3>
+<p>mkdocs-material site with Doxygen merged under <code>/api/</code>. Pull requests build strictly and check links without deploying; pushes to the default branch and <code>v*</code> tags deploy to <code>gh-pages</code> with versioned docs. Guide: docs/ru-mkdocs-publish.md.</p>
+<div class="fragment"><div class="line">jobs:</div>
+<div class="line">  docs:</div>
+<div class="line">    permissions:</div>
+<div class="line">      contents: write</div>
+<div class="line">    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1</div>
+</div><!-- fragment --><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Input   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Required   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>python_version</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>3.12</code>   </td><td class="markdownTableBodyNone">Python used to build the site.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>requirements</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>requirements-docs.txt</code>   </td><td class="markdownTableBodyNone">pip requirements file with the pinned site toolchain (mkdocs, mkdocs-material, mike, ...).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>mkdocs_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>mkdocs.yml</code>   </td><td class="markdownTableBodyNone">Path of mkdocs.yml.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>submodules</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>submodule_paths</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>check_commands</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi</code>   </td><td class="markdownTableBodyNone">Shell lines run before the build; any failure fails the job. The default runs the figure drift check (tools/figkit/build.py &ndash;check) and the generated-table check (tools/docs/gen.py &ndash;check) when present.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>doxygen_config</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>doxygen_working_directory</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.</code>   </td><td class="markdownTableBodyNone">Directory Doxygen runs in; relative paths in the Doxyfile resolve against it.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>doxygen_html_dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>api_dir</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>api</code>   </td><td class="markdownTableBodyNone">Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml).    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>link_check</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>true</code>   </td><td class="markdownTableBodyNone">Run lychee offline on the built site (internal links, anchors and images, API included).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>link_check_args</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Extra lychee arguments, for example &ndash;exclude-path patterns.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>deploy</code>   </td><td class="markdownTableBodyNone">boolean   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>false</code>   </td><td class="markdownTableBodyNone">Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>deployment_branch</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>gh-pages</code>   </td><td class="markdownTableBodyNone">Branch GitHub Pages serves from.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>dev_version</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>dev</code>   </td><td class="markdownTableBodyNone">mike version name a push to the default branch publishes to.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>latest_alias</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>latest</code>   </td><td class="markdownTableBodyNone">mike alias moved to each release (v* tag).   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md16"></a>
 ru-docs-linkcheck</h3>
 <div class="fragment"><div class="line">jobs:</div>
 <div class="line">  links:</div>
@@ -482,7 +528,7 @@ ru-docs-linkcheck</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>config_file</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Path to lychee.toml config file (optional)   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md16"></a>
+<h3><a class="anchor" id="autotoc_md17"></a>
 ru-markdown-lint</h3>
 <div class="fragment"><div class="line">jobs:</div>
 <div class="line">  markdown:</div>
@@ -507,7 +553,7 @@ ru-markdown-lint</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>separator</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Separator to use between glob patterns (default: space)   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md17"></a>
+<h3><a class="anchor" id="autotoc_md18"></a>
 ru-yaml-lint</h3>
 <div class="fragment"><div class="line">jobs:</div>
 <div class="line">  yaml:</div>
@@ -528,7 +574,7 @@ ru-yaml-lint</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>exclude_patterns</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>.git/**,node_modules/**,venv/**,.venv/**,**/hf-espidf-project-tools/**</code>   </td><td class="markdownTableBodyNone">Comma-separated patterns to exclude from checking   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md18"></a>
+<h3><a class="anchor" id="autotoc_md19"></a>
 ru-release</h3>
 <div class="fragment"><div class="line">on:</div>
 <div class="line">  push:</div>
@@ -549,7 +595,7 @@ ru-release</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>tag_name</code>   </td><td class="markdownTableBodyNone">string   </td><td class="markdownTableBodyNone">no   </td><td class="markdownTableBodyNone"><code>""</code>   </td><td class="markdownTableBodyNone">Tag name for release (defaults to github.ref_name)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 How this repository tests itself</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -571,7 +617,7 @@ How this repository tests itself</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Nov 2 2026 03:47:25 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+    <li class="footer">Generated on Mon Nov 2 2026 04:39:13 for Publish Docs API by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
   </ul>
 </div>
 </body>
