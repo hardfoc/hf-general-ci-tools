@@ -458,7 +458,12 @@
 
   .md-typeset table:not([class]) td code {
     white-space: normal;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;  /* not "anywhere": a column stays as wide as its longest identifier when it can */
+  }
+
+  /* The first column names things (a workflow, a pin, a register): it stays on one line. */
+  .md-typeset table:not([class]) td:first-child code {
+    white-space: nowrap;
   }
 }
 
