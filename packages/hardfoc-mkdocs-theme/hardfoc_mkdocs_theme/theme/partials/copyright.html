@@ -1,0 +1,16 @@
+{#- HardFOC footer: organisation links, the repository, the licence, then the copyright line. -#}
+{% set hf = config.extra.hardfoc or {} %}
+<div class="md-copyright hf-footer">
+  <nav class="hf-footer__links" aria-label="HardFOC">
+    <a href="{{ hf.portal_url | d('https://hardfoc.github.io/') }}">HardFOC docs</a>
+    <a href="{{ hf.org_url | d('https://github.com/hardfoc') }}">GitHub organisation</a>
+    {% if config.repo_url %}
+      <a href="{{ config.repo_url }}">Source</a>
+      <a href="{{ config.repo_url }}/issues">Report an issue</a>
+      <a href="{{ config.repo_url }}/blob/{{ hf.default_branch | d('main') }}/LICENSE">License</a>
+    {% endif %}
+  </nav>
+  {% if config.copyright %}
+    <div class="md-copyright__highlight">{{ config.copyright }}</div>
+  {% endif %}
+</div>
