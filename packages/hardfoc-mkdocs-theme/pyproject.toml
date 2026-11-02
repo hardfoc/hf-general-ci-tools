@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hardfoc-mkdocs-theme"
+version = "1.0.0"
+description = "The HardFOC documentation theme for MkDocs: brand, layout, page checks and figkit, in one package."
+readme = "README.md"
+license = { text = "GPL-3.0" }
+requires-python = ">=3.10"
+# Exact versions: every HardFOC site builds with the same toolchain. ru-mkdocs-publish.yml installs this package at
+# the commit of the workflow itself, so a caller pinned to @v1 gets the theme and toolchain released with v1.
+dependencies = [
+  "mkdocs==1.6.1",
+  "mkdocs-material==9.8.0",
+  "mkdocs-awesome-nav==3.3.0",
+  "pymdown-extensions==12.3",
+  "mike==2.2.0",
+  "PyYAML==6.0.3",
+]
+
+[project.optional-dependencies]
+# Screenshots of the built site at phone and desktop widths (CI quality job, or locally).
+screenshots = ["playwright==1.63.0"]
+
+[project.scripts]
+hardfoc-docs = "hardfoc_mkdocs_theme.cli:main"
+
+[project.entry-points."mkdocs.themes"]
+hardfoc = "hardfoc_mkdocs_theme.theme"
+
+[project.entry-points."mkdocs.plugins"]
+hardfoc = "hardfoc_mkdocs_theme.plugin:HardfocPlugin"
+
+[tool.setuptools.packages.find]
+include = ["hardfoc_mkdocs_theme*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yml", "*.html", "*.css", "*.js", "*.svg", "*.png", "*.ico", "*.json", "*.webmanifest"]

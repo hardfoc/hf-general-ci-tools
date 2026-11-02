@@ -12,3 +12,14 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: ci
+
+  # The documentation toolchain pinned by the theme package (mkdocs, mkdocs-material, mike, ...).
+  - package-ecosystem: pip
+    directory: /packages/hardfoc-mkdocs-theme
+    schedule:
+      interval: weekly
+    groups:
+      docs-toolchain:
+        patterns: ["*"]
+    commit-message:
+      prefix: docs

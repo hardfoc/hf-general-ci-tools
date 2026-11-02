@@ -20,3 +20,7 @@ bin-release/
 # information for Eclipse / Flash Builder.
 
 **/_config_generated.yml
+# Python
+__pycache__/
+*.egg-info/
+site/

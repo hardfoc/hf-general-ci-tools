@@ -1,6 +1,13 @@
 ---
-# Cuts a release of this repository's reusable workflows when a semver tag
-# is pushed (see docs/VERSIONING.md):
+# Cuts a release of this repository's reusable workflows (see docs/VERSIONING.md):
+#   push to main  -> automatic patch release: the next vX.Y.(Z+1) after the
+#                    highest release is tagged on the pushed commit and
+#                    released as below, so callers pinned to @vX get every
+#                    merged fix without a manual release. Skipped when the
+#                    commit is already released, or when CHANGELOG.md's
+#                    Unreleased section has a "### Breaking" heading (a major
+#                    release is cut by hand with a tag push; the self-CI
+#                    contract check is what forces that heading).
 #   vX.Y.Z        -> GitHub Release with generated notes, and the moving major
 #                    tag vX is force-updated to the same commit, if vX.Y.Z is
 #                    the highest release in that major.
@@ -9,6 +16,7 @@ name: 🏷️ Release
 
 on:
   push:
+    branches: [main]
     tags: ['v*.*.*']
 
 concurrency:
@@ -17,20 +25,50 @@ concurrency:
 
 jobs:
   release:
-    name: Release ${{ github.ref_name }}
+    name: Release
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: write  # create the release and move the major tag
+      contents: write  # tag, create the release and move the major tag
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
         with:
           fetch-depth: 0  # all tags, to find the highest release in the major
 
+      - name: Pick the patch release (push to main)
+        id: auto
+        if: ${{ github.ref_type == 'branch' }}
+        run: |
+          set -euo pipefail
+          echo "tag=" >> "$GITHUB_OUTPUT"
+          if git tag --points-at HEAD | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::notice::HEAD is already released: $(git tag --points-at HEAD | tr '\n' ' ')"
+            exit 0
+          fi
+          unreleased="$(awk '/^## \[Unreleased\]/{f=1; next} /^## \[/{f=0} f' CHANGELOG.md)"
+          if grep -q '^### Breaking' <<<"$unreleased"; then
+            echo "::notice::Unreleased has a Breaking section: no automatic release (cut the major by hand)"
+            exit 0
+          fi
+          highest="$(git tag -l 'v*.*.*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1 || true)"
+          if [ -z "$highest" ]; then
+            echo "::notice::no release yet: the first one is cut by hand"
+            exit 0
+          fi
+          IFS=. read -r major minor patch <<<"${highest#v}"
+          next="v${major}.${minor}.$((patch + 1))"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$next" -m "$next" HEAD
+          git push origin "refs/tags/$next"
+          echo "tag=$next" >> "$GITHUB_OUTPUT"
+          echo "::notice::tagged $next (after $highest)"
+
       - name: Parse tag
         id: tag
+        if: ${{ github.ref_type == 'tag' || steps.auto.outputs.tag != '' }}
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ steps.auto.outputs.tag || github.ref_name }}
         run: |
           if [[ ! "$TAG" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z.-]+)?$ ]]; then
             echo "::error::Tag '$TAG' is not vMAJOR.MINOR.PATCH[-PRERELEASE]"
@@ -39,15 +77,17 @@ jobs:
           major="v${BASH_REMATCH[1]}"
           if [ -n "${BASH_REMATCH[4]}" ]; then prerelease=true; else prerelease=false; fi
           {
+            echo "tag=$TAG"
             echo "major=$major"
             echo "prerelease=$prerelease"
           } >> "$GITHUB_OUTPUT"
           echo "tag=$TAG major=$major prerelease=$prerelease"
 
       - name: Create GitHub Release (generated notes)
+        if: ${{ steps.tag.outputs.tag != '' }}
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ steps.tag.outputs.tag }}
           PRERELEASE: ${{ steps.tag.outputs.prerelease }}
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
@@ -61,12 +101,13 @@ jobs:
           gh release create "${args[@]}"
 
       - name: Move the major tag
-        if: ${{ steps.tag.outputs.prerelease == 'false' }}
+        if: ${{ steps.tag.outputs.tag != '' && steps.tag.outputs.prerelease == 'false' }}
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ steps.tag.outputs.tag }}
           MAJOR: ${{ steps.tag.outputs.major }}
         run: |
           set -euo pipefail
+          git fetch --tags --force origin
           # Only the highest release of a major moves it: a patch to an older
           # minor (v1.2.5 after v1.3.0) must not pull v1 backwards.
           highest="$(git tag -l "${MAJOR}.*.*" | grep -E "^${MAJOR}\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1)"

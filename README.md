@@ -75,7 +75,8 @@ moving ref. Pinning a caller to `@v1` therefore pins everything it runs.
 | [`ru-host-ci.yml`](.github/workflows/ru-host-ci.yml) | CMake configure/build/ctest, then clang-tidy 18 and cppcheck on the compile database ([guide](docs/ru-host-ci.md)) |
 | [`ru-cpp-lint.yml`](.github/workflows/ru-cpp-lint.yml) | clang-format and clang-tidy through cpp-linter-action ([guide](docs/ru-cpp-lint.md)) |
 | [`ru-cpp-analysis.yml`](.github/workflows/ru-cpp-analysis.yml) | cppcheck over source directories ([guide](docs/ru-cpp-analysis.md)) |
-| [`ru-docs-publish.yml`](.github/workflows/ru-docs-publish.yml) | Doxygen and Jekyll, versioned deploy to `gh-pages`; PRs build without deploying ([guide](docs/ru-docs-publish.md)) |
+| [`ru-mkdocs-publish.yml`](.github/workflows/ru-mkdocs-publish.yml) | The HardFOC documentation platform: MkDocs with the shared theme, Doxygen under `/api/`, link check, Lighthouse budget and screenshots on PRs, versioned deploy with mike ([guide](docs/ru-mkdocs-publish.md), [migration](docs/MIGRATING-TO-MKDOCS.md), [style guide](docs/DOCS-STYLE-GUIDE.md)) |
+| [`ru-docs-publish.yml`](.github/workflows/ru-docs-publish.yml) | Legacy: Doxygen and Jekyll, versioned deploy to `gh-pages`; being replaced by `ru-mkdocs-publish.yml` ([guide](docs/ru-docs-publish.md)) |
 | [`ru-docs-linkcheck.yml`](.github/workflows/ru-docs-linkcheck.yml) | lychee link check ([guide](docs/ru-docs-linkcheck.md)) |
 | [`ru-markdown-lint.yml`](.github/workflows/ru-markdown-lint.yml) | markdownlint-cli2 ([guide](docs/ru-markdown-lint.md)) |
 | [`ru-yaml-lint.yml`](.github/workflows/ru-yaml-lint.yml) | yamllint ([guide](docs/ru-yaml-lint.md)) |
@@ -115,9 +116,9 @@ workflow's job permissions ever differ from this table.
 | [`ru-cpp-lint.yml`](.github/workflows/ru-cpp-lint.yml) | `contents: read`, `pull-requests: write` | checkout; cpp-linter thread comments and annotations |
 | [`ru-docs-linkcheck.yml`](.github/workflows/ru-docs-linkcheck.yml) | `contents: read` | checkout |
 | [`ru-docs-publish.yml`](.github/workflows/ru-docs-publish.yml) | `contents: write` | push to the deployment branch; required on pull requests too, although PRs never deploy |
-| [`ru-mkdocs-publish.yml`](.github/workflows/ru-mkdocs-publish.yml) | `contents: write` | the deploy job pushes to the deployment branch; the build job needs only `contents: read`, but a caller grants the most any job needs |
 | [`ru-host-ci.yml`](.github/workflows/ru-host-ci.yml) | `contents: read` | checkout |
 | [`ru-markdown-lint.yml`](.github/workflows/ru-markdown-lint.yml) | `contents: read` | checkout |
+| [`ru-mkdocs-publish.yml`](.github/workflows/ru-mkdocs-publish.yml) | `contents: write` | push to the deployment branch (publish job only; the build and quality jobs read) |
 | [`ru-release.yml`](.github/workflows/ru-release.yml) | `contents: write` | create the GitHub Release |
 | [`ru-yaml-lint.yml`](.github/workflows/ru-yaml-lint.yml) | `contents: read` | checkout |
 <!-- permissions-table:end -->
@@ -255,6 +256,53 @@ jobs:
 | `max_configs` | number | no | `0` | Maximum configs to check (for template-heavy code, 0=unlimited) |
 <!-- inputs:ru-cpp-analysis.yml:end -->
 
+### ru-mkdocs-publish
+
+The documentation platform. A repository keeps `mkdocs.yml`, `docs/`, `docs/.nav.yml` and a `Doxyfile`; the theme,
+plugin, figkit and toolchain come from [`packages/hardfoc-mkdocs-theme`](packages/hardfoc-mkdocs-theme/README.md),
+installed at the same commit as the workflow. Pull requests build, check and audit; pushes to `main` publish `dev`;
+`vX.Y.Z` tags publish that version and move `latest`.
+
+```yaml
+jobs:
+  docs:
+    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1
+    permissions:
+      contents: write
+    with:
+      doxygen_config: Doxyfile
+      deploy: true
+```
+
+#### ru-mkdocs-publish inputs
+
+<!-- inputs:ru-mkdocs-publish.yml:start -->
+| Input | Type | Required | Default | Description |
+| --- | --- | --- | --- | --- |
+| `python_version` | string | no | `3.12` | Python used to build the site. |
+| `requirements` | string | no | `requirements-docs.txt` | Optional pip requirements file installed after the theme package (extra MkDocs plugins). Skipped when the file does not exist; the theme package already pins mkdocs, mkdocs-material, awesome-nav, pymdown and mike. |
+| `theme_ref` | string | no | `""` | Ref of hardfoc/hf-general-ci-tools to install the theme package from. Empty: the commit this workflow runs from, so the theme always matches the workflow. |
+| `mkdocs_config` | string | no | `mkdocs.yml` | Path of mkdocs.yml. |
+| `submodules` | string | no | `false` | Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'. |
+| `submodule_paths` | string | no | `""` | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules. |
+| `check_commands` | string | no | `if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] && [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi` | Shell lines run before the build; any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them. |
+| `doxygen_config` | string | no | `""` | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. |
+| `doxygen_working_directory` | string | no | `.` | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. |
+| `doxygen_html_dir` | string | no | `""` | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. |
+| `api_dir` | string | no | `api` | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). |
+| `link_check` | boolean | no | `true` | Run lychee offline on the built site (internal links, anchors and images, API included). |
+| `link_check_args` | string | no | `""` | Extra lychee arguments, for example --exclude-path patterns. |
+| `lighthouse` | boolean | no | `true` | Run Lighthouse on the built site (home page and the first navigation pages) against the budgets. |
+| `lighthouse_budgets` | string | no | `performance=0.8 accessibility=0.95 best-practices=0.9 seo=0.9` | Minimum Lighthouse category scores (0-1, median of three runs, mobile emulation), space-separated category=score pairs. A score below its minimum fails the job. |
+| `screenshots` | boolean | no | `true` | Capture the home page and the first navigation pages at 375 and 1280 px, light and dark (artifact). |
+| `deploy` | boolean | no | `false` | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. |
+| `deployment_branch` | string | no | `gh-pages` | Branch GitHub Pages serves from. |
+| `dev_version` | string | no | `dev` | mike version name a push to the default branch publishes to. |
+| `latest_alias` | string | no | `latest` | mike alias moved to each release (v* tag). |
+| `release_version` | string | no | `tag` | Version name a v* tag publishes: 'tag' (the tag itself, vX.Y.Z) or 'minor' (X.Y, a patch release replaces the docs of its minor release). |
+| `prune_legacy` | boolean | no | `true` | On publish, remove every top-level entry of the deployment branch that is not a mike version or alias (the old Jekyll / Doxygen site: development/, doxs/, html/, version_selector.html, ...), in the publish commit. Kept: versions.json, index.html, 404.html, .nojekyll, CNAME, robots.txt. |
+<!-- inputs:ru-mkdocs-publish.yml:end -->
+
 ### ru-docs-publish
 
 Call it on pull requests as well. They take the PR build path: the whole site
@@ -321,42 +369,6 @@ jobs:
 | `jekyll_quiet` | boolean | no | `false` | Suppress normal output during Jekyll build (reduces debugging info) |
 | `jekyll_trace` | boolean | no | `false` | Show full backtrace when an error occurs (debug only) |
 <!-- inputs:ru-docs-publish.yml:end -->
-
-### `ru-mkdocs-publish.yml`
-
-mkdocs-material site with Doxygen merged under `/api/`. Pull requests build
-strictly and check links without deploying; pushes to the default branch and
-`v*` tags deploy to `gh-pages` with versioned docs. Guide:
-[docs/ru-mkdocs-publish.md](docs/ru-mkdocs-publish.md).
-
-```yaml
-jobs:
-  docs:
-    permissions:
-      contents: write
-    uses: hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1
-```
-
-<!-- inputs:ru-mkdocs-publish.yml:start -->
-| Input | Type | Required | Default | Description |
-| --- | --- | --- | --- | --- |
-| `python_version` | string | no | `3.12` | Python used to build the site. |
-| `requirements` | string | no | `requirements-docs.txt` | pip requirements file with the pinned site toolchain (mkdocs, mkdocs-material, mike, ...). |
-| `mkdocs_config` | string | no | `mkdocs.yml` | Path of mkdocs.yml. |
-| `submodules` | string | no | `false` | Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'. |
-| `submodule_paths` | string | no | `""` | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules. |
-| `check_commands` | string | no | `if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi` | Shell lines run before the build; any failure fails the job. The default runs the figure drift check (tools/figkit/build.py --check) and the generated-table check (tools/docs/gen.py --check) when present. |
-| `doxygen_config` | string | no | `""` | Doxyfile for the API reference, relative to doxygen_working_directory. Empty: no API. |
-| `doxygen_working_directory` | string | no | `.` | Directory Doxygen runs in; relative paths in the Doxyfile resolve against it. |
-| `doxygen_html_dir` | string | no | `""` | Directory of the generated HTML, relative to doxygen_working_directory. Empty: read OUTPUT_DIRECTORY and HTML_OUTPUT from the Doxyfile. |
-| `api_dir` | string | no | `api` | Folder of the site that receives the Doxygen HTML (match extra.api_dir in mkdocs.yml). |
-| `link_check` | boolean | no | `true` | Run lychee offline on the built site (internal links, anchors and images, API included). |
-| `link_check_args` | string | no | `""` | Extra lychee arguments, for example --exclude-path patterns. |
-| `deploy` | boolean | no | `false` | Publish to deployment_branch. Never happens on a pull_request event, whatever this says; callers usually pass a repository-variable gate here. |
-| `deployment_branch` | string | no | `gh-pages` | Branch GitHub Pages serves from. |
-| `dev_version` | string | no | `dev` | mike version name a push to the default branch publishes to. |
-| `latest_alias` | string | no | `latest` | mike alias moved to each release (v* tag). |
-<!-- inputs:ru-mkdocs-publish.yml:end -->
 
 ### ru-docs-linkcheck
 
