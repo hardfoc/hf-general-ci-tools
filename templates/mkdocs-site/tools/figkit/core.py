@@ -302,6 +302,21 @@ class Fig:
     def pill_width(self, s: str) -> float:
         return text_width(s, self.k["pill"], 700) + 16
 
+    def chips(self, x: float, y: float, w: float, items: Iterable[str], tone: str = "slate", on: str = "card",
+              gap: float = 8, solid: bool = False) -> float:
+        """Pills laid out left to right, wrapping at ``w``; returns the height used."""
+        h = self.k["pill"] + 10
+        cx, cy = x, y
+        for s in items:
+            pw = self.pill_width(s)
+            if cx > x and cx + pw > x + w:
+                cx, cy = x, cy + h + gap
+            if pw > w:
+                self.problem(f"chip {s!r} is wider than its row")
+            self.pill(cx, cy, s, tone=tone, solid=solid, on=on)
+            cx += pw + gap
+        return cy + h - y
+
     def card(
         self,
         x: float,
@@ -330,6 +345,9 @@ class Fig:
         inner_w = w - 2 * pad - 6
         tag_w = self.pill_width(tag) + 8 if tag else 0
         t_lines = wrap(title, inner_w - tag_w, k["card_title"], 700)
+        for t in t_lines:
+            if text_width(t, k["card_title"], 700) > inner_w - tag_w + 0.5:
+                self.problem(f"card title {t!r} is wider than its card")
         s_lines = wrap(sub, inner_w, k["small"]) if sub else []
         body = []
         for ln in lines:
@@ -558,6 +576,16 @@ class Fig:
                         break
                 if hit:
                     self._problems.append(f"an arrow runs under card {title!r}")
+        for (x0, y0), (x1, y1) in self._segments:
+            n = max(int(math.hypot(x1 - x0, y1 - y0) / 2), 1)
+            for bb, _fg, _bg, s, _size in self._texts:
+                if any(bb.inside(lb) for lb, _s in self._labels):
+                    continue
+                for i in range(n + 1):
+                    px, py = x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n
+                    if bb.x + 1 < px < bb.r - 1 and bb.y + 1 < py < bb.b - 1:
+                        self._problems.append(f"an arrow crosses the text {s!r}")
+                        break
         for lb, s in self._labels:
             for box, title in self._cards:
                 if lb.overlaps(box):

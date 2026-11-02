@@ -7,7 +7,8 @@ A page marks a region with a pair of comments; everything between them is replac
     <!-- /generated -->
 
 Each module ``tools/docs/generators/<name>.py`` exposes ``REGIONS``, a dict from region name to a function that
-returns the Markdown for it. A generator reads the code (a header, a YAML file) and nothing else, so the same code
+returns the Markdown for it. A function that takes one argument receives a ``Page`` whose ``rel(path)`` turns a
+repository path into a link relative to the page being filled. A generator reads the code (a header, a YAML file) and nothing else, so the same code
 always gives the same text. Writing the source file into the region keeps the provenance on the page.
 
 Usage::
@@ -21,6 +22,8 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import inspect
+import os
 import pathlib
 import re
 import sys
@@ -46,6 +49,17 @@ def outside_fences(text: str, fn) -> str:
 
 
 sys.path.insert(0, str(HERE))
+
+
+class Page:
+    """The page a region is being filled on."""
+
+    def __init__(self, path: pathlib.Path):
+        self.path = path
+
+    def rel(self, repo_path: str) -> str:
+        """A link from this page to a file of the repository."""
+        return os.path.relpath(ROOT / repo_path, self.path.parent).replace(os.sep, "/")
 
 
 def regions() -> dict:
@@ -80,7 +94,7 @@ def main() -> int:
     args = ap.parse_args()
 
     fns = regions()
-    cache: dict[str, str] = {}
+    cache: dict[tuple[str, str], str] = {}
     bad, used = [], {}
     for p in markdown_files():
         text = p.read_text()
@@ -93,9 +107,12 @@ def main() -> int:
             if name not in fns:
                 bad.append(f"{p.relative_to(ROOT)}: no generator for region {name!r}")
                 return m.group(0)
-            if name not in cache:
-                cache[name] = fns[name]().rstrip("\n") + "\n"
-            return m.group(1) + cache[name] + m.group(4)
+            fn = fns[name]
+            takes_page = len(inspect.signature(fn).parameters) == 1
+            key = (name, str(p)) if takes_page else (name, "")
+            if key not in cache:
+                cache[key] = (fn(Page(p)) if takes_page else fn()).rstrip("\n") + "\n"
+            return m.group(1) + cache[key] + m.group(4)
 
         new = outside_fences(text, lambda t: REGION.sub(sub, t))
         if new != text:
