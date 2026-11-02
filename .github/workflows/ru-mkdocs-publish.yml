@@ -375,7 +375,7 @@ jobs:
           if-no-files-found: ignore
 
   deploy:
-    name: Publish (mike)
+    name: Publish
     needs: build
     if: ${{ inputs.deploy && github.event_name != 'pull_request' }}
     runs-on: ubuntu-24.04
