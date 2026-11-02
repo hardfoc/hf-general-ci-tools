@@ -1,0 +1,13 @@
+---
+version: "1.0"
+metadata:
+  project: "Example"
+  default_app: "basic"
+  target: "esp32s3"
+apps:
+  basic:
+    description: "Smallest example: initialise, read, print"
+    source_file: "basic.cpp"
+    category: "example"
+    ci_enabled: true
+    featured: true
