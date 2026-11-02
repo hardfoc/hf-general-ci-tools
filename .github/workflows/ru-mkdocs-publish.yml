@@ -157,7 +157,9 @@ jobs:
 
       - name: Install Doxygen
         if: ${{ inputs.doxygen_config != '' }}
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq doxygen graphviz
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq doxygen graphviz
 
       - name: Build the API reference
         if: ${{ inputs.doxygen_config != '' }}
