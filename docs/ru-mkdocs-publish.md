@@ -59,7 +59,7 @@ same page under `latest/` (`/docs/x/`, `/development/x/` to `latest/x/`; `/doxs/
 | `python_version` | string | `3.12` | Python used to build the site. |
 | `requirements` | string | `requirements-docs.txt` | Optional pip requirements file installed after the theme package (extra MkDocs plugins). Skipped when the file does not exist; the theme package already pins mkdocs, mkdocs-material, awesome-nav, pymdown and mike. |
 | `theme_ref` | string | empty | Ref of hardfoc/hf-general-ci-tools to install the theme package from. Empty: the commit this workflow runs from, so the theme always matches the workflow. |
-| `mkdocs_config` | string | `mkdocs.yml` | Path of mkdocs.yml. |
+| `mkdocs_config` | string | `mkdocs.yml` | Path of the site configuration. A repository that keeps tool configuration out of its root passes _config/mkdocs.yml (with docs_dir: ../docs); the theme then takes the folder that holds docs_dir as the repository root (snippets, repository links, figures) and the check commands get it as HARDFOC_DOCS_CONFIG. |
 | `submodules` | string | `false` | Submodules to check out with the repository: 'false', 'true' (top level) or 'recursive'. |
 | `submodule_paths` | string | empty | Space-separated submodule paths to initialise (shallow) after checkout, nested ones included: each parent submodule on the way is initialised without recursion, e.g. 'lib/core/drivers/internal/pincfg'. Use it instead of 'recursive' when the checks need a few nested submodules. |
 | `check_commands` | string | `if [ -f tools/figkit/build.py ]; then python3 tools/figkit/build.py --check; fi if [ -f tools/docs/gen.py ]; then python3 tools/docs/gen.py --check; fi if [ ! -f tools/figkit/build.py ] && [ ! -f tools/docs/gen.py ]; then hardfoc-docs check; fi` | Shell lines run before the build, with GH_TOKEN set to the job's read-only token (for commands that read the GitHub API); any failure fails the job. The default runs the figure drift check and the generated-region check (hardfoc-docs check), or a repository's own tools/figkit and tools/docs/gen.py when it still carries them. |
@@ -110,6 +110,22 @@ jobs:
       doxygen_config: Doxyfile
       deploy: true
 ```
+
+### Configuration in `_config/`
+
+A repository whose root holds only what GitHub and readers look for keeps the site configuration in `_config/`
+with `docs_dir: ../docs` and passes its path:
+
+```yaml
+    with:
+      mkdocs_config: _config/mkdocs.yml
+      doxygen_config: _config/Doxyfile
+```
+
+The build, the drift checks (`HARDFOC_DOCS_CONFIG` is set from `mkdocs_config`), the pip cache key and mike all use
+that path, and the theme takes the folder that holds `docs_dir` as the repository root, so snippets and repository
+links are unchanged. Doxygen runs in `doxygen_working_directory` (default the root), so paths inside a
+`_config/Doxyfile` stay relative to the root.
 
 ## Unversioned sites
 

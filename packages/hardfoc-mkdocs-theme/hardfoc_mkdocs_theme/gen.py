@@ -29,7 +29,7 @@ import pathlib
 import re
 import sys
 
-from .paths import SKIP_DIRS, repo_root
+from .paths import SKIP_DIRS, is_site_root, repo_root
 
 ROOT = repo_root()
 BUILTIN = pathlib.Path(__file__).resolve().parent / "generators"
@@ -107,8 +107,9 @@ def markdown_files() -> list[pathlib.Path]:
         rel = p.relative_to(ROOT).parts
         if any(part in SKIP_DIRS or part.startswith(".") for part in rel[:-1]):
             continue
-        # A folder with its own mkdocs.yml (a template, a fixture) is another site with its own regions.
-        if any((ROOT.joinpath(*rel[:i]) / "mkdocs.yml").is_file() for i in range(1, len(rel))):
+        # A folder with its own mkdocs.yml or _config/mkdocs.yml (a template, a fixture) is another site with its own
+        # regions.
+        if any(is_site_root(ROOT.joinpath(*rel[:i])) for i in range(1, len(rel))):
             continue
         out.append(p)
     return out

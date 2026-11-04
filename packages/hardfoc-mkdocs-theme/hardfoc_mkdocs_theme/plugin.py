@@ -7,7 +7,8 @@ same Markdown dialect, the same validation and the same versioning without copyi
   address of every page), ``repo_name``, ``edit_uri`` (``edit/main/docs/``), ``copyright``, ``extra.version``
   (mike, default ``latest``), ``extra.social`` and ``extra.generator: false``.
 * **Markdown extensions**: snippets (``--8<-- "tests/docs/x.cpp:section"`` includes code the repository compiles,
-  paths from the repository root), admonitions, details, tabs, tables, footnotes, attribute lists, Markdown in HTML, task
+  paths from the repository root: the folder of ``mkdocs.yml``, or the folder that holds ``docs_dir`` when the
+  configuration is elsewhere, e.g. ``_config/mkdocs.yml`` with ``docs_dir: ../docs``), admonitions, details, tabs, tables, footnotes, attribute lists, Markdown in HTML, task
   lists, keys, emoji, highlighting with line anchors, Mermaid fences and GitHub-style heading anchors (so ``#links``
   work on GitHub and on the site). The site may add more.
 * **Validation**: a link MkDocs cannot resolve, a missing anchor or a page left out of the navigation is a warning,
@@ -33,7 +34,7 @@ from mkdocs.config.base import Config
 from mkdocs.plugins import BasePlugin, get_plugin_logger
 from mkdocs.structure.files import InclusionLevel
 
-from . import hooks
+from . import hooks, paths
 
 log = get_plugin_logger(__name__)
 
@@ -114,7 +115,9 @@ class HardfocConfig(Config):
 
 class HardfocPlugin(BasePlugin[HardfocConfig]):
     def on_config(self, config):
-        root = Path(config.config_file_path).resolve().parent
+        # The repository root: the folder of mkdocs.yml, or the folder that holds docs_dir when the configuration
+        # lives elsewhere (_config/mkdocs.yml with docs_dir: ../docs). Snippets, repository links and figures use it.
+        root = paths.root_of(Path(config.config_file_path).parent, Path(config.docs_dir))
         org = self.config.org
 
         if config.theme.name != "hardfoc":

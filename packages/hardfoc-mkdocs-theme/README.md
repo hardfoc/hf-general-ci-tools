@@ -35,6 +35,30 @@ A site is versioned with mike unless it is the organisation site (`hardfoc.githu
 workflow sets it from its `versioning` input). An unversioned site has no version selector and its `site_url` is
 the Pages root.
 
+### Configuration outside the root
+
+A repository that keeps tool configuration in `_config/` puts the site there with `docs_dir: ../docs`
+(and `site_dir: ../site`, so a local build lands where it would with a root `mkdocs.yml`):
+
+```yaml
+# _config/mkdocs.yml
+site_name: TMC9660 Driver
+repo_url: https://github.com/hardfoc/hf-tmc9660-driver
+docs_dir: ../docs
+site_dir: ../site
+theme:
+  name: hardfoc
+plugins:
+  - hardfoc
+  - search
+  - awesome-nav
+```
+
+The repository root is then the folder that holds `docs_dir`, not the folder of the configuration, so snippets,
+repository links, figures and generated regions resolve as they would with a root `mkdocs.yml`. Build with
+`mkdocs build -f _config/mkdocs.yml`; `hardfoc-docs` finds `_config/mkdocs.yml` from anywhere in the repository
+(or takes `-f _config/mkdocs.yml`), and the publish workflow takes `mkdocs_config: _config/mkdocs.yml`.
+
 ## What is in it
 
 | Path | What |
@@ -51,6 +75,7 @@ the Pages root.
 ## Commands
 
 ```text
+hardfoc-docs [-f CONFIG] COMMAND        CONFIG: the site configuration (default: nearest mkdocs.yml or _config/mkdocs.yml)
 hardfoc-docs figures [--check] [ids]   build (or check) docs/diagrams/figures/*.py
 hardfoc-docs gen [--check|--list]      fill (or check) generated regions (built-in + tools/docs/generators/)
 hardfoc-docs check                     both checks, as CI runs them

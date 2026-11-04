@@ -21,7 +21,7 @@ toggle)::
 The build fails on any figkit problem (contrast below 4.5:1 in either theme, content that does not fit, overlapping
 cards, missing alt text), on an unknown figure in a marker, and on output that is not well-formed XML.
 
-Usage (from anywhere in the repository; the root is the nearest directory with mkdocs.yml)::
+Usage (from anywhere in the repository; the root is the folder that holds the site's docs_dir, see paths.py)::
 
     hardfoc-docs figures              # extract, render, write, fill embeds
     hardfoc-docs figures some-id      # only some figures
