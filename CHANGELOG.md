@@ -15,6 +15,19 @@ that heading.
 
 ## [Unreleased]
 
+### Added (site configuration outside the repository root)
+
+- Theme plugin: the repository root is the folder that holds `docs_dir` when the configuration is not above it, so
+  `_config/mkdocs.yml` with `docs_dir: ../docs` gets snippets, repository links and figures from the repository
+  root, exactly like a root `mkdocs.yml` (which is unchanged).
+- `hardfoc-docs -f/--config PATH` (before or after the command), and `HARDFOC_DOCS_CONFIG`; without either, the
+  nearest `mkdocs.yml` or `_config/mkdocs.yml` from the working directory up. A folder with `_config/mkdocs.yml` also
+  counts as another site for generated regions.
+- `ru-mkdocs-publish.yml`: `mkdocs_config` now also sets the pip cache key (it named `mkdocs.yml`, which fails the
+  cache step when that file is not at the root) and is passed to the drift checks as `HARDFOC_DOCS_CONFIG`.
+  The default stays `mkdocs.yml`.
+- Unit tests for a `_config/mkdocs.yml` site (`tests/test_config_outside_root.py`).
+
 ### Added (unversioned sites, link check)
 
 - `ru-mkdocs-publish.yml`: `versioning` input (default `true`). `false` builds an unversioned site (the

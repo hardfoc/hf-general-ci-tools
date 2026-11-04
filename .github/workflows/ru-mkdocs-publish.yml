@@ -36,7 +36,10 @@ on:
         type: string
         default: ""
       mkdocs_config:
-        description: "Path of mkdocs.yml."
+        description: >-
+          Path of the site configuration. A repository that keeps tool configuration out of its root passes
+          _config/mkdocs.yml (with docs_dir: ../docs); the theme then takes the folder that holds docs_dir as the
+          repository root (snippets, repository links, figures) and the check commands get it as HARDFOC_DOCS_CONFIG.
         type: string
         default: "mkdocs.yml"
       submodules:
@@ -189,7 +192,7 @@ jobs:
           cache: pip
           cache-dependency-path: |
             ${{ inputs.requirements }}
-            mkdocs.yml
+            ${{ inputs.mkdocs_config }}
 
       - name: Install the theme and the site toolchain
         env:
@@ -213,6 +216,8 @@ jobs:
         if: ${{ inputs.check_commands != '' }}
         env:
           CHECKS: ${{ inputs.check_commands }}
+          # hardfoc-docs reads the site configuration from here, so a config outside the root needs no -f.
+          HARDFOC_DOCS_CONFIG: ${{ inputs.mkdocs_config }}
           # The job's read-only token, for commands that read the GitHub API (the portal's repository catalogue).
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -398,7 +403,7 @@ jobs:
           cache: pip
           cache-dependency-path: |
             ${{ inputs.requirements }}
-            mkdocs.yml
+            ${{ inputs.mkdocs_config }}
 
       - name: Install the theme and the site toolchain
         env:
