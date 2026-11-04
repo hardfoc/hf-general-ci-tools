@@ -858,6 +858,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#added-site-configuration-outside-the-repository-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added (site configuration outside the repository root)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#added-unversioned-sites-link-check" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1033,6 +1044,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#added-site-configuration-outside-the-repository-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added (site configuration outside the repository root)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#added-unversioned-sites-link-check" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1181,6 +1203,19 @@
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
 <p>Every change to the reusable workflows, the theme package and the tools, newest first, from <code>CHANGELOG.md</code>.</p>
 <h2 id="unreleased">[Unreleased]<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
+<h3 id="added-site-configuration-outside-the-repository-root">Added (site configuration outside the repository root)<a class="headerlink" href="#added-site-configuration-outside-the-repository-root" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Theme plugin: the repository root is the folder that holds <code>docs_dir</code> when the configuration is not above it, so
+  <code>_config/mkdocs.yml</code> with <code>docs_dir: ../docs</code> gets snippets, repository links and figures from the repository
+  root, exactly like a root <code>mkdocs.yml</code> (which is unchanged).</li>
+<li><code>hardfoc-docs -f/--config PATH</code> (before or after the command), and <code>HARDFOC_DOCS_CONFIG</code>; without either, the
+  nearest <code>mkdocs.yml</code> or <code>_config/mkdocs.yml</code> from the working directory up. A folder with <code>_config/mkdocs.yml</code> also
+  counts as another site for generated regions.</li>
+<li><code>ru-mkdocs-publish.yml</code>: <code>mkdocs_config</code> now also sets the pip cache key (it named <code>mkdocs.yml</code>, which fails the
+  cache step when that file is not at the root) and is passed to the drift checks as <code>HARDFOC_DOCS_CONFIG</code>.
+  The default stays <code>mkdocs.yml</code>.</li>
+<li>Unit tests for a <code>_config/mkdocs.yml</code> site (<code>tests/test_config_outside_root.py</code>).</li>
+</ul>
 <h3 id="added-unversioned-sites-link-check">Added (unversioned sites, link check)<a class="headerlink" href="#added-unversioned-sites-link-check" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>ru-mkdocs-publish.yml</code>: <code>versioning</code> input (default <code>true</code>). <code>false</code> builds an unversioned site (the

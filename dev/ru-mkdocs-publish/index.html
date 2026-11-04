@@ -903,6 +903,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-in-_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration in _config/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1304,6 +1321,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-in-_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration in _config/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1372,7 +1406,7 @@ a versioned site with <a href="https://github.com/jimporter/mike">mike</a>, with
 says what its pages contain.</p>
 <h2 id="where-the-theme-comes-from">Where the theme comes from<a class="headerlink" href="#where-the-theme-comes-from" title="Permanent link">&para;</a></h2>
 <p>The theme, the plugin, figkit and the pinned toolchain are the <code>hardfoc-mkdocs-theme</code> package in
-<a href="https://github.com/hardfoc/hf-general-ci-tools/blob/3d659a2cc883820968048541ecb55cc326a106b4/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a>. Every job installs it with pip from
+<a href="https://github.com/hardfoc/hf-general-ci-tools/blob/e61bc03cc63fffff382ae1574f90cc46c28b39bb/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a>. Every job installs it with pip from
 <strong>the commit this workflow runs from</strong> (the <code>job</code> context's <code>workflow_repository</code> and <code>workflow_sha</code>), so a caller
 pinned to <code>@v1</code> builds with the theme released in <code>v1</code>, and a branch under review builds with that branch's theme.
 <code>theme_ref</code> overrides the ref. A repository's own <code>requirements-docs.txt</code>, if it has one, is installed afterwards
@@ -1482,7 +1516,7 @@ same page under <code>latest/</code> (<code>/docs/x/</code>, <code>/development/
 <td><code>mkdocs_config</code></td>
 <td>string</td>
 <td><code>mkdocs.yml</code></td>
-<td>Path of mkdocs.yml.</td>
+<td>Path of the site configuration. A repository that keeps tool configuration out of its root passes _config/mkdocs.yml (with docs_dir: ../docs); the theme then takes the folder that holds docs_dir as the repository root (snippets, repository links, figures) and the check commands get it as HARDFOC_DOCS_CONFIG.</td>
 </tr>
 <tr>
 <td><code>submodules</code></td>
@@ -1629,6 +1663,17 @@ same page under <code>latest/</code> (<code>/docs/x/</code>, <code>/development/
 </span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">      </span><span class="nt">doxygen_config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Doxyfile</span>
 </span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">      </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
+<h3 id="configuration-in-_config">Configuration in <code>_config/</code><a class="headerlink" href="#configuration-in-_config" title="Permanent link">&para;</a></h3>
+<p>A repository whose root holds only what GitHub and readers look for keeps the site configuration in <code>_config/</code>
+with <code>docs_dir: ../docs</code> and passes its path:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">      </span><span class="nt">mkdocs_config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_config/mkdocs.yml</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">      </span><span class="nt">doxygen_config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_config/Doxyfile</span>
+</span></code></pre></div>
+<p>The build, the drift checks (<code>HARDFOC_DOCS_CONFIG</code> is set from <code>mkdocs_config</code>), the pip cache key and mike all use
+that path, and the theme takes the folder that holds <code>docs_dir</code> as the repository root, so snippets and repository
+links are unchanged. Doxygen runs in <code>doxygen_working_directory</code> (default the root), so paths inside a
+<code>_config/Doxyfile</code> stay relative to the root.</p>
 <h2 id="unversioned-sites">Unversioned sites<a class="headerlink" href="#unversioned-sites" title="Permanent link">&para;</a></h2>
 <p>The organisation portal (<code>hardfoc.github.io</code>) has one current site, not versions. With <code>versioning: false</code>:</p>
 <table>
@@ -1670,14 +1715,14 @@ same page under <code>latest/</code> (<code>/docs/x/</code>, <code>/development/
 <p>The build job tells the theme plugin through <code>HARDFOC_DOCS_VERSIONED</code>, so the input decides both the build and the
 publish. A local build of the portal needs nothing: the plugin treats <code>&lt;org&gt;.github.io</code> as unversioned on its own,
 and <code>plugins: [{hardfoc: {versioned: false}}]</code> does the same for any other site.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">jobs</span><span class="p">:</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">site</span><span class="p">:</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">permissions</span><span class="p">:</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">versioning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">jobs</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">site</span><span class="p">:</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hardfoc/hf-general-ci-tools/.github/workflows/ru-mkdocs-publish.yml@v1</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">permissions</span><span class="p">:</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">versioning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span></code></pre></div>
 <p>Pages must serve the <code>gh-pages</code> branch from <code>/</code> once the first publish has run; until then, leave the Pages source
 as it is, so the current site stays up.</p>
