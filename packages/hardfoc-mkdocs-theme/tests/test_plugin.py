@@ -6,6 +6,8 @@ import json
 import os
 import pathlib
 import re
+import shutil
+import subprocess
 import tempfile
 import unittest
 from unittest import mock
@@ -173,6 +175,79 @@ class MermaidOnDemandTest(unittest.TestCase):
         head = out.split("</head>")[0]
         self.assertIn("window.mermaid = stub", head)
         self.assertLess(head.index("window.mermaid = stub"), out.index("bundle."))
+
+
+# A fake page for the stand-in: one IntersectionObserver whose rootMargin the test can read, diagrams that are on the
+# screen or not, and the window events the stand-in listens to. Prints what happened, one JSON line per step.
+STAND_IN_HARNESS = r"""
+const log = [], listeners = {}, observers = [], scripts = [];
+function Pre(text, onScreen, ahead) { this.textContent = text; this.onScreen = onScreen; this.ahead = ahead; this.attrs = {}; }
+Pre.prototype.setAttribute = function (k, v) { this.attrs[k] = v; };
+const pres = [new Pre("graph A", false, true), new Pre("graph B", true, true), new Pre("graph C", false, false)];
+globalThis.Element = function () {};
+globalThis.window = globalThis;
+window.addEventListener = (t, f) => { (listeners[t] = listeners[t] || []).push(f); };
+window.removeEventListener = (t, f) => { listeners[t] = (listeners[t] || []).filter((g) => g !== f); };
+const fire = (t) => (listeners[t] || []).slice().forEach((f) => f({ type: t }));
+globalThis.IntersectionObserver = function (cb, opts) {
+  const io = { margin: opts.rootMargin, els: new Set(), live: true, cb };
+  this.observe = (el) => io.els.add(el);
+  this.unobserve = (el) => io.els.delete(el);
+  this.disconnect = () => { io.live = false; io.els.clear(); };
+  observers.push(io);
+};
+// What the browser would report: on the screen, or within a screen of it with the wide margin.
+const tick = () => observers.filter((o) => o.live).forEach((o) => o.cb([...o.els].map((el) => ({
+  target: el, isIntersecting: el.onScreen || (o.margin === "100% 0px" && el.ahead) }))));
+globalThis.document = {
+  querySelectorAll: () => pres.filter((p) => !("data-hf-mermaid" in p.attrs)),
+  createElement: () => ({}),
+  head: { appendChild: (s) => { scripts.push(s.src); globalThis.mermaid = {
+    initialize() {}, render: (id, text) => Promise.resolve({ svg: text }) }; setTimeout(s.onload, 0); } },
+};
+const rendered = [];
+const settle = () => new Promise((r) => setTimeout(r, 5));
+const step = async (name) => { tick(); await settle(); await settle();
+  console.log(JSON.stringify({ step: name, scripts: scripts.length, rendered: rendered.slice().sort(),
+    margin: observers.filter((o) => o.live).map((o) => o.margin) })); };
+(async () => {
+  STAND_IN
+  mermaid.initialize({});
+  pres.forEach((p, i) => mermaid.render("d" + i, p.textContent).then(() => rendered.push(p.textContent)));
+  await step("load");
+  fire("scroll");
+  await step("scroll");
+  fire("beforeprint");
+  await step("print");
+})();
+"""
+
+
+@unittest.skipUnless(shutil.which("node"), "needs Node")
+class MermaidStandInBehaviourTest(unittest.TestCase):
+    """Runs the stand-in in Node against a fake page: Mermaid must not load for a diagram that is only near the first
+    screen until the reader engages (a diagram just below it had made Mermaid load during page load, 977 KB and
+    300 to 500 ms of blocking time on a phone), and must still render every diagram in time."""
+
+    def steps(self):
+        html = (pathlib.Path(__file__).resolve().parents[1] / "hardfoc_mkdocs_theme/theme/partials/mermaid-lazy.html").read_text()
+        js = html.split("<script>")[1].split("</script>")[0]
+        out = subprocess.run(["node", "-e", STAND_IN_HARNESS.replace("STAND_IN", js)],
+                             capture_output=True, text=True, timeout=30, check=True).stdout
+        return {s["step"]: s for s in map(json.loads, out.splitlines())}
+
+    def test_waits_for_the_reader_then_loads_ahead(self):
+        s = self.steps()
+        # On load: only the diagram on the screen renders; the observer looks at the screen only.
+        self.assertEqual(s["load"]["margin"], ["0px"])
+        self.assertEqual(s["load"]["rendered"], ["graph B"])
+        self.assertEqual(s["load"]["scripts"], 1)
+        # After a scroll: a screen ahead, so the diagram just below renders before it is reached.
+        self.assertEqual(s["scroll"]["margin"], ["100% 0px"])
+        self.assertEqual(s["scroll"]["rendered"], ["graph A", "graph B"])
+        # Printing renders the rest; Mermaid is loaded once.
+        self.assertEqual(s["print"]["rendered"], ["graph A", "graph B", "graph C"])
+        self.assertEqual(s["print"]["scripts"], 1)
 
 
 class Root404Test(unittest.TestCase):
