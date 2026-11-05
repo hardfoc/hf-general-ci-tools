@@ -108,7 +108,8 @@
   <script>
 (function () {
   if (typeof mermaid != "undefined" && !(mermaid instanceof Element)) return;
-  var SRC = "https://unpkg.com/mermaid@11/dist/mermaid.min.js", config = {}, real, loading, waiting = [];
+  var SRC = "https://unpkg.com/mermaid@11/dist/mermaid.min.js", config = {}, real, loading;
+  var waiting = [], io = null, ahead = false, ENGAGE = ["scroll", "keydown", "pointerdown", "touchstart"];
   var stub = {
     initialize: function (c) { config = c || {}; if (real) real.initialize(config); },
     render: function (id, text) {
@@ -132,17 +133,38 @@
       document.head.appendChild(s);
     }));
   }
+  // One observer for the diagrams still waiting: on the screen only until the reader engages, then a screen ahead.
+  function watch() {
+    if (io) io.disconnect();
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) release(function (w) { return w.el === e.target; });
+      });
+    }, { rootMargin: ahead ? "100% 0px" : "0px" });
+    waiting.forEach(function (w) { io.observe(w.el); });
+  }
+  function release(which) {
+    waiting = waiting.filter(function (w) {
+      if (!which(w)) return true;
+      io.unobserve(w.el);
+      w.go();
+      return false;
+    });
+  }
   function near(el) {
     if (real || !el || !("IntersectionObserver" in window)) return Promise.resolve();
     return new Promise(function (resolve) {
-      var io = new IntersectionObserver(function (entries) {
-        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); resolve(); }
-      }, { rootMargin: "100% 0px" });
-      io.observe(el);
-      waiting.push(function () { io.disconnect(); resolve(); });
+      waiting.push({ el: el, go: resolve });
+      if (io) io.observe(el); else watch();
     });
   }
-  window.addEventListener("beforeprint", function () { waiting.splice(0).forEach(function (go) { go(); }); });
+  function engaged() {
+    ENGAGE.forEach(function (t) { window.removeEventListener(t, engaged, true); });
+    ahead = true;
+    if (io) watch();
+  }
+  ENGAGE.forEach(function (t) { window.addEventListener(t, engaged, { capture: true, passive: true }); });
+  window.addEventListener("beforeprint", function () { if (io) release(function () { return true; }); });
   window.mermaid = stub;
 })();
 </script>
@@ -1406,7 +1428,7 @@ a versioned site with <a href="https://github.com/jimporter/mike">mike</a>, with
 says what its pages contain.</p>
 <h2 id="where-the-theme-comes-from">Where the theme comes from<a class="headerlink" href="#where-the-theme-comes-from" title="Permanent link">&para;</a></h2>
 <p>The theme, the plugin, figkit and the pinned toolchain are the <code>hardfoc-mkdocs-theme</code> package in
-<a href="https://github.com/hardfoc/hf-general-ci-tools/blob/e61bc03cc63fffff382ae1574f90cc46c28b39bb/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a>. Every job installs it with pip from
+<a href="https://github.com/hardfoc/hf-general-ci-tools/blob/e0528743317c1f4121679328280aef6e4d98b12e/packages/hardfoc-mkdocs-theme/README.md"><code>packages/hardfoc-mkdocs-theme</code></a>. Every job installs it with pip from
 <strong>the commit this workflow runs from</strong> (the <code>job</code> context's <code>workflow_repository</code> and <code>workflow_sha</code>), so a caller
 pinned to <code>@v1</code> builds with the theme released in <code>v1</code>, and a branch under review builds with that branch's theme.
 <code>theme_ref</code> overrides the ref. A repository's own <code>requirements-docs.txt</code>, if it has one, is installed afterwards
