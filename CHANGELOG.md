@@ -15,6 +15,17 @@ that heading.
 
 ## [Unreleased]
 
+### Fixed (Mermaid just below the first screen)
+
+- Theme: a page with a Mermaid diagram less than a screen below the first one (the ISF15ACP4 driver's architecture
+  page: figure at the top, sequence diagram at about 1,580 px on an 823 px phone screen) still missed the
+  Lighthouse performance budget (0.76 against 0.8). The Mermaid stand-in loaded Mermaid for any diagram within a
+  screen of the viewport, so such a diagram loaded it during page load: 977 KB of script, total blocking time
+  290 to 520 ms, and the first figure's paint held back behind it. Before the reader scrolls, presses a key or
+  touches the page, the stand-in now loads Mermaid only for a diagram on the screen; from the first of those it
+  loads a screen ahead as before, so a diagram is drawn before it is reached. Printing still renders every
+  diagram. Nothing to change in a site. A unit test runs the stand-in in Node against a fake page.
+
 ### Added (site configuration outside the repository root)
 
 - Theme plugin: the repository root is the folder that holds `docs_dir` when the configuration is not above it, so

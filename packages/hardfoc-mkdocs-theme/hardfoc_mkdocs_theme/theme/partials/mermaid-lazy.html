@@ -2,13 +2,17 @@
     phone) on every page with a diagram, as soon as the page loads, even when the diagram is far down the page.
     Material skips its own loader when a global `mermaid` exists and then only calls `mermaid.initialize(config)`
     once and `mermaid.render(id, text)` per diagram. This stand-in answers those two calls and loads the real
-    Mermaid only when a diagram comes near the screen (or the page is printed); Material renders it as before, with
-    the theme's colours. Without IntersectionObserver every diagram renders at once, as before.
-    tests/test_plugin.py checks that Material's bundle still uses these two calls. -#}
+    Mermaid only when a diagram is on the screen, or, once the reader has scrolled, pressed a key or touched the
+    page, when it comes within a screen of it (or the page is printed); Material renders it as before, with the
+    theme's colours. Before the reader does anything, a diagram just below the first screen waits: loading it then
+    would run Mermaid while the page is still loading, on the main thread the page needs for its first paint.
+    Without IntersectionObserver every diagram renders at once, as before.
+    tests/test_plugin.py checks that Material's bundle still uses these two calls, and runs this script in Node. -#}
 <script>
 (function () {
   if (typeof mermaid != "undefined" && !(mermaid instanceof Element)) return;
-  var SRC = "https://unpkg.com/mermaid@11/dist/mermaid.min.js", config = {}, real, loading, waiting = [];
+  var SRC = "https://unpkg.com/mermaid@11/dist/mermaid.min.js", config = {}, real, loading;
+  var waiting = [], io = null, ahead = false, ENGAGE = ["scroll", "keydown", "pointerdown", "touchstart"];
   var stub = {
     initialize: function (c) { config = c || {}; if (real) real.initialize(config); },
     render: function (id, text) {
@@ -32,17 +36,38 @@
       document.head.appendChild(s);
     }));
   }
+  // One observer for the diagrams still waiting: on the screen only until the reader engages, then a screen ahead.
+  function watch() {
+    if (io) io.disconnect();
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) release(function (w) { return w.el === e.target; });
+      });
+    }, { rootMargin: ahead ? "100% 0px" : "0px" });
+    waiting.forEach(function (w) { io.observe(w.el); });
+  }
+  function release(which) {
+    waiting = waiting.filter(function (w) {
+      if (!which(w)) return true;
+      io.unobserve(w.el);
+      w.go();
+      return false;
+    });
+  }
   function near(el) {
     if (real || !el || !("IntersectionObserver" in window)) return Promise.resolve();
     return new Promise(function (resolve) {
-      var io = new IntersectionObserver(function (entries) {
-        if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); resolve(); }
-      }, { rootMargin: "100% 0px" });
-      io.observe(el);
-      waiting.push(function () { io.disconnect(); resolve(); });
+      waiting.push({ el: el, go: resolve });
+      if (io) io.observe(el); else watch();
     });
   }
-  window.addEventListener("beforeprint", function () { waiting.splice(0).forEach(function (go) { go(); }); });
+  function engaged() {
+    ENGAGE.forEach(function (t) { window.removeEventListener(t, engaged, true); });
+    ahead = true;
+    if (io) watch();
+  }
+  ENGAGE.forEach(function (t) { window.addEventListener(t, engaged, { capture: true, passive: true }); });
+  window.addEventListener("beforeprint", function () { if (io) release(function () { return true; }); });
   window.mermaid = stub;
 })();
 </script>
